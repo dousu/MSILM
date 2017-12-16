@@ -2,7 +2,7 @@
  * Element.h
  *
  *  Created on: 2011/05/19
- *      Author: Hiroki Sudo
+ *      Author: Rindow
  */
 
 #ifndef ELEMENT_H_

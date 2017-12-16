@@ -21,7 +21,6 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/vector.hpp>
 
-#include "Distance.hpp"
 #include "Element.h"
 #include "IndexFactory.h"
 
@@ -92,10 +91,7 @@ class Rule : public RuleTypeDef {
     set_noun(int dcat, Element& dind, ExType& dex);
     void
     set_sentence(InType& din, ExType& dex);
-    
-    std::vector< std::vector<Element> >
-    moph(void);
-    
+
   private:
     friend class boost::serialization::access;
     template<class Archive>
@@ -236,7 +232,5 @@ class RuleSort : public RuleTypeDef {
       return false;
     }
 };
-
-
 
 #endif /* RULE_H_ */

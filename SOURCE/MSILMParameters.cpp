@@ -52,7 +52,7 @@ MSILMParameters::MSILMParameters() {
   RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
   RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
   LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
-  DICTIONARY_FILE = "/home/hiroki/Dropbox/MSILM/MSILM/MSILM/data.dic"; //どこのカレントディレクトリのコンソールからでも実行したいため絶対パスにした
+  DICTIONARY_FILE = "/home/hiroki/Dropbox/LEILA/leila/LEILA/data.dic"; //どこのカレントディレクトリのコンソールからでも実行したいため絶対パスにした
   PER_UTTERANCES = 0.5; //意味空間の数の半分にしたかった．
   BASE_PATH = "/home/hiroki/Desktop/MSILMresult/TEST/"; //テストフォルダを初期値に設定
 }

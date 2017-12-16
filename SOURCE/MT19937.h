@@ -2,7 +2,7 @@
  * MT19937E.h
  *
  *  Created on: 2011/08/04
- *      Author: Hiroki Sudo
+ *      Author: Rindow
  */
 
 #ifndef MT19937_H_

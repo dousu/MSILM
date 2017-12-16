@@ -1,12 +1,12 @@
-/* 
- * File:   MSILM_main.h
- * Author: hiroki
+/*
+ * kirby_main.h
  *
- * Created on October 28, 2013, 6:14 PM
+ *  Created on: 2011/06/23
+ *      Author: rindou
  */
 
-#ifndef MSILM_MAIN_H
-#define	MSILM_MAIN_H
+#ifndef KIRBY_MAIN_H_
+#define KIRBY_MAIN_H_
 
 #include <iostream>
 #include <vector>
@@ -45,15 +45,14 @@
 //igraph library
 //#include <igraph.h>
 
-//#include "KirbyAgent.h"
-#include "MSILMAgent.h"
+#include "KirbyAgent.h"
 #include "Rule.h"
 #include "Element.h"
 //#include "Random.hpp"
 #include "MT19937.h"
 #include "Dictionary.h"
 #include "LogBox.h"
-#include "MSILMParameters.h"//#include "LEILAParameters.h"
+#include "Parameters.h"//#include "LEILAParameters.h"
 //#include "NetWorld.h"
 #include "Distance.hpp"
 
@@ -66,38 +65,32 @@ construct_individuals(std::vector<Element>& inds, Dictionary &dic);
 //analyze function
 void
 unit_analyze(std::vector<double>& result_vector,
-    std::vector<Rule>& meanings, MSILMAgent& agent);
+    std::vector<Rule>& meanings, KirbyAgent& agent);
 
-double
-expression(std::vector<Rule>& meanings, MSILMAgent& agent);
+int
+expression(std::vector<Rule>& meanings, KirbyAgent& agent);
 
 void
 calculate_language_distance(
     std::vector<double>& lev_sent_vector,
     std::vector<double>& lev_word_vector,
-    std::vector<Rule>& meanings, std::vector<Element>& words, MSILMAgent& agent1,
-    MSILMAgent& agent2);
+    std::vector<Rule>& meanings, std::vector<Element>& words, KirbyAgent& agent1,
+    KirbyAgent& agent2);
 
 double
 calculate_word_distance(std::vector<Element>&, KnowledgeBase&, KnowledgeBase&);
 
 void
-analyze_and_output(MSILMParameters& param, std::vector<Rule> meaning_space,
-    std::vector<Element> individuals, MSILMAgent& agent1, MSILMAgent& agent2, int index);
+analyze_and_output(Parameters& param, std::vector<Rule> meaning_space,
+    std::vector<Element> individuals, KirbyAgent& agent1, KirbyAgent& agent2);
 
 //sudo
 double
 calculate_sudo_distance(std::vector<Rule>& meanings,
-    KnowledgeBase& kb1, KnowledgeBase& kb2,double& word_length);
-
-void
-calculate_average_word_length(std::vector<Rule>& meanings,KnowledgeBase& kb1,double& word_length);
+    KnowledgeBase& kb1, KnowledgeBase& kb2);
 
 std::string
 tr_vector_double_to_string(std::vector<double> vector);
-
-std::vector<int>
-choice_selected_meanings(std::vector<Rule> meanings,MSILMParameters param);
 
 //std::vector<Rule>
 //construct_meanings(
@@ -107,38 +100,32 @@ choice_selected_meanings(std::vector<Rule> meanings,MSILMParameters param);
 //		int NOUN_INDEX_END = 9
 //);
 
-double limit_time;
-
-void 
-cognition_init(std::vector<int>& source, MSILMParameters& param);
 
 template<typename _IFS>
 void resume_agent(
 		_IFS&,
-		MSILMParameters&,
+		Parameters&,
 		unsigned long long int&,
 		unsigned long long int&,
 		Dictionary&,
 		std::vector<Rule>&,
 		int&,
-		MSILMAgent&
+		KirbyAgent&
 		);
 
 template<typename _OFS>
 void save_agent(
 		_OFS&,
-		MSILMParameters&,
+		Parameters&,
 		unsigned long long int&,
 		unsigned long long int&,
 		Dictionary&,
 		std::vector<Rule>&,
 		int&,
-		MSILMAgent&
+		KirbyAgent&
 		);
 
 //std::vector<int> analyze(std::vector<Rule>& meanings, KirbyAgent& agent);
 //int expression(std::vector<Rule>& meanings, KirbyAgent& agent);
 
-
-#endif	/* MSILM_MAIN_H */
-
+#endif /* KIRBY_MAIN_H_ */

@@ -2,7 +2,7 @@
  * Dictionary.h
  *
  *  Created on: 2011/05/23
- *      Author: Hiroki Sudo
+ *      Author: Rindow
  */
 
 #ifndef DICTIONARY_H_

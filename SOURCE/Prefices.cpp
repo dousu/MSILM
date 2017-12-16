@@ -2,7 +2,7 @@
  * Prefices.cpp
  *
  *  Created on: 2011/05/22
- *      Author: Hiroki Sudo
+ *      Author: Rindow
  */
 
 #include "Prefices.h"
