@@ -264,5 +264,5 @@ double hamming(std::vector<E> ex1, std::vector<E> ex2){
 }
 
 } /*Distance*/
-} /*MSILM*/
+} /*LEILA*/
 #endif /* DISTANCE_H_ */

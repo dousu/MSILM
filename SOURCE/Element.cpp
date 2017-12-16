@@ -2,7 +2,7 @@
  * Element.cpp
  *
  *  Created on: 2011/05/19
- *      Author: Hiroki Sudo
+ *      Author: Rindow
  */
 
 #include "Element.h"

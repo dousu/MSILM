@@ -2,7 +2,7 @@
  * Prefices.h
  *
  *  Created on: 2011/05/22
- *      Author: Hiroki Sudo
+ *      Author: Rindow
  */
 
 #ifndef PREFICES_H_

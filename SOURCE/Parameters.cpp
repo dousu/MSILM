@@ -1,8 +1,8 @@
 /*
- * Parameters.cpp
+ * Parameters2.cpp
  *
  *  Created on: 2011/06/24
- *      Author: Hiroki Sudo
+ *      Author: rindou
  */
 
 #include "Parameters.h"
@@ -29,7 +29,7 @@ Parameters::Parameters() {
   SAVE_LAST_STATE = false;
   SAVE_ALL_STATE = false;
 
-  FILE_PREFIX = "KILM_";
+  FILE_PREFIX = "LEKA_";
   DATE_STR = date_str;
   STATE_EXT = ".st";
   RESULT_EXT = ".rst";

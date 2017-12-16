@@ -1,12 +1,13 @@
 /* 
- * File:   MSILM_main.h
+ * File:   CM_main.h
  * Author: hiroki
  *
- * Created on October 28, 2013, 6:14 PM
+ * Created on August 9, 2014, 6:10 PM
  */
 
-#ifndef MSILM_MAIN_H
-#define	MSILM_MAIN_H
+#ifndef CM_MAIN_H
+#define	CM_MAIN_H
+
 
 #include <iostream>
 #include <vector>
@@ -34,27 +35,18 @@
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/serialization/export.hpp>
-//#include <boost/filesystem.hpp>
-//#include <boost/numeric/ublas/matrix.hpp>
-//#include <boost/numeric/ublas/io.hpp>
 
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 
-//igraph library
-//#include <igraph.h>
-
-//#include "KirbyAgent.h"
 #include "MSILMAgent.h"
 #include "Rule.h"
 #include "Element.h"
-//#include "Random.hpp"
 #include "MT19937.h"
 #include "Dictionary.h"
 #include "LogBox.h"
-#include "MSILMParameters.h"//#include "LEILAParameters.h"
-//#include "NetWorld.h"
+#include "MSILMParameters.h"
 #include "Distance.hpp"
 
 //construct function
@@ -99,14 +91,6 @@ tr_vector_double_to_string(std::vector<double> vector);
 std::vector<int>
 choice_selected_meanings(std::vector<Rule> meanings,MSILMParameters param);
 
-//std::vector<Rule>
-//construct_meanings(
-//		int VERB_INDEX_BEGIN = 0,
-//		int VERB_INDEX_END = 4,
-//		int NOUN_INDEX_BEGIN = 5,
-//		int NOUN_INDEX_END = 9
-//);
-
 double limit_time;
 
 void 
@@ -136,9 +120,6 @@ void save_agent(
 		MSILMAgent&
 		);
 
-//std::vector<int> analyze(std::vector<Rule>& meanings, KirbyAgent& agent);
-//int expression(std::vector<Rule>& meanings, KirbyAgent& agent);
 
-
-#endif	/* MSILM_MAIN_H */
+#endif	/* CM_MAIN_H */
 
