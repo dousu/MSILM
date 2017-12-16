@@ -1,5 +1,5 @@
 /*
- * LELAParameters.cpp
+ * MSILMParameters.cpp
  *
  *  Created on: 2011/06/29
  *      Author: rindou
@@ -7,7 +7,7 @@
 
 #include "MSILMParameters.h"
 
-//int LELAParameters::thread = 1;
+//int MSILMParameters::thread = 1;
 bool MSILMParameters::UTTER_MINIMUM = false;
 bool MSILMParameters::INDEX = false;
 

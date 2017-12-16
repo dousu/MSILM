@@ -1,5 +1,5 @@
 /*
- * LELAParameters.h
+ * MSILMParameters.h
  *
  *  Created on: 2011/06/29
  *      Author: rindou
