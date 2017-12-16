@@ -674,7 +674,7 @@ int main(int argc, char* argv[]) {
             /*辞書ファイル*/
             ("dictionary,d",
             boost::program_options::value<std::string>(),
-            "Dictionary file name for meaning space(\"/home/hiroki/Dropbox/LEILA/leila/LEILA/data.dic\")")
+            "Dictionary file name for meaning space(\"/home/hiroki/Dropbox/MSILM/MSILM/MSILM/data.dic\")")
 
             /*生成規則再利用*/
             ("keep-random-rule",

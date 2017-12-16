@@ -2,7 +2,7 @@
  * LogBox.h
  *
  *  Created on: 2011/06/18
- *      Author: Rindow
+ *      Author: Hiroki Sudo
  */
 
 #ifndef LOGBOX_H_
@@ -17,7 +17,7 @@
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
-//#include "LEILAParameters.h"
+//#include "MSILMParameters.h"
 /*
 class LogWriter {
   public:
