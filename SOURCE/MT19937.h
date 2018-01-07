@@ -1,5 +1,5 @@
 /*
- * MT19937E.h
+ * MT19937.h
  *
  *  Created on: 2012/12/04
  *      Author: Hiroki Sudo

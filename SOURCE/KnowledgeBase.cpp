@@ -1222,9 +1222,9 @@ KnowledgeBase::fabricate_for_complementing(Rule& src1) {
         ex = construct_buzz_word();
         src.external.swap(ex);
 
-        if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD) {
-            //send_db(src);
-        }
+        //if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD) {
+        //    //send_db(src);
+        //}
     }
 
     return src;

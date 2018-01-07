@@ -15,8 +15,8 @@ $(SOURCEDIR)/%.o: %.cpp
 	@[ -d $(SOURCEDIR/) ]
 	${CXX} ${OPT} ${LD} ${LIBS} -o $@ -c $<
 
-MSILM_main.cpp: MSILMAgent.o LogBox.o MSILMParameters.o MT19937.o
-MSILMAgent.o: KirbyAgent.o MSILMAgent.h
+MSILM_main.cpp: MSILMAgent.o Rule.o Element.o LogBox.o MSILMParameters.o MT19937.o ${HDS} MSILM_main.h
+MSILMAgent.o: KirbyAgent.o MT19937.o MSILMAgent.h
 KirbyAgent.o: KnowledgeBase.o LogBox.o KirbyAgent.h
 KnowledgeBase.o: ${HDS} Rule.o IndexFactory.o Prefices.o LogBox.o KnowledgeBase.h
 Rule.o: Element.o Dictionary.o IndexFactory.o Prefices.o Rule.h
@@ -26,8 +26,8 @@ IndexFactory.o:IndexFactory.h
 Prefices.o:Prefices.h
 LogBox.o:LogBox.h
 MT19937.o:MT19937.h
-MSILMParameters: Parameters.o MSILMParameters.h
-Parameters.o:Parameters.h
+MSILMParameters: Parameters.o LogBox.o MSILMParameters.h
+Parameters.o:KnowledgeBase.o Parameters.h
 
 clean:
 	rm -f ${SOURCEDIR}*.o ${SOURCEDIR}*.dump ${SOURCEDIR}*.exe ${SOURCEDIR}*.log ${SOURCEDIR}*.rst
