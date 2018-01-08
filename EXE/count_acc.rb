@@ -144,7 +144,7 @@ end
 $ITERATEnum=100
 $msilm="../SOURCE/msilm.exe"
 $dictionary="../SOURCE/data.dic"
-$THREADnum=10
+$THREADnum=5
 $RESULTbox=Hash.new
 $COUNTINGbox=Array.new
 countProcess(ARGV)

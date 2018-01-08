@@ -50,6 +50,8 @@ void
 construct_meanings(std::vector<Rule>& meanings);
 void
 construct_individuals(std::vector<Element>& inds, Dictionary &dic);
+void
+cognition_task_init(std::vector<int>& source, MSILMParameters& param);
 
 //analyze function
 void
@@ -73,6 +75,7 @@ double
 calculate_distance(std::vector<Rule>& meanings,
 	KnowledgeBase& kb1, KnowledgeBase& kb2, double& word_length);
 
+//utility
 void
 calculate_average_word_length(std::vector<Rule>& meanings, KnowledgeBase& kb1, double& word_length);
 
@@ -81,8 +84,9 @@ tr_vector_double_to_string(std::vector<double> vector);
 
 double limit_time;
 
-void
-cognition_task_init(std::vector<int>& source, MSILMParameters& param);
+void logging_off(MSILMParameters& param);
+
+void logging_on(MSILMParameters& param);
 
 template<typename _IFS>
 void resume_agent(

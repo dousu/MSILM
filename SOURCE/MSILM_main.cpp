@@ -322,6 +322,18 @@ tr_vector_double_to_string(std::vector<double> vector) {
 	return (res + ")");
 }
 
+void logging_off(MSILMParameters& param)
+{
+	param.LOGGING = false;
+	MSILMAgent::logging_off();
+}
+
+void logging_on(MSILMParameters& param)
+{
+	param.LOGGING = true;
+	MSILMAgent::logging_on();
+}
+
 std::vector<int>
 choice_meanings(std::vector<Rule> meanings, MSILMParameters param) {
 	std::vector<int> chosen_meaning_indexs;
@@ -404,98 +416,63 @@ int main(int argc, char* argv[]) {
 		("help,h", "Description")
 		//experiment parameters
 		/*ランダムシード*/
-		("random-seed,r",
-			boost::program_options::value<uint32_t>(),
-			"Random seed (101010)")
+		("random-seed,r", boost::program_options::value<uint32_t>(), "Random seed (101010)")
 
 		/*実験世代数*/
-			("generations,g",
-				boost::program_options::value<int>(),
-				"Max generation number (100)")
+		("generations,g", boost::program_options::value<int>(), "Max generation number (100)")
 		/*発話回数*/
-				("utterances,u",
-					boost::program_options::value<double>(),
-					"Uttering ratio for meaning space (0.5/[0-1])")
+		("utterances,u", boost::program_options::value<double>(), "Uttering ratio for meaning space (0.5/[0-1])")
 		/*エージェントに渡す意味の数*/
-					("multiple-meanings,m",
-						boost::program_options::value<int>(),
-						"At once utterance process, number of meanings given agent (2)")
-		/*学習期間の設定*/
-						("term",
-							boost::program_options::value<double>(),
-							"Single meaning ratio for utterances (0.0/[0-1])")
+		("multiple-meanings,m", boost::program_options::value<int>(), "At once utterance process, number of meanings given agent (2)")
+		/*直接学習確率の設定*/
+		("term", boost::program_options::value<double>(), "Single meaning ratio for utterances (0.0/[0-1])")
 		/*バッチ処理期間の設定*/
-							("window",
-								boost::program_options::value<int>(),
-								"Number of utterance for prediction of meaning")
+		("window", boost::program_options::value<int>(), "Number of utterance for prediction of meaning")
 		/*対称性バイアス*/
-								("symmetry", "When receive multiple meanings, use symmetry bias")
+		("symmetry", "When receive multiple meanings, use symmetry bias")
 		/*非完全一致対称性バイアス*/
 		("ucsymmetry", "When use symmetry bias, apply similarity for symmetry bias thinking")
 		/*言葉の省略*/
 		("omission", "Omission")
 		/*ロギング*/
-		("logging,l",
-			"Logging")
+		("logging,l", "Logging")
 		/*分析*/
-			("analyze,a",
-				"Analyze each agent for expression and a number of rules")
+		("analyze,a", "Analyze each agent for expression and a number of rules")
 		/*生成文字列最大長*/
-				("word-length,w",
-					boost::program_options::value<int>(),
-					"Max length of created word (3)")
-		///*世代における解析間隔*/
-		//("interspace-analysis", boost::program_options::value<int>(),
-		//"set analysis interspace for the number of generations")
-		///*世代におけるロギング間隔*/
-		//("interspace-logging", boost::program_options::value<int>(),
-		//"set logging interspace for the number of generations")
+		("word-length,w", boost::program_options::value<int>(), "Max length of created word (3)")
+		/*世代における解析間隔*/
+		("interspace-analysis", boost::program_options::value<int>(), "set analysis interspace for the number of generations")
+		/*世代におけるロギング間隔*/
+		("interspace-logging", boost::program_options::value<int>(), "set logging interspace for the number of generations")
 		/*親と子の選択した意味が合っていたかどうかの結果出力*/
-					("accuracy-meaning", "Output logging whether parent and child selected same meaning")
+		("accuracy-meaning", "Output logging whether parent and child selected same meaning")
 		/*辞書ファイル*/
-		("dictionary,d",
-			boost::program_options::value<std::string>(),
-			"Dictionary file name for meaning space(\"./data.dic\")")
+		("dictionary,d", boost::program_options::value<std::string>(), "Dictionary file name for meaning space(\"./data.dic\")")
 
 		/*生成規則再利用*/
-			("keep-random-rule",
-				"Keep created rules with a random word into parent knowledge-base")
+		("keep-random-rule", "Keep created rules with a random word into parent knowledge-base")
 		/*規則削除使用*/
-				("delete-redundant-rules",
-					"Delete redundant rules")
+		("delete-redundant-rules", "Delete redundant rules")
 		/*補完発話*/
-					("invention-utterance",
-						"Uttering with invention")
+		("invention-utterance", "Uttering with invention")
 		/*非重複発話*/
-						("unique-utterance",
-							"Do not use the same meaning on utterance process")
+		("unique-utterance", "Do not use the same meaning on utterance process")
 		/*FILE PREFIX*/
-							("prefix",
-								boost::program_options::value<std::string>(),
-								"Set file prefix (\"MSILM\")")
+		("prefix", boost::program_options::value<std::string>(), "Set file prefix (\"MSILM\")")
 
 		/*BASE PATH*/
-								("path",
-									boost::program_options::value<std::string>(),
-									"Set folder for output files (\"../RESULT/\")")
+		("path", boost::program_options::value<std::string>(), "Set folder for output files (\"../RESULT/\")")
 		/*再開*/
-									("resume",
-										boost::program_options::value<std::vector<std::string> >(),
-										"Resume an experiment from saved file name. Then used path/resume_file")
+		("resume", boost::program_options::value<std::vector<std::string> >(), "Resume an experiment from saved file name. Then used path/resume_file")
 		/*保存*/
-										("last-save",
-											"Save the last state of the experiment into the file")
+		("last-save", "Save the last state of the experiment into the file")
 		/*全保存*/
-											("all-save",
-												"Save the all state of the experiment into the file with the prefix")
+		("all-save", "Save the all state of the experiment into the file with the prefix")
 		/*保存形式*/
-												("format",
-													boost::program_options::value<std::string>(),
-													"Set saving format (bin/[xml])")
+		("format", boost::program_options::value<std::string>(), "Set saving format (bin/[xml])")
 
 		/*プログレスバー*/
-													("progress,p",
-														"Show progress bar");
+		("progress,p", "Show progress bar");
 
 
 	//process options
@@ -677,6 +654,33 @@ int main(int argc, char* argv[]) {
 		utterance_counter = 0;
 		time(&start);
 
+		//解析間隔の設定
+		if (param.INTER_ANALYSIS && generation_counter != 0) {
+			if (param.ANALYZE) {
+				if ((generation_counter + 1) % param.SPACE_ANALYSIS != 0) {
+					param.ANALYZE = false;
+				}
+			}
+			else {
+				if ((generation_counter + 1) % param.SPACE_ANALYSIS == 0) {
+					param.ANALYZE = true;
+				}
+			}
+		}
+		//ロギング間隔の設定
+		if (param.INTER_LOG && generation_counter != 0) {
+			if (param.LOGGING) {
+				if ((generation_counter + 1) % param.SPACE_LOG != 0) {
+					logging_off(param);
+				}
+			}
+			else {
+				if ((generation_counter + 1) % param.SPACE_ANALYSIS == 0) {
+					logging_on(param);
+				}
+			}
+		}
+
 #ifdef DEBUG
 		std::cerr << "Start Generation:" << generation_counter << std::endl;
 #endif
@@ -704,7 +708,7 @@ int main(int argc, char* argv[]) {
 			for (int i = 0; i < param.WINDOW && utterance_counter < param.UTTERANCES; i++) {
 				std::vector<Rule> meanings;
 				if (difftime(now, start) > limit_time) {
-					std::cerr << "TIME OVER : GENERATION " << generation_counter + 1 << std::endl;
+					std::cerr << "TIME OVER : GENERATION " << generation_counter + Base_Counter << std::endl;
 					return 0;
 				}
 
