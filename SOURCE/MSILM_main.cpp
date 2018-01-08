@@ -167,7 +167,7 @@ void analyze_and_output(MSILMParameters& param, std::vector<Rule> meaning_space,
 
 	//index = agent1.generation_index;
 	index_str = boost::lexical_cast<std::string>(index);
-	file = param.FILE_PREFIX + "_" + param.DATE_STR + "_" + boost::lexical_cast<std::string>(param.RANDOM_SEED) + "_" + index_str + ".rst";
+	file = param.FILE_PREFIX + param.DATE_STR + "_" + boost::lexical_cast<std::string>(param.RANDOM_SEED) + "_" + index_str + ".rst";
 
 	res = analyze(meaning_space, agent1, agent2);
 
@@ -396,7 +396,7 @@ int main(int argc, char* argv[]) {
 	int utterance_counter = 0;
 
 	int use_meaning_index = 0;
-	int generation_counter = 0;
+	int generation_counter = 1;
 	int Base_Counter = 0;
 	Rule utter, use_meaning;
 	std::vector<int> use_meaning_indexs;
@@ -648,34 +648,34 @@ int main(int argc, char* argv[]) {
 	}
 
 	//main loop
-	while (generation_counter < param.MAX_GENERATIONS) {
+	while (generation_counter <= param.MAX_GENERATIONS) {
 		std::vector<Rule> meanings_copy;
 		meanings_copy = meaning_space;
 		utterance_counter = 0;
 		time(&start);
 
 		//解析間隔の設定
-		if (param.INTER_ANALYSIS && generation_counter != 0) {
+		if (param.INTER_ANALYSIS && generation_counter != 1) {
 			if (param.ANALYZE) {
-				if ((generation_counter + 1) % param.SPACE_ANALYSIS != 0) {
+				if (generation_counter % param.SPACE_ANALYSIS != 0) {
 					param.ANALYZE = false;
 				}
 			}
 			else {
-				if ((generation_counter + 1) % param.SPACE_ANALYSIS == 0) {
+				if (generation_counter % param.SPACE_ANALYSIS == 0) {
 					param.ANALYZE = true;
 				}
 			}
 		}
 		//ロギング間隔の設定
-		if (param.INTER_LOG && generation_counter != 0) {
+		if (param.INTER_LOG && generation_counter != 1) {
 			if (param.LOGGING) {
-				if ((generation_counter + 1) % param.SPACE_LOG != 0) {
+				if (generation_counter % param.SPACE_LOG != 0) {
 					logging_off(param);
 				}
 			}
 			else {
-				if ((generation_counter + 1) % param.SPACE_ANALYSIS == 0) {
+				if (generation_counter % param.SPACE_ANALYSIS == 0) {
 					logging_on(param);
 				}
 			}
@@ -833,9 +833,9 @@ int main(int argc, char* argv[]) {
 #endif
 		if (param.ANALYZE) {
 			analyze_and_output(param, meaning_space,
-				child_agent, parent_agent, generation_counter);
+				child_agent, parent_agent, generation_counter+Base_Counter);
 			analyze_and_output(param, meaning_space,
-				parent_agent, child_agent, generation_counter);
+				parent_agent, child_agent, generation_counter+Base_Counter);
 		}
 
 		if (param.LOGGING) {

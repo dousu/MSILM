@@ -9,10 +9,11 @@
 #include "MSILMAgent.h"
 
 bool MSILMAgent::SYM_FLAG = false;
-bool MSILMAgent::UCSYM = true;
+bool MSILMAgent::UCSYM = false;
 bool MSILMAgent::OMISSION_FLAG = false;
 
 MSILMAgent::MSILMAgent() {
+	generation_index = 0;
 }
 
 MSILMAgent::~MSILMAgent() {
@@ -102,6 +103,7 @@ MSILMAgent::sym_off(void) {
 
 void
 MSILMAgent::ucsym_on(void) {
+	SYM_FLAG = true;
 	UCSYM = true;
 }
 
