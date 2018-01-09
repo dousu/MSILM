@@ -1,7 +1,7 @@
 LD = -L/usr/local/lib
 LIBS = -lboost_serialization -lboost_system -lboost_program_options
 SOURCEDIR = .
-OBJ = KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o Parameters.o MT19937.o
+OBJ = MSILMAgent.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o MSILMParameters.o Parameters.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
 HD = Distance.hpp
 HDS = $(addprefix ${SOURCEDIR}/, $(HD))
@@ -30,4 +30,4 @@ MSILMParameters: Parameters.o LogBox.o MSILMParameters.h
 Parameters.o:KnowledgeBase.o Parameters.h
 
 clean:
-	rm -f ${SOURCEDIR}*.o ${SOURCEDIR}*.dump ${SOURCEDIR}*.exe ${SOURCEDIR}*.log ${SOURCEDIR}*.rst
+	rm -f ${SOURCEDIR}/*.o ${SOURCEDIR}/*.dump ${SOURCEDIR}/*.exe ${SOURCEDIR}/*.log ${SOURCEDIR}/*.rst

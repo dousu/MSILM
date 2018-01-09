@@ -6,7 +6,7 @@
  */
 
 #ifndef MSILMPARAMETERS_H_
-#define MSILMARAMETERS_H_
+#define MSILMPARAMETERS_H_
 
 #include <vector>
 #include <string>
