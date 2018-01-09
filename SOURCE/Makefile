@@ -1,5 +1,12 @@
-LD = -L/usr/local/lib
+#for linux
+#LD = -L/usr/local/lib
+#for mac
+LD = -L/usr/local/opt/boost@1.59/lib
 LIBS = -lboost_serialization -lboost_system -lboost_program_options
+#for linux
+#ID = -I/usr/local/include
+#for mac
+ID = -I/usr/local/opt/boost@1.59/include
 SOURCEDIR = .
 OBJ = MSILMAgent.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o MSILMParameters.o Parameters.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
@@ -9,11 +16,14 @@ OPT = --std=c++14 -g -O2
 CXX = g++
 
 ms: ${OBJS}
-	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
+	${CXX} ${OPT} ${ID} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
 
 $(SOURCEDIR)/%.o: %.cpp
 	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${OPT} ${LD} ${LIBS} -o $@ -c $<
+	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
+
+boost:
+	${CXX} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
 
 MSILM_main.cpp: MSILMAgent.o Rule.o Element.o LogBox.o MSILMParameters.o MT19937.o ${HDS} MSILM_main.h
 MSILMAgent.o: KirbyAgent.o MT19937.o MSILMAgent.h
