@@ -753,7 +753,7 @@ int main(int argc, char* argv[]) {
 
 				history_meanings.push_back(meanings);
 
-				if (param.UNIQUE_UTTERANCE) {
+				if (param.UNIQUE_UTTERANCE) {//future work
 					if (param.MULTIPLE_MEANINGS > 1 && cognition_task_flag[utterance_counter] != 1) {
 						std::vector<int>::iterator use_meaning_indexs_it = use_meaning_indexs.begin();
 						std::vector<Rule> eraselist;
