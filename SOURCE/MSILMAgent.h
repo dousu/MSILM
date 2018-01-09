@@ -8,6 +8,7 @@
 #ifndef MSILMAGENT_H
 #define	MSILMAGENT_H
 #include "KirbyAgent.h"
+#include "MT19937.h"
 
 class MSILMAgent : public KirbyAgent{
 public:
@@ -18,46 +19,38 @@ public:
     
     MSILMAgent& operator=(const MSILMAgent& dst);
     
-    Rule say(Rule& internal);
-    void hear(std::vector<Rule>& terms, std::vector<Rule> all_meanings);
-    Rule dither_say(std::vector<Rule>& internals);
-//    void dither_hear(Rule& term,std::vector<Rule>& meanings, std::vector<Rule>& all_meanings);
-    void dither_hear(std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss, std::vector<Rule>& all_meanings);
+    Rule cognittion_say(std::vector<Rule>& internals);
+	std::vector<Rule> cognittion_say(std::vector<std::vector<Rule> >& internals);
+//    void cognittion_hear(Rule& term,std::vector<Rule>& meanings, std::vector<Rule>& all_meanings);
+    void cognittion_hear(std::vector<Rule>& utterances,std::vector<std::vector<Rule> >& meanings_list, std::vector<Rule>& all_meanings);
     
-    std::vector<Rule> think_meaning(std::vector<Rule>& internals);
-    std::vector<std::vector<Rule> > think_meaning(bool& flag,std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss, std::vector<Rule>& all_meanings);
-    std::vector<Rule> random_think_meaning(std::vector<Rule>& internals);
-    void symmetry_bias_think(std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss,std::vector<Rule>& reference, std::vector<KnowledgeBase::PatternType>& patterns,std::vector<std::vector<Rule> >& return_rules);
-    void mutual_exclusivity_bias_think(std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss,std::vector<Rule>& reference, std::vector<KnowledgeBase::PatternType>& patterns,std::vector<std::vector<Rule> >& return_rules);
-    void symmetry_bias_think(std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss,std::vector<Rule>& reference, std::vector<KnowledgeBase::PatternType>& patterns,std::vector<std::vector<Rule> >& term_pairs, std::vector<std::vector<std::vector<Rule> > >& meaning_pair_orders,std::vector<std::vector<double> >& meaning_distancess);
-    void mutual_exclusivity_bias_think(std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss,std::vector<Rule>& reference, std::vector<KnowledgeBase::PatternType>& patterns,std::vector<std::vector<Rule> >& term_pairs, std::vector<std::vector<std::vector<Rule> > >& meaning_pair_orders,std::vector<std::vector<double> >& meaning_distancess);
-    void decide_likelihood(std::vector<Rule>& terms, std::vector<std::vector<Rule> >& term_pairs, std::vector<std::vector<std::vector<Rule> > >& meaning_pair_orders);
+    Rule say_think_meaning(std::vector<Rule>& internals);
+    std::vector<Rule> hear_think_meaning(std::vector<Rule>& utterances,std::vector<std::vector<Rule> >& meaning_lists,std::vector<Rule>& all_meanings);
+    Rule random_think_meaning(std::vector<Rule>& internals);
+    void symmetry_bias_think(std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss,std::vector<Rule>& reference, std::vector<std::vector<Rule> >& return_rules);
+    void ucsymmetry_bias_inference(std::vector<Rule>& terms,std::vector<std::vector<Rule> >& meaningss,std::vector<Rule>& reference, std::vector<std::vector<Rule> >& term_pairs,std::vector<std::vector<std::vector<Rule> > >& meaning_pair_orders, std::vector<std::vector<double> >& meaning_distancess);
+    std::vector<std::vector<Rule> > decide_likelihood(std::vector<Rule>& terms, std::vector<std::vector<Rule> >& term_pairs, std::vector<std::vector<std::vector<Rule> > >& meaning_pair_orders);
     static bool SYM_FLAG;
-    static bool MUT_FLAG;
-    static bool EXC_FLAG;
+	static bool UCSYM;
     static bool OMISSION_FLAG;
     
-    void symmetry_exception_check(Rule term, std::vector<Rule>& reference, std::vector<KnowledgeBase::PatternType>& patterns);
-    void mutual_exclusivity_exception_check(Rule term, std::vector<Rule>& reference, std::vector<KnowledgeBase::PatternType>& patterns);
+	std::vector<Rule> return_last_selected_meaning();
     
-    Rule return_last_selected_meaning();
-    
-    //waste
+    //utility
     std::string tr_vector_Rule_to_string(std::vector<Rule> vector);
     std::string tr_vector_Rule_to_string(std::vector<std::vector<Rule> > vector);
+	std::vector<std::vector<Rule> > tr_vector_Rule_to_double_vector(std::vector<Rule>);
     
     MSILMAgent();
     virtual ~MSILMAgent();
     static void sym_on(void);
-    static void mut_on(void);
-    static void exc_on(void);
+	static void sym_off(void);
+	static void ucsym_on(void);
     static void omission_on(void);
     static void omission_off(void);
     
-    Rule last_selected_meaning;
-    
 private:
-
+	std::vector<Rule> last_selected_meaning;
 };
 
 class Random
