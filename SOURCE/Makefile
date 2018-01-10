@@ -1,12 +1,12 @@
 #for linux
 #LD = -L/usr/local/lib
 #for mac
-LD = -L/usr/local/opt/boost@1.59/lib
+LD = -L/usr/local/lib
 LIBS = -lboost_serialization -lboost_system -lboost_program_options
 #for linux
 #ID = -I/usr/local/include
 #for mac
-ID = -I/usr/local/opt/boost@1.59/include
+ID = -I/usr/local/include
 SOURCEDIR = .
 OBJ = MSILMAgent.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o MSILMParameters.o Parameters.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
