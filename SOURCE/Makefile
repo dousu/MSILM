@@ -23,7 +23,7 @@ $(SOURCEDIR)/%.o: %.cpp
 	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
 
 boost:
-	${CXX} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
+	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
 
 MSILM_main.cpp: MSILMAgent.o Rule.o Element.o LogBox.o MSILMParameters.o MT19937.o ${HDS} MSILM_main.h
 MSILMAgent.o: KirbyAgent.o MT19937.o MSILMAgent.h
