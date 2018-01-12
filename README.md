@@ -45,4 +45,5 @@ msilm.exeという実行ファイルができます．msilm.exeにオプショ�
 rubyによる実行ユーティリティを使うことで，複数スレッドでのシード値を変更しての実行，統計処理，グラフ描画が簡単にできます，初期設定では，世代数100，実行回数100，スレッド数5にて実行されます．実行回数ごとにシード値は変わります．第一引数に実行結果の入る（入っている）フォルダを指定してください．exe_count.rbでは--path, --dictionaryオプションは指定不要です．EXEフォルダを作業ディレクトリとして実行されることを想定した--dictionaryオプションが自動で付きますので，EXEフォルダにてexe_count.rbを実行してください．
 
 例：
-    ruby exe_count.rb ../RESULT --keep-random-rule --analyze --logging --generation 100 --accuracy-meaning --ucsymmetry
+
+        ruby exe_count.rb ../RESULT --keep-random-rule --analyze --logging --generation 100 --accuracy-meaning --ucsymmetry
