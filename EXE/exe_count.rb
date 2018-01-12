@@ -205,6 +205,11 @@ $SDbox=Array.new
 
 main(ARGV)
 
+#ruby exe_count.rb ~/Documents/GitHub/MSILM/RESULT/DIRECTORY -g 100 --keep-random-rule --interspace-analysis 5 --accuracy-meaning --term 1.0 -m 1
+#ruby exe_count.rb ~/Documents/GitHub/MSILM/RESULT/DIRECTORY -g 100 --keep-random-rule --interspace-analysis 5 --accuracy-meaning --omission
+#ruby exe_count.rb ~/Documents/GitHub/MSILM/RESULT/DIRECTORY -g 100 --keep-random-rule --interspace-analysis 5 --accuracy-meaning --symmetry
+#ruby exe_count.rb ~/Documents/GitHub/MSILM/RESULT/DIRECTORY -g 100 --keep-random-rule --interspace-analysis 5 --accuracy-meaning --ucsymmetry
+
 #ruby exe_count.rb ~/Desktop/MSILMresult/Omission/NoOmissions/NoOmission/ -u 0.50 -g 300 --keep-random-rule --analyze
 
 #ruby exe_count.rb ~/Desktop/MSILMresult/Omission_BothBiase/ -u 0.50 -g 500 --keep-random-rule --analyze --interspace-analysis 10 --logging --interspace-logging 10 --term 0.0 -m 3 --symmetry --mutual-exclusivity --omission-C
