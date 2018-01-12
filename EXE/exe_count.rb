@@ -80,6 +80,7 @@ end
 def countProcess()
   #result file name
   $CountingFileName=$folder.split("/")[-1]+".cnt.ave"
+  $CountingFileName2=$folder.split("/")[-1]+".cnt.sd"
 #  puts $CountingFileName #check
 
   #recognize target file name
@@ -133,6 +134,24 @@ def countProcess()
     end
   end
 
+  #標準偏差
+  $RESULTbox.each_pair do |key, ar|
+    index=key.split(" ")[-1].to_i
+
+	if $SDbox[index]==nil
+	  $SDbox[index]=ar.dup.map.with_index{|obj,pos| (obj-$COUNTINGbox[index][pos])**2.0}
+	else
+	  ar.each_with_index do |el,i|
+	    $SDbox[index][i]+=((el-$COUNTINGbox[index][i])**2.0)
+	  end
+	end
+  end
+  $SDbox.each_with_index do |ar,i|
+    if(numcounter[i]!=nil)
+	  ar.map!{|obj| obj/numcounter[i]}
+	end
+  end
+
   $ITERATEnum=$RESULTbox.size
   
   #output to file
@@ -162,7 +181,17 @@ def outputCOUNTINGbox
         f.write("\n")
       end
     end
-    f.write '# data format : #{generation} #{child expresivity} #{child sentence rules} #{child word rules} #{child rules} #{child to parent distance} #{WDIST} #{parent expresivity} #{parent sentence rules} #{parent word rules} #{parent rules} #{parent to child distance} #{WDIST}'+"\n#Number of detected data : #{$ITERATEnum}"
+    f.write '# data format : #{generation} #{child expresivity} #{child sentence rules} #{child word rules} #{child rules} #{child to parent distance} #{parent expresivity} #{parent sentence rules} #{parent word rules} #{parent rules} #{parent to child distance}'+"\n#Number of detected data : #{$ITERATEnum}"
+  end
+  File.open($folder+"../"+$CountingFileName2,"w") do |f|
+    $SDbox.each_with_index do |ar,i|
+      if ar!=nil
+        f.write("#{i+1}")
+        ar.each{|value| f.write(" #{value**(1/2.0)}")}
+        f.write("\n")
+      end
+    end
+    f.write '# standard deviation data format : #{generation} #{child expresivity} #{child sentence rules} #{child word rules} #{child rules} #{child to parent distance} #{parent expresivity} #{parent sentence rules} #{parent word rules} #{parent rules} #{parent to child distance}'+"\n#Number of detected data : #{$ITERATEnum}"
   end
 end
 
@@ -172,6 +201,7 @@ $dictionary="../SOURCE/data.dic"
 $THREADnum=5
 $RESULTbox=Hash.new
 $COUNTINGbox=Array.new
+$SDbox=Array.new
 
 main(ARGV)
 
