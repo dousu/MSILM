@@ -34,11 +34,11 @@ S. Kirby(2002)が提案したILM(Iterated Learning Model, 繰り返し学習モ�
 ## make&実行
 makeターゲットはmsとなっています．
 
-    make ms
+        make ms
 
 msilm.exeという実行ファイルができます．msilm.exeにオプションを付けて実行してください．オプションは-hで確認できます．
-  
-    msilm.exe -h
+
+        msilm.exe -h
   
 
 ## 実行ユーティリティ
