@@ -38,15 +38,20 @@ void
 MSILMParameters::set_option(boost::program_options::variables_map& vm) {
 	Parameters::set_option(vm);
 
+	if (vm.count("analyze")) {
+		ACC_MEA = true;
+	}
 	if (vm.count("interspace-analysis")) {
 		ANALYZE = true;
 		INTER_ANALYSIS = true;
 		SPACE_ANALYSIS = vm["interspace-analysis"].as<int>();
+		ACC_MEA = true;
 	}
 	if (vm.count("interspace-logging")) {
 		LOGGING = true;
 		INTER_LOG = true;
 		SPACE_LOG = vm["interspace-logging"].as<int>();
+		ACC_MEA = true;
 	}
 
 	if (vm.count("multiple-meanings")) {
