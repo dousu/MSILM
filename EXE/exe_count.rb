@@ -161,7 +161,7 @@ end
 def exe_counting(name,th_num)
   puts "Thread Number #{th_num}"
   puts "ACCESS FILE NAME:\n"+$folder+name+"\n"
-  #$RESULTboxに"#{seed} #{gen}"をkeyとして[#{expresivity},#{number of sentence},#{number of word},#{distance}]の配列を突っ込む
+  #$RESULTboxに"#{seed} #{gen}"をkeyとして[#{expresivity},#{number of sentence},#{number of word},#{distance}]の配列をいれる
   string=name.split(".rst")[0].split("_") #.rstの除去と_で分割
   seed=string[-2];gen=string[-1]
   key=seed+" "+gen
@@ -176,7 +176,7 @@ def outputCOUNTINGbox
   File.open($folder+"../"+$CountingFileName,"w") do |f|
     $COUNTINGbox.each_with_index do |ar,i|
       if ar!=nil
-        f.write("#{i+1}")
+        f.write("#{i}")
         ar.each{|value| f.write(" #{value}")}
         f.write("\n")
       end
@@ -186,7 +186,7 @@ def outputCOUNTINGbox
   File.open($folder+"../"+$CountingFileName2,"w") do |f|
     $SDbox.each_with_index do |ar,i|
       if ar!=nil
-        f.write("#{i+1}")
+        f.write("#{i}")
         ar.each{|value| f.write(" #{value**(1/2.0)}")}
         f.write("\n")
       end
