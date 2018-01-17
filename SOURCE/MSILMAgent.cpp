@@ -110,11 +110,13 @@ MSILMAgent::ucsym_on(void) {
 void
 MSILMAgent::omission_on(void) {
 	OMISSION_FLAG = true;
+	KnowledgeBase::omission_on();
 }
 
 void
 MSILMAgent::omission_off(void) {
 	OMISSION_FLAG = false;
+	KnowledgeBase::omission_off();
 }
 
 Rule

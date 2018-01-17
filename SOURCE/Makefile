@@ -28,7 +28,7 @@ boost:
 MSILM_main.cpp: MSILMAgent.o Rule.o Element.o LogBox.o MSILMParameters.o MT19937.o ${HDS} MSILM_main.h
 MSILMAgent.o: KirbyAgent.o MT19937.o MSILMAgent.h
 KirbyAgent.o: KnowledgeBase.o LogBox.o KirbyAgent.h
-KnowledgeBase.o: ${HDS} Rule.o IndexFactory.o Prefices.o LogBox.o KnowledgeBase.h
+KnowledgeBase.o: ${HDS} Rule.o IndexFactory.o Prefices.o LogBox.o MT19937.o KnowledgeBase.h
 Rule.o: Element.o Dictionary.o IndexFactory.o Prefices.o Rule.h
 Element.o:Dictionary.o IndexFactory.o Prefices.o Element.h
 Dictionary.o:Dictionary.h
