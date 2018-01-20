@@ -1,3 +1,4 @@
+ID = -I/usr/local/include
 LD = -L/usr/local/lib
 LIBS = -lboost_serialization -lboost_system -lboost_program_options
 SOURCEDIR = ./SOURCE
@@ -13,21 +14,24 @@ ms: ${OBJS}
 
 $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${OPT} ${ID} -o $@ -c $<
+	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
 
-MSILM_main.cpp: MSILMAgent.o LogBox.o MSILMParameters.o MT19937.o
-MSILMAgent.o: KirbyAgent.o MT19937.o MSILMAgent.h
-KirbyAgent.o: KnowledgeBase.o LogBox.o KirbyAgent.h
-KnowledgeBase.o: ${HDS} Rule.o IndexFactory.o Prefices.o LogBox.o MT19937.o KnowledgeBase.h
-Rule.o: Element.o Dictionary.o IndexFactory.o Prefices.o Rule.h
-Element.o:Dictionary.o IndexFactory.o Prefices.o Element.h
-Dictionary.o:Dictionary.h
-IndexFactory.o:IndexFactory.h
-Prefices.o:Prefices.h
-LogBox.o:LogBox.h
-MT19937.o:MT19937.h
-MSILMParameters: Parameters.o MSILMParameters.h
-Parameters.o:Parameters.h
+boost:
+	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
+
+$(SOURCEDIR)/MSILM_main.cpp: ${OBJS}
+$(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h
+$(SOURCEDIR)/KirbyAgent.o: $(SOURCEDIR)/KnowledgeBase.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/KirbyAgent.h
+$(SOURCEDIR)/KnowledgeBase.o: ${HDS} $(SOURCEDIR)/Rule.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/KnowledgeBase.h
+$(SOURCEDIR)/Rule.o: $(SOURCEDIR)/Element.o $(SOURCEDIR)/Dictionary.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/Rule.h
+$(SOURCEDIR)/Element.o: $(SOURCEDIR)/Dictionary.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/Element.h
+$(SOURCEDIR)/Dictionary.o: $(SOURCEDIR)/Dictionary.h
+$(SOURCEDIR)/IndexFactory.o: $(SOURCEDIR)/IndexFactory.h
+$(SOURCEDIR)/Prefices.o: $(SOURCEDIR)/Prefices.h
+$(SOURCEDIR)/LogBox.o: $(SOURCEDIR)/LogBox.h
+$(SOURCEDIR)/MT19937.o: $(SOURCEDIR)/MT19937.h
+$(SOURCEDIR)/MSILMParameters: $(SOURCEDIR)/Parameters.o $(SOURCEDIR)/MSILMParameters.h
+$(SOURCEDIR)/Parameters.o: $(SOURCEDIR)/Parameters.h
 
 clean:
 	rm -f ${SOURCEDIR}*.o ${SOURCEDIR}*.dump ${SOURCEDIR}*.exe ${SOURCEDIR}*.log ${SOURCEDIR}*.rst

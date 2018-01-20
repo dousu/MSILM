@@ -1,43 +1,37 @@
-#for linux
-#LD = -L/usr/local/lib
-#for mac
+ID = -I/usr/local/include
 LD = -L/usr/local/lib
 LIBS = -lboost_serialization -lboost_system -lboost_program_options
-#for linux
-#ID = -I/usr/local/include
-#for mac
-ID = -I/usr/local/include
 SOURCEDIR = .
-OBJ = MSILMAgent.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o MSILMParameters.o Parameters.o MT19937.o
+OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o Parameters.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
 HD = Distance.hpp
 HDS = $(addprefix ${SOURCEDIR}/, $(HD))
 OPT = --std=c++14 -g -O2
-CXX = g++
+CXX = g++ --std=c++14 -g -O2
 
 ms: ${OBJS}
-	${CXX} ${OPT} ${ID} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
+	${CXX} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
 
 $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${OPT} ${ID} -o $@ -c $<
+	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
 
 boost:
 	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
 
-MSILM_main.cpp: MSILMAgent.o Rule.o Element.o LogBox.o MSILMParameters.o MT19937.o ${HDS} MSILM_main.h
-MSILMAgent.o: KirbyAgent.o MT19937.o MSILMAgent.h
-KirbyAgent.o: KnowledgeBase.o LogBox.o KirbyAgent.h
-KnowledgeBase.o: ${HDS} Rule.o IndexFactory.o Prefices.o LogBox.o MT19937.o KnowledgeBase.h
-Rule.o: Element.o Dictionary.o IndexFactory.o Prefices.o Rule.h
-Element.o:Dictionary.o IndexFactory.o Prefices.o Element.h
-Dictionary.o:Dictionary.h
-IndexFactory.o:IndexFactory.h
-Prefices.o:Prefices.h
-LogBox.o:LogBox.h
-MT19937.o:MT19937.h
-MSILMParameters: Parameters.o LogBox.o MSILMParameters.h
-Parameters.o:KnowledgeBase.o Parameters.h
+$(SOURCEDIR)/MSILM_main.cpp: ${OBJS}
+$(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h
+$(SOURCEDIR)/KirbyAgent.o: $(SOURCEDIR)/KnowledgeBase.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/KirbyAgent.h
+$(SOURCEDIR)/KnowledgeBase.o: ${HDS} $(SOURCEDIR)/Rule.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/KnowledgeBase.h
+$(SOURCEDIR)/Rule.o: $(SOURCEDIR)/Element.o $(SOURCEDIR)/Dictionary.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/Rule.h
+$(SOURCEDIR)/Element.o: $(SOURCEDIR)/Dictionary.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/Element.h
+$(SOURCEDIR)/Dictionary.o: $(SOURCEDIR)/Dictionary.h
+$(SOURCEDIR)/IndexFactory.o: $(SOURCEDIR)/IndexFactory.h
+$(SOURCEDIR)/Prefices.o: $(SOURCEDIR)/Prefices.h
+$(SOURCEDIR)/LogBox.o: $(SOURCEDIR)/LogBox.h
+$(SOURCEDIR)/MT19937.o: $(SOURCEDIR)/MT19937.h
+$(SOURCEDIR)/MSILMParameters: $(SOURCEDIR)/Parameters.o $(SOURCEDIR)/MSILMParameters.h
+$(SOURCEDIR)/Parameters.o: $(SOURCEDIR)/Parameters.h
 
 clean:
-	rm -f ${SOURCEDIR}/*.o ${SOURCEDIR}/*.dump ${SOURCEDIR}/*.exe ${SOURCEDIR}/*.log ${SOURCEDIR}/*.rst
+	rm -f ${SOURCEDIR}*.o ${SOURCEDIR}*.dump ${SOURCEDIR}*.exe ${SOURCEDIR}*.log ${SOURCEDIR}*.rst
