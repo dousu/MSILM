@@ -11,9 +11,9 @@ CXX = g++ --std=c++14 -g -O2
 ms: ${OBJS}
 	${CXX} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
 
-$(SOURCEDIR)/%.o: %.cpp
+$(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${LD} ${LIBS} -o $@ -c $<
+	${CXX} ${OPT} ${ID} -o $@ -c $<
 
 MSILM_main.cpp: MSILMAgent.o LogBox.o MSILMParameters.o MT19937.o
 MSILMAgent.o: KirbyAgent.o MT19937.o MSILMAgent.h

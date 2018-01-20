@@ -18,9 +18,9 @@ CXX = g++
 ms: ${OBJS}
 	${CXX} ${OPT} ${ID} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
 
-$(SOURCEDIR)/%.o: %.cpp
+$(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
+	${CXX} ${OPT} ${ID} -o $@ -c $<
 
 boost:
 	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
