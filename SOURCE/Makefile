@@ -19,7 +19,7 @@ $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 boost:
 	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
 
-$(SOURCEDIR)/MSILM_main.cpp: ${OBJS}
+$(SOURCEDIR)/MSILM_main.cpp: ${OBJS} MSILM_main.h
 $(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h
 $(SOURCEDIR)/KirbyAgent.o: $(SOURCEDIR)/KnowledgeBase.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/KirbyAgent.h
 $(SOURCEDIR)/KnowledgeBase.o: ${HDS} $(SOURCEDIR)/Rule.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/KnowledgeBase.h
