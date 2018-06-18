@@ -10,7 +10,6 @@
 #define DISTANCE_H_
 
 #include <vector>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <array>
 #include <cstdlib>
 
@@ -30,7 +29,7 @@ private:
 	const int row, col;
 	std::array<std::array<int,I2>, I1> data;
 public:
-	matrix_exp() : row(I1), col(I2), data{{}} {};
+	Matrix_exp() : row(I1), col(I2), data{{}} {};
 	int & operator()(int i, int j){
 		if(0<=i && i<row && 0<=j && j<col){
 			return (data.at(i)).at(j);
@@ -38,7 +37,7 @@ public:
 			std::cerr << "invalid location in Distancce::Matrix_exp" << std::endl;
 			exit(1);
 		}
-	}
+	};
 };
 
 /*!
