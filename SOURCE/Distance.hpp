@@ -11,9 +11,9 @@
 
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/io.hpp>
-#include <boost/shared_ptr.hpp>
-#include "Element.h"
+//#include <boost/numeric/ublas/io.hpp>
+//#include <boost/shared_ptr.hpp>
+//#include "Element.h"
 
 /*!
  *
