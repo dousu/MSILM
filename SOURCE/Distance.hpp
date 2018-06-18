@@ -11,9 +11,8 @@
 
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
-//#include <boost/numeric/ublas/io.hpp>
-//#include <boost/shared_ptr.hpp>
-//#include "Element.h"
+#include <array>
+#include <cstdlib>
 
 /*!
  *
@@ -24,6 +23,24 @@ namespace {
  */
 namespace Distance {
 
+//matrix表現クラス
+template<int I1, int I2>
+class Matrix_exp{
+private:
+	const int row, col;
+	std::array<std::array<int,I2>, I1> data;
+public:
+	matrix_exp() : row(I1), col(I2), data{{}} {};
+	int & operator()(int i, int j){
+		if(0<=i && i<row && 0<=j && j<col){
+			return (data.at(i)).at(j);
+		}else{
+			std::cerr << "invalid location in Distancce::Matrix_exp" << std::endl;
+			exit(1);
+		}
+	}
+};
+
 /*!
  * ElementクラスのVectorインスタンスを引数に2つ取り、それぞれの編集距離(Levenstein距離)を計算します。
  * 返値は引数に渡されるVectorインスタンスの要素数で割られるため、0~1の値を取ります。
@@ -32,7 +49,7 @@ namespace Distance {
 template<class E>
 double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
     
-	boost::numeric::ublas::matrix<int> matrix(0, 0);
+	// boost::numeric::ublas::matrix<int> matrix(0, 0);
 	int col_size, row_size;
 	int cost_delta, cost1, cost2, cost3, cost;
 
@@ -46,7 +63,8 @@ double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
 	row_size = ex1.size() + 1;
 	col_size = ex2.size() + 1;
 
-	matrix.resize(row_size, col_size);
+	// matrix.resize(row_size, col_size);
+	Matrix_exp<row_size, col_size> matrix;
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
@@ -97,7 +115,7 @@ double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
 template<class E>
 double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
     
-	boost::numeric::ublas::matrix<int> matrix(0, 0);
+	// boost::numeric::ublas::matrix<int> matrix(0, 0);
 	int col_size, row_size;
 	int cost_delta, cost1, cost2, cost3, cost;
 
@@ -111,7 +129,8 @@ double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	row_size = ex1.size() + 1;
 	col_size = ex2.size() + 1;
 
-	matrix.resize(row_size, col_size);
+	// matrix.resize(row_size, col_size);
+	Matrix_exp<row_size, col_size> matrix;
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
