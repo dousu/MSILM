@@ -9,6 +9,7 @@ branches:
   only:
     - master
     - readability
+    - ex_boost
 matrix:
   include:
     - os: linux

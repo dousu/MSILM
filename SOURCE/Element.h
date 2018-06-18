@@ -12,8 +12,8 @@
 #include <string>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
+//#include <boost/serialization/serialization.hpp>
+//#include <boost/serialization/nvp.hpp>
 
 #include "Dictionary.h"
 #include "Prefices.h"
@@ -97,15 +97,15 @@ public:
 	//! インスタンスの文字列表現をstringで返します。（例:インスタンスが、カテゴリインデックス1で、変数インデックス2なら、"C1/x2"が返ってきます。）
 	std::string to_s(void);
 
-private:
+/*private:
     // serialize
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int /* file_version */){
+    void serialize(Archive &ar, const unsigned int ){
     	ar & BOOST_SERIALIZATION_NVP(type);
     	ar & BOOST_SERIALIZATION_NVP(obj);
     	ar & BOOST_SERIALIZATION_NVP(cat);
-    }
+    }*/
 
 };
 

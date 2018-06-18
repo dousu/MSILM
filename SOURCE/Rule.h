@@ -17,9 +17,9 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/vector.hpp>
+//#include <boost/serialization/serialization.hpp>
+//#include <boost/serialization/nvp.hpp>
+//#include <boost/serialization/vector.hpp>
 
 #include "Distance.hpp"
 #include "Element.h"
@@ -96,16 +96,16 @@ class Rule : public RuleTypeDef {
     std::vector< std::vector<Element> >
     moph(void);
     
-  private:
+  /*private:
     friend class boost::serialization::access;
     template<class Archive>
       void
-      serialize(Archive &ar, const unsigned int /* file_version */) {
+      serialize(Archive &ar, const unsigned int ) {
         ar & BOOST_SERIALIZATION_NVP(type);
         ar & BOOST_SERIALIZATION_NVP(cat);
         ar & BOOST_SERIALIZATION_NVP(internal);
         ar & BOOST_SERIALIZATION_NVP(external);
-      }
+      }*/
 };
 
 class RuleSort : public RuleTypeDef {

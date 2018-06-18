@@ -7,7 +7,7 @@
 
 #include "MSILM_main.h"
 
-template<typename _OFS>
+/*template<typename _OFS>
 void save_agent(
 	_OFS& ofs,
 	MSILMParameters& param,
@@ -47,7 +47,7 @@ void resume_agent(
 	ifs >> boost::serialization::make_nvp("MS", meanings);
 	ifs >> boost::serialization::make_nvp("DC", dic);
 	ifs >> boost::serialization::make_nvp("MS", agent);
-}
+}*/
 
 void construct_meanings(std::vector<Rule>& meanings) {
 	int VERB_INDEX_BEGIN = 0;
@@ -556,15 +556,17 @@ int main(int argc, char* argv[]) {
 			switch (param.SAVE_FORMAT) {
 			case Parameters::BIN:
 			{
-				boost::archive::binary_iarchive ia(ifs);
-				resume_agent(ia, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
+				//exception of boost
+				//boost::archive::binary_iarchive ia(ifs);
+				//resume_agent(ia, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
 			}
 			break;
 
 			case Parameters::XML:
 			{
-				boost::archive::xml_iarchive ia(ifs);
-				resume_agent(ia, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
+				//exception of boost
+				//boost::archive::xml_iarchive ia(ifs);
+				//resume_agent(ia, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
 			}
 			break;
 
@@ -863,21 +865,23 @@ int main(int argc, char* argv[]) {
 		switch (param.SAVE_FORMAT) {
 		case Parameters::BIN:
 		{
-			boost::archive::binary_oarchive oa(ofs);
-			int counter;
-			counter = Base_Counter + param.MAX_GENERATIONS;
-			save_agent<boost::archive::binary_oarchive>
-				(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
+			//exception of boost
+			//boost::archive::binary_oarchive oa(ofs);
+			//int counter;
+			//counter = Base_Counter + param.MAX_GENERATIONS;
+			//save_agent<boost::archive::binary_oarchive>
+			//	(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
 		}
 		break;
 
 		case Parameters::XML:
 		{
-			boost::archive::xml_oarchive oa(ofs);
-			int counter;
-			counter = Base_Counter + param.MAX_GENERATIONS;
-			save_agent<boost::archive::xml_oarchive>
-				(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
+			//exception of boost
+			//boost::archive::xml_oarchive oa(ofs);
+			//int counter;
+			//counter = Base_Counter + param.MAX_GENERATIONS;
+			//save_agent<boost::archive::xml_oarchive>
+			//	(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
 		}
 		break;
 
@@ -900,15 +904,17 @@ int main(int argc, char* argv[]) {
 			switch (param.SAVE_FORMAT) {
 			case Parameters::BIN:
 			{
-				boost::archive::binary_oarchive oa(ofs);
-				save_agent(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, *a_it);
+				//exception of boost
+				//boost::archive::binary_oarchive oa(ofs);
+				//save_agent(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, *a_it);
 			}
 			break;
 
 			case Parameters::XML:
 			{
-				boost::archive::xml_oarchive oa(ofs);
-				save_agent(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, *a_it);
+				//exception of boost
+				//boost::archive::xml_oarchive oa(ofs);
+				//save_agent(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, *a_it);
 			}
 			break;
 

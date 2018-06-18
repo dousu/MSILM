@@ -15,9 +15,6 @@ $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
 	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
 
-boost:
-	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
-
 test: ms
 
 $(SOURCEDIR)/MSILM_main.cpp: ${OBJS} MSILM_main.h
