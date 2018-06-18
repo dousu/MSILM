@@ -63,7 +63,7 @@ double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
 	col_size = ex2.size() + 1;
 
 	// matrix.resize(row_size, col_size);
-	Matrix_exp<static_cast<const int>(row_size), static_cast<const int>(col_size)> matrix;
+	Matrix_exp<const_cast<const int>(row_size), const_cast<const int>(col_size)> matrix;
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
@@ -129,7 +129,7 @@ double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	col_size = ex2.size() + 1;
 
 	// matrix.resize(row_size, col_size);
-	Matrix_exp<static_cast<const int>(row_size), static_cast<const int>(col_size)> matrix;
+	Matrix_exp<const_cast<const int>(row_size), const_cast<const int>(col_size)> matrix;
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
