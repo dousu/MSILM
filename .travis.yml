@@ -1,5 +1,5 @@
 language: cpp
-install: sudo apt-get install -y libboost1.59-all-dev
+install: sudo apt-get install -y libboost-all-dev
  # true
 script: make test
 dist: trusty
