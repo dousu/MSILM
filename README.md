@@ -1,4 +1,4 @@
-# MSILMとは
+# MSILM [![Build Status](https://travis-ci.org/dousu/MSILM.svg?branch=master)](https://travis-ci.org/dousu/MSILM)
 Meaning Selection Iterated Learning Model[1]
 
 S. Kirby(2002)が提案したILM(Iterated Learning Model, 繰り返し学習モデル)[2]に意味の不確定性を加えたモデルです．KirbyのILMでは，親が発話した意図を子が直接読み取れてしまうモデルでした．現実の環境では，親と子が共通の意味を想起できることは少ないはずです．そこで，親と子に複数の意味を提示するモデルを考案しました．親は提示された意味から一つ選びその発話を生成する．子は親の発話が提示された意味のどれから生成されたか推測して学習するモデルです[1]．
