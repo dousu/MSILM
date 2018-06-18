@@ -7,10 +7,10 @@ OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
 HD = Distance.hpp
 HDS = $(addprefix ${SOURCEDIR}/, $(HD))
 OPT = --std=c++14 -g -O2
-CXX = g++ --std=c++14 -g -O2
+CXX = g++
 
 ms: ${OBJS}
-	${CXX} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
+	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
 
 $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
@@ -18,6 +18,8 @@ $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 
 boost:
 	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
+
+test: ms
 
 $(SOURCEDIR)/MSILM_main.cpp: ${OBJS} MSILM_main.h
 $(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h
@@ -34,4 +36,4 @@ $(SOURCEDIR)/MSILMParameters: $(SOURCEDIR)/Parameters.o $(SOURCEDIR)/MSILMParame
 $(SOURCEDIR)/Parameters.o: $(SOURCEDIR)/Parameters.h
 
 clean:
-	rm -f ${SOURCEDIR}*.o ${SOURCEDIR}*.dump ${SOURCEDIR}*.exe ${SOURCEDIR}*.log ${SOURCEDIR}*.rst
+	rm -f ${SOURCEDIR}/*.o ${SOURCEDIR}/*.dump ${SOURCEDIR}/*.exe ${SOURCEDIR}/*.log ${SOURCEDIR}/*.rst
