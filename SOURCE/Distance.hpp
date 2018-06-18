@@ -49,7 +49,6 @@ template<class E>
 double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
     
 	// boost::numeric::ublas::matrix<int> matrix(0, 0);
-	int col_size, row_size;
 	int cost_delta, cost1, cost2, cost3, cost;
 
 	if (ex1.size() == 0 && ex2.size() != 0)
@@ -59,11 +58,11 @@ double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
 	if (ex1.size() == 0 && ex2.size() == 0)
 		return 0;
 
-	row_size = ex1.size() + 1;
-	col_size = ex2.size() + 1;
+	const int row_size = ex1.size() + 1;
+	const int col_size = ex2.size() + 1;
 
 	// matrix.resize(row_size, col_size);
-	Matrix_exp<const_cast<const int>(row_size), const_cast<const int>(col_size)> matrix;
+	Matrix_exp<row_size, col_size> matrix;
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
@@ -115,7 +114,6 @@ template<class E>
 double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
     
 	// boost::numeric::ublas::matrix<int> matrix(0, 0);
-	int col_size, row_size;
 	int cost_delta, cost1, cost2, cost3, cost;
 
 	if (ex1.size() == 0 && ex2.size() != 0)
@@ -125,11 +123,11 @@ double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	if (ex1.size() == 0 && ex2.size() == 0)
 		return 0;
 
-	row_size = ex1.size() + 1;
-	col_size = ex2.size() + 1;
+	const int row_size = ex1.size() + 1;
+	const int col_size = ex2.size() + 1;
 
 	// matrix.resize(row_size, col_size);
-	Matrix_exp<const_cast<const int>(row_size), const_cast<const int>(col_size)> matrix;
+	Matrix_exp<row_size, col_size> matrix;
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
