@@ -23,7 +23,7 @@ namespace {
 namespace Distance {
 
 //matrix表現クラス
-template<int I1, int I2>
+template<std::size_t I1, std::size_t I2>
 class Matrix_exp{
 private:
 	const int row, col;
