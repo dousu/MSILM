@@ -10,4 +10,4 @@ env:
     - CC=gcc CXX=g++
     - CC=clang CXX=clang++
 script:
-  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-$CC CXX=$CXX make test
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-$CC /bin/sh -c "CXX=$CXX make test"
