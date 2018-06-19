@@ -190,6 +190,7 @@ int snake(int k, int y, std::vector<E >& ary1, std::vector<E >& ary2, int m, int
 
 	return y;
 }
+*/
 
 /*!
  * O(np)法の実装

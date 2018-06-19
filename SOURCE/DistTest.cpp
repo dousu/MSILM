@@ -9,10 +9,10 @@ int main(void){
 	std::vector<int> e{6,7,8,9,1,2,3,4,5,10};
 	//dist(a,b)=3,dist(a,c)=1,dist(a,d)=2,dist(a,e)=5
 	if(
-		Distance::levenstein(a, b) == 3 &&
-		Distance::levenstein(a, c) == 1 &&
-		Distance::levenstein(a, d) == 2 &&
-		Distance::levenstein(a, e) == 5
+		Distance::levenstein2(a, b) == 3 &&
+		Distance::levenstein2(a, c) == 1 &&
+		Distance::levenstein2(a, d) == 2 &&
+		Distance::levenstein2(a, e) == 5
 		){
 		return 0;
 	}else{
