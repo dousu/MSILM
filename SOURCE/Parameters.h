@@ -89,6 +89,9 @@ class Parameters {
 
     virtual void
     set_option(boost::program_options::variables_map& vm);
+private:
+    std::string
+    string_join(const std::vector<std::string> & str_v, const std::string & delim);
 };
 
 #endif /* PARAMETERS2_H_ */

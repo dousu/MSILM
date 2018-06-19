@@ -13,7 +13,7 @@ Parameters::Parameters() {
   struct tm *stm = localtime(&now);
   char s[100];
   strftime(s,100,"%Yy%mm%dd%Hh%Mm%Ss",stm);
-  std::string date_str = boost::lexical_cast<std::string>(s);
+  std::string date_str = std::to_string(s);
 
   //initialization with default value
   MAX_GENERATIONS = 100;
@@ -179,19 +179,19 @@ Parameters::to_s(void) {
   if (svm.count("random-seed")) {
     bag.push_back("--random-seed");
     bag.push_back(
-        boost::lexical_cast<std::string>(svm["random-seed"].as<uint32_t>()));
+        std::to_string(svm["random-seed"].as<uint32_t>()));
   }
 
   if (svm.count("generations")) {
     bag.push_back("--generations");
     bag.push_back(
-        boost::lexical_cast<std::string>(svm["generations"].as<int>()));
+        std::to_string(svm["generations"].as<int>()));
   }
 
   if (svm.count("utterances")) {
     bag.push_back("--utterances");
     bag.push_back(
-        boost::lexical_cast<std::string>(svm["utterances"].as<double>()));
+        std::to_string(svm["utterances"].as<double>()));
   }
 
   if (svm.count("analyze")) {
@@ -210,7 +210,7 @@ Parameters::to_s(void) {
   if (svm.count("word-length")) {
     bag.push_back("--word-length");
     bag.push_back(
-        boost::lexical_cast<std::string>(svm["word-length"].as<int>()));
+        std::to_string(svm["word-length"].as<int>()));
   }
 
   if (svm.count("keep-random-rule")) {
@@ -251,6 +251,14 @@ Parameters::to_s(void) {
     bag.push_back("--progress");
   }
 
-  return boost::algorithm::join(bag, " ");
+  return string_join(bag, " ");
 }
 
+std::string
+Parameters::string_join(const std::vector<std::string> & str_v, const std::string & delim){
+    std::ostringstream os;
+    std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
+    std::string str = os.str();
+    str.erase(str.end()-delim.size(),str.end());
+    return str;
+}
