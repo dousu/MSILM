@@ -22,17 +22,16 @@ namespace {
  */
 namespace Distance {
 
-//matrix表現クラス
-template<std::size_t I1, std::size_t I2>
-class Matrix_exp{
+template<typename T = int>
+class MatrixExp{
 private:
 	const int row, col;
-	std::array<std::array<int,I2>, I1> data;
+	std::vector<int> data;
 public:
-	Matrix_exp() : row(I1), col(I2), data{{}} {};
-	int & operator()(int i, int j){
+	Matrix_exp(const int r, const int c) : row(r), col(c), data(r*c) {};
+	T & operator()(const int i, const int j){
 		if(0<=i && i<row && 0<=j && j<col){
-			return (data.at(i)).at(j);
+			return data.at(i*col+j);
 		}else{
 			std::cerr << "invalid location in Distancce::Matrix_exp" << std::endl;
 			exit(1);
@@ -62,7 +61,7 @@ double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
 	const int col_size = ex2.size() + 1;
 
 	// matrix.resize(row_size, col_size);
-	Matrix_exp<row_size, col_size> matrix;
+	MatrixExp<int> matrix(row_size, col_size);
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
@@ -127,7 +126,7 @@ double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	const int col_size = ex2.size() + 1;
 
 	// matrix.resize(row_size, col_size);
-	Matrix_exp<row_size, col_size> matrix;
+	MatrixExp<int> matrix(row_size, col_size);
 
 	for (int j = 0; j < col_size; j++) {
 		matrix(0, j) = j;
