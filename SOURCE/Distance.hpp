@@ -37,6 +37,8 @@ public:
 			exit(1);
 		}
 	};
+	int & size1(){return row};
+	int & size2(){return col};
 };
 
 /*!
@@ -167,7 +169,7 @@ double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	else
 		len = col_size;
 
-	return (matrix(matrix.size1() - 1, matrix.size2() - 1));
+	return matrix(matrix.size1() - 1, matrix.size2() - 1);
 }
 
 
