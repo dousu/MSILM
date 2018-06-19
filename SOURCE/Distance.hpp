@@ -51,15 +51,9 @@ template<class E>
 double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
 
 	double dist2 = static_cast<double>(levenstein2<E>(ex1,ex2));
+	int len = std::max(ex1.size(),ex2.size());
 
-	int len;
-	if (row_size > col_size)
-		len = row_size;
-	else
-		len = col_size;
-
-	return (matrix(matrix.size1() - 1, matrix.size2() - 1))
-			/ (static_cast<double>(len));
+	return dist2 / (static_cast<double>(len));
 }
 
 /*!
