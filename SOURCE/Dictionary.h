@@ -15,7 +15,7 @@
 #include <regex>
 #include <cstdlib>
 #include <iostream>
-
+#include <iterator>
 
 // #include <boost/algorithm/string.hpp>
 // #include <boost/algorithm/string/trim.hpp>
