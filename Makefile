@@ -1,6 +1,6 @@
 ID = -I/usr/local/include
 LD = -L/usr/local/lib
-LIBS = -lboost_system -lboost_program_options
+LIBS = -lboost_program_options
 SOURCEDIR = ./SOURCE
 OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o Parameters.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))

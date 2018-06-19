@@ -166,8 +166,8 @@ void analyze_and_output(MSILMParameters& param, std::vector<Rule> meaning_space,
 	//int index;
 
 	//index = agent1.generation_index;
-	index_str = boost::lexical_cast<std::string>(index);
-	file = param.FILE_PREFIX + param.DATE_STR + "_" + boost::lexical_cast<std::string>(param.RANDOM_SEED) + "_" + index_str + ".rst";
+	index_str = std::to_string(index);
+	file = param.FILE_PREFIX + param.DATE_STR + "_" + std::to_string(param.RANDOM_SEED) + "_" + index_str + ".rst";
 
 	res = analyze(meaning_space, agent1, agent2);
 
@@ -386,7 +386,7 @@ int main(int argc, char* argv[]) {
 	limit_time = 20 * 60; //second
 
 	MSILMParameters param;
-	boost::progress_display *show_progress = 0;
+	//boost::progress_display *show_progress = 0;
 
 	Generation all_generations;
 	std::vector<Rule> meaning_space;
@@ -615,7 +615,7 @@ int main(int argc, char* argv[]) {
 		std::vector<Rule>::iterator mean_it;
 
 		LogBox::push_log("USED RANDOM SEED");
-		LogBox::push_log(boost::lexical_cast<std::string>(param.RANDOM_SEED));
+		LogBox::push_log(std::to_string(param.RANDOM_SEED));
 
 		mean_it = meaning_space.begin();
 		LogBox::push_log("USEING MEANINGS");
@@ -631,20 +631,20 @@ int main(int argc, char* argv[]) {
 	param.UTTERANCES = (int)round(param.PER_UTTERANCES * meaning_space.size());
 	param.TERMS = (int)round(param.PER_TERM * param.UTTERANCES);
 	if (param.LOGGING) {
-		LogBox::push_log("UTTRANCE TIMES = " + boost::lexical_cast<std::string>(param.UTTERANCES));
-		LogBox::push_log("MULTIPLE MEANING TIMES = " + boost::lexical_cast<std::string>(param.TERMS));
+		LogBox::push_log("UTTRANCE TIMES = " + std::to_string(param.UTTERANCES));
+		LogBox::push_log("MULTIPLE MEANING TIMES = " + std::to_string(param.TERMS));
 	}
 
 	/*
 	 * Progress bar construction
 	 */
 	if (param.PROGRESS) {
-		boost::progress_display show_progress(param.UTTERANCES * param.MAX_GENERATIONS);
+		//boost::progress_display show_progress(param.UTTERANCES * param.MAX_GENERATIONS);
 	}
 
 	//Parameter Output
 	{
-		std::string param_file("Parameters_" + param.DATE_STR + "_" + boost::lexical_cast<std::string>(param.RANDOM_SEED) + ".prm");
+		std::string param_file("Parameters_" + param.DATE_STR + "_" + std::to_string(param.RANDOM_SEED) + ".prm");
 		std::ofstream ofs((param.BASE_PATH + param_file).c_str());
 		ofs << param.to_s() << std::endl;
 	}
@@ -688,7 +688,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 		if (param.LOGGING) {
-			LogBox::push_log("\nGENERATION: " + boost::lexical_cast<std::string>(generation_counter + Base_Counter));
+			LogBox::push_log("\nGENERATION: " + std::to_string(generation_counter + Base_Counter));
 			LogBox::push_log("BEFORE TALKING");
 			LogBox::push_log("\nPARRENT KNOWLEDGE");
 			LogBox::push_log(parent_agent.to_s());
@@ -733,17 +733,17 @@ int main(int argc, char* argv[]) {
 				}
 
 				if (param.LOGGING) {
-					LogBox::push_log("\n\n\n" + boost::lexical_cast<std::string>(utterance_counter + 1) + " UTTERANCE(S)");
+					LogBox::push_log("\n\n\n" + std::to_string(utterance_counter + 1) + " UTTERANCE(S)");
 					if (cognition_task_flag[utterance_counter] == 1) {
 						LogBox::push_log(
-							"MEANING INDEX: [" + boost::lexical_cast<std::string>(use_meaning_index) + "]");
+							"MEANING INDEX: [" + std::to_string(use_meaning_index) + "]");
 						LogBox::push_log("MEANING: " + (meanings_copy[use_meaning_index]).to_s());
 					}
 					else {
 						LogBox::push_log("USE MULTIPLE MEANINGS:");
 						std::vector<int>::iterator use_meaning_indexs_it = use_meaning_indexs.begin();
 						for (; use_meaning_indexs_it != use_meaning_indexs.end(); use_meaning_indexs_it++) {
-							LogBox::push_log("INDEX: [" + boost::lexical_cast<std::string>((*use_meaning_indexs_it)) + "]");
+							LogBox::push_log("INDEX: [" + std::to_string((*use_meaning_indexs_it)) + "]");
 							LogBox::push_log("MEANING: " + (meanings_copy[(*use_meaning_indexs_it)]).to_s());
 						}
 					}
@@ -781,7 +781,7 @@ int main(int argc, char* argv[]) {
 				}
 
 				if (param.PROGRESS)
-					++show_progress;
+					// ++show_progress;
 
 				utterance_counter++;
 			}
@@ -814,7 +814,7 @@ int main(int argc, char* argv[]) {
 
 		if (param.LOGGING) {
 			LogBox::push_log("\n<<--EDUCATION");
-			LogBox::push_log("\nGENERATION :" + boost::lexical_cast<std::string>(generation_counter + Base_Counter));
+			LogBox::push_log("\nGENERATION :" + std::to_string(generation_counter + Base_Counter));
 			LogBox::push_log("AFTER TALKING");
 			LogBox::push_log("\nCHILD KNOWLEDGE");
 			LogBox::push_log(child_agent.to_s());
@@ -854,7 +854,7 @@ int main(int argc, char* argv[]) {
 	}
 	if (param.ACC_MEA) {
 		std::string mea_file;
-		mea_file = param.FILE_PREFIX + "_" + param.DATE_STR + "_" + boost::lexical_cast<std::string>(param.RANDOM_SEED) + ".mea.acc";
+		mea_file = param.FILE_PREFIX + "_" + param.DATE_STR + "_" + std::to_string(param.RANDOM_SEED) + ".mea.acc";
 		accuracy_meaning_output(param, mea_file, cognittion_correct_data);
 	}
 
@@ -897,7 +897,7 @@ int main(int argc, char* argv[]) {
 		a_it = all_generations.begin();
 		while (a_it != all_generations.end()) {
 			std::string index_str;
-			index_str = boost::lexical_cast<std::string>(index + Base_Counter);
+			index_str = std::to_string(index + Base_Counter);
 			std::string stf((param.FILE_PREFIX + "_Gen_" + index_str + ".st").c_str());
 			std::ofstream ofs((param.BASE_PATH + stf).c_str());
 
@@ -929,7 +929,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	//delete
-	delete show_progress;
+	//delete show_progress;
 
 	if (param.LOGGING)
 		log.refresh_log();
