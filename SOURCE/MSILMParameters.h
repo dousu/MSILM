@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <boost/program_options.hpp>
 
 #include "Parameters.h"
@@ -44,6 +45,8 @@ public:
 
 	void set_option(boost::program_options::variables_map& vm);
 	std::string to_s(void);
+private:
+	std::string string_join(const std::vector<std::string> & str_v, const std::string & delim);
 };
 
 #endif /* MSILMPARAMETERS_H_ */
