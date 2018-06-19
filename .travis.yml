@@ -7,7 +7,7 @@ before_install:
   - docker pull asciian/docker-boost-clang
 env:
   matrix:
-    - CC=gcc
-    - CC=clang
+    - CC=gcc CXX=g++
+    - CC=clang CXX=clang++
 script:
-  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-$CC make test
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-$CC CXX=$CXX make test
