@@ -94,4 +94,12 @@ private:
     string_join(const std::vector<std::string> & str_v, const std::string & delim);
 };
 
+struct ProgramOption{
+    std::map<std::string, std::string> option; // <option名,値>
+    std::vector<std::pair<std::string,std::string>> description; // <option名,説明>
+    void parse(char* argv[]);
+    void add_option();
+    
+};
+
 #endif /* PARAMETERS2_H_ */
