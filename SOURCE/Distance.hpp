@@ -37,8 +37,8 @@ public:
 			exit(1);
 		}
 	};
-	int & size1(){return row};
-	int & size2(){return col};
+	int & size1(){return row;};
+	int & size2(){return col;};
 };
 
 /*!
@@ -172,7 +172,8 @@ double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	return matrix(matrix.size1() - 1, matrix.size2() - 1);
 }
 
-
+//test implimentation
+/*
 template <class E>
 int snake(int k, int y, std::vector<E >& ary1, std::vector<E >& ary2, int m, int n) {
 	int x;
@@ -184,9 +185,11 @@ int snake(int k, int y, std::vector<E >& ary1, std::vector<E >& ary2, int m, int
 
 	return y;
 }
+
 /*!
  * O(np)法の実装
  */
+/*
 template<class E>
 double onp_lv(std::vector<E>& ary1, std::vector<E>& ary2, double limit = -1) {
 	std::vector<E> temp;
@@ -252,6 +255,7 @@ double onp_lv(std::vector<E>& ary1, std::vector<E>& ary2, double limit = -1) {
 
 	return (delta + 2 * p)/(static_cast<double>(ary2.size()));
 }
+*/
 
 template<class E> 
 double hamming(std::vector<E> ex1, std::vector<E> ex2){
