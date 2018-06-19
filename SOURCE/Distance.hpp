@@ -10,7 +10,7 @@
 #define DISTANCE_H_
 
 #include <vector>
-#include <array>
+#include <valarray>
 #include <cstdlib>
 #include <iostream>
 
