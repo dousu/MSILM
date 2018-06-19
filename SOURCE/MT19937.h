@@ -53,7 +53,7 @@ public:
 	 */
 	static double rrand(void);
 
-	static double rrand(double,double)
+	static double rrand(double,double);
 
 	/*!
 	 * 使用済み乱数を破棄する
@@ -63,7 +63,7 @@ public:
 	/*!
 	 * 乱数シードを設定する
 	 */
-	static void set_seed(boost::uint32_t seed_value);
+	static void set_seed(std::uint32_t seed_value);
 };
 
 #endif /* MT19937_H_ */
