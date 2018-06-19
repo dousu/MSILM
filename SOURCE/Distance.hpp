@@ -28,7 +28,7 @@ private:
 	const int row, col;
 	std::vector<int> data;
 public:
-	Matrix_exp(const int r, const int c) : row(r), col(c), data(r*c) {};
+	MatrixExp(const int r, const int c) : row(r), col(c), data(r*c) {};
 	T & operator()(const int i, const int j){
 		if(0<=i && i<row && 0<=j && j<col){
 			return data.at(i*col+j);
