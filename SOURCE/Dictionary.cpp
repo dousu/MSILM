@@ -57,18 +57,19 @@ Dictionary::load(std::string& file_path) {
 			// throw "unknown key";
    //  }
     std::regex re("[,=]");
-    auto it = std::sregex_token_iterator(line.begin(),line.end(),re,-1);
-    auto it_end = std::sregex_token_iterator();
+    std::sregex_token_iterator it(line.begin(),line.end(),re,-1), it_end;
     if(*it == "IND"){
       it++;
-      for(;it!=it_end;it++){
-        individual_buffer.push_back(*it);
-      }
+      std::copy(it,it_end,std::back_inserter(individual_buffer));
+      // for(;it!=it_end;it++){
+      //   individual_buffer.push_back(*it);
+      // }
     }else if(*it == "SYM"){
       it++;
-      for(;it!=it_end;it++){
-        symbol_buffer.push_back(*it);
-      }
+      std::copy(it,it_end,std::back_inserter(symbol_buffer));
+      // for(;it!=it_end;it++){
+      //   symbol_buffer.push_back(*it);
+      // }
     }else{
       std::cerr << "undefined key\""<< (*it) << "\"" << std::endl;
       exit(1);
