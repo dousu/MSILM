@@ -69,7 +69,7 @@ void MT19937::waste(void){
 	rgen.discard(rcount);
 }
 
-void MT19937::set_seed(uint32_t seed_value){
+void MT19937::set_seed(std::uint32_t seed_value){
 	igen.seed(static_cast<unsigned long>(seed_value));
-	rgen.engine().seed(static_cast<unsigned long>(seed_value));
+	rgen.seed(static_cast<unsigned long>(seed_value));
 }
