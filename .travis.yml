@@ -1,39 +1,8 @@
 language: cpp
-install: sudo apt-get install -y libboost-all-dev
- # true
-script: make test
-dist: trusty
-sudo: required
-os: linux
-branches:
-  only:
-    - master
-    - readability
-    - ex_boost
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-trusty-5.0
-          packages:
-            - clang-5.0
-      env:
-        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
-
+sudo: false
+services:
+  - docker
 before_install:
-    - eval "${MATRIX_EVAL}"
-notifications:
-  email:
-    on_failure: change
+  - docker pull gcc:7
+script:
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp gcc:7 make
