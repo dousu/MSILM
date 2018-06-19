@@ -562,7 +562,7 @@ KnowledgeBase::merging(Rule& src) {
         it = unified_cat.begin();
         for (; it != unified_cat.end(); it++) {
             cat_vec.push_back(
-                    Prefices::CAT + ":" + static_cast<std::string>((*it).first));
+                    Prefices::CAT + ":" + std::to_string((*it).first));
         }
         std::string ss = string_join(cat_vec, ",");
         LogBox::push_log(ss);
