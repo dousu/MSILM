@@ -74,6 +74,10 @@ Dictionary::load(std::string& file_path) {
       exit(1);
     }
   }
+  if(symbol_buffer.size() == 0 || individual_buffer.size() == 0){
+    std::cerr << "no dictionary data" << std::endl;
+    exit(1);
+  }
 
   //store items
   int index;

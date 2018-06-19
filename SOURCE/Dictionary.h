@@ -13,6 +13,8 @@
 #include <fstream>
 #include <algorithm>
 #include <regex>
+#include <cstdlib>
+#include <iostream>
 
 
 // #include <boost/algorithm/string.hpp>
