@@ -18,11 +18,11 @@
 #include <iostream>
 
 #include <boost/program_options.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/string.hpp>
-#include <boost/serialization/export.hpp>
+//#include <boost/serialization/serialization.hpp>
+//#include <boost/serialization/nvp.hpp>
+//#include <boost/serialization/vector.hpp>
+//#include <boost/serialization/string.hpp>
+//#include <boost/serialization/export.hpp>
 
 #include "KnowledgeBase.h"
 

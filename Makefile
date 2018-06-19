@@ -1,24 +1,23 @@
-ID = -I/usr/local/include
-LD = -L/usr/local/lib
-LIBS = -lboost_serialization -lboost_system -lboost_program_options
+#ID = -I/usr/local/include
+#LD = -L/usr/local/lib
+LIBS = -lboost_program_options
 SOURCEDIR = ./SOURCE
 OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o Parameters.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
 HD = Distance.hpp
 HDS = $(addprefix ${SOURCEDIR}/, $(HD))
-OPT = --std=c++17 -g -O2
+OPT = -std=c++17
 
 ms: ${OBJS}
-	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
+	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LIBS} -o ${SOURCEDIR}/msilm.exe
 
 $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
-
-boost:
-	${CXX} ${ID} ${SOURCEDIR}/boost_version.cpp -o b_ver.exe
+	${CXX} ${OPT} -o $@ -c $<
 
 test: ms
+	${CXX} ${OPT} ${SOURCEDIR}/DistTest.cpp -o ${SOURCEDIR}/disttest.exe
+	${SOURCEDIR}/disttest.exe
 
 $(SOURCEDIR)/MSILM_main.cpp: ${OBJS} MSILM_main.h
 $(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h

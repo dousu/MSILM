@@ -14,14 +14,13 @@
 #include <climits>
 #include <algorithm>
 #include <map>
+#include <sstream>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/shared_ptr.hpp>
+//#include <boost/lexical_cast.hpp>
+//#include <boost/algorithm/string.hpp>
+//#include <boost/serialization/serialization.hpp>
+//#include <boost/serialization/nvp.hpp>
+//#include <boost/serialization/vector.hpp>
 
 #include "Rule.h"
 #include "IndexFactory.h"
@@ -278,30 +277,23 @@ private:
     void
     unique(RuleDBType& DB);
 
-private:
+    std::string
+    string_join(const std::vector<std::string> & str_v, const std::string & delim);
+
+/*private:
     friend class boost::serialization::access;
 
     template<class Archive>
     void
-    serialize(Archive &ar, const unsigned int /* file_version */) {
+    serialize(Archive &ar, const unsigned int ) {
         ar & BOOST_SERIALIZATION_NVP(cat_indexer);
         ar & BOOST_SERIALIZATION_NVP(sbox_buffer);
         ar & BOOST_SERIALIZATION_NVP(sentence_box);
         ar & BOOST_SERIALIZATION_NVP(sentenceDB);
         ar & BOOST_SERIALIZATION_NVP(word_box);
         ar & BOOST_SERIALIZATION_NVP(wordDB);
-
-        /*
-         * Multimapはシリアライズできない（めんどくさい）ので
-         * DIC_BLDフラグを合わせて保存しないようにする
-         * そうすればFabricate時に自動で再構築される
-         bool DIC_BLD;
-         ar & BOOST_SERIALIZATION_NVP(word_dic);
-         */
-
-        /*Staticをシリアライズすると何が起こるんだろうか*/
         ar & BOOST_SERIALIZATION_NVP(buzz_length);
-    }
+    }*/
 };
 
 #endif /* KNOWLEDGEBASE_H_ */

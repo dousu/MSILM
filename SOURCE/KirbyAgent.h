@@ -9,9 +9,9 @@
 #define KIRBYAGENT_H_
 #include <string>
 #include <iostream>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/lexical_cast.hpp>
+//#include <boost/serialization/serialization.hpp>
+//#include <boost/serialization/nvp.hpp>
+//#include <boost/lexical_cast.hpp>
 
 #include "IndexFactory.h"
 #include "KnowledgeBase.h"
@@ -73,15 +73,15 @@ public:
 	static void logging_on(void);
 	static void logging_off(void);
 
-private:
+/*private:
 	IndexFactory serial_generator;
 
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int /* file_version */){
+    void serialize(Archive &ar, const unsigned int){
     	ar & BOOST_SERIALIZATION_NVP(kb);
     	ar & BOOST_SERIALIZATION_NVP(generation_index);
-    }
+    }*/
 
 };
 

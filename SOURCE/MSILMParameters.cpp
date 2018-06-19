@@ -82,10 +82,10 @@ MSILMParameters::set_option(boost::program_options::variables_map& vm) {
 		ACC_MEA = true;
 	}
 	//必ずprefixの変更後に行うこと
-	SAVE_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + STATE_EXT);
-	RESULT_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + RESULT_EXT);
-	RESUME_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + STATE_EXT);
-	LOG_FILE = (FILE_PREFIX + DATE_STR + "_" + boost::lexical_cast<std::string>(RANDOM_SEED) + LOG_EXT);
+	SAVE_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
+	RESULT_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + RESULT_EXT);
+	RESUME_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
+	LOG_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + LOG_EXT);
 }
 
 std::string
@@ -96,22 +96,22 @@ MSILMParameters::to_s(void) {
 	bag.push_back(param1);
 
 	if (svm.count("interspace-analysis")) {
-		bag.push_back("--interspace-analysis " + boost::lexical_cast<std::string>(svm["interspace-analysis"].as<int>()));
+		bag.push_back("--interspace-analysis " + std::to_string(svm["interspace-analysis"].as<int>()));
 	}
 	if (svm.count("interspace-logging")) {
-		bag.push_back("--interspace-logging " + boost::lexical_cast<std::string>(svm["interspace-logging"].as<int>()));
+		bag.push_back("--interspace-logging " + std::to_string(svm["interspace-logging"].as<int>()));
 	}
 
 	if (svm.count("multiple-meanings")) {
-		bag.push_back("--multiple-meanings " + boost::lexical_cast<std::string>(svm["multiple-meanings"].as<int>()));
+		bag.push_back("--multiple-meanings " + std::to_string(svm["multiple-meanings"].as<int>()));
 	}
 
 	if (svm.count("term")) {
-		bag.push_back("--term " + boost::lexical_cast<std::string>(svm["term"].as<double>()));
+		bag.push_back("--term " + std::to_string(svm["term"].as<double>()));
 	}
 
 	if (svm.count("window")) {
-		bag.push_back("--window " + boost::lexical_cast<std::string>(svm["window"].as<int>()));
+		bag.push_back("--window " + std::to_string(svm["window"].as<int>()));
 	}
 
 	if (svm.count("symmetry")) {
@@ -130,5 +130,14 @@ MSILMParameters::to_s(void) {
 		bag.push_back("--accuracy-meaning ");
 	}
 
-	return boost::algorithm::join(bag, " ");
+	return string_join(bag, " ");
+}
+
+std::string
+MSILMParameters::string_join(const std::vector<std::string> & str_v, const std::string & delim){
+    std::ostringstream os;
+    std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
+    std::string str = os.str();
+    str.erase(str.end()-delim.size(),str.end());
+    return str;
 }

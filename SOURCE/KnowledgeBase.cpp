@@ -562,9 +562,9 @@ KnowledgeBase::merging(Rule& src) {
         it = unified_cat.begin();
         for (; it != unified_cat.end(); it++) {
             cat_vec.push_back(
-                    Prefices::CAT + ":" + boost::lexical_cast<std::string>((*it).first));
+                    Prefices::CAT + ":" + std::to_string((*it).first));
         }
-        std::string ss = boost::algorithm::join(cat_vec, ",");
+        std::string ss = string_join(cat_vec, ",");
         LogBox::push_log(ss);
         LogBox::push_log("**TARGET");
     }
@@ -1964,7 +1964,7 @@ KnowledgeBase::to_s(void) {
         it++;
     }
 
-    return boost::algorithm::join(buf, "\n");
+    return string_join(buf, "\n");
 }
 
 void
@@ -2228,6 +2228,14 @@ KnowledgeBase::recognize_terminal_strings(Rule& target) {
     return terminal_strings;
 }
 
+std::string
+KnowledgeBase::string_join(const std::vector<std::string> & str_v, const std::string & delim){
+    std::ostringstream os;
+    std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
+    std::string str = os.str();
+    str.erase(str.end()-delim.size(),str.end());
+    return str;
+}
 
 #ifdef DEBUG_KB
 

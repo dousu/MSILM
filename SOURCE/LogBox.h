@@ -13,9 +13,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <boost/thread.hpp>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 
 /*!
  * ロギングデータを保持するクラス

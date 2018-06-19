@@ -27,33 +27,57 @@ Dictionary::load(std::string& file_path) {
   std::ifstream source(file_path.c_str());
 
   //read test
-  if (!source.good())
-    throw "not found dictionary file";
+  if (!source.good()){
+    std::cerr << "not found dictionary file" << std::endl;
+    exit(1);
+  }
 
   //read items
   std::vector<std::string> individual_buffer;
   std::vector<std::string> symbol_buffer;
   while (std::getline(source, line)) {
-    std::string::size_type p = line.find("=");
-    std::string key = line.substr(0, p);
-    std::string value = line.substr(p + 1);
+   //  std::string::size_type p = line.find("=");
+   //  std::string key = line.substr(0, p);
+   //  std::string value = line.substr(p + 1);
 
-    boost::algorithm::trim_if(key, boost::algorithm::is_any_of("\r\n "));
-    boost::algorithm::trim_if(value, boost::algorithm::is_any_of("\r\n "));
+   //  boost::algorithm::trim_if(key, boost::algorithm::is_any_of("\r\n "));
+   //  boost::algorithm::trim_if(value, boost::algorithm::is_any_of("\r\n "));
 
-    if (key == "IND") {
-      boost::algorithm::split(individual_buffer, value,
-          boost::algorithm::is_any_of(","),
-          boost::algorithm::token_compress_on);
+   //  if (key == "IND") {
+   //    boost::algorithm::split(individual_buffer, value,
+   //        boost::algorithm::is_any_of(","),
+   //        boost::algorithm::token_compress_on);
+   //  }
+   //  else if (key == "SYM") {
+   //    boost::algorithm::split(symbol_buffer, value,
+   //        boost::algorithm::is_any_of(","),
+   //        boost::algorithm::token_compress_on);
+   //  }
+   //  else {
+			// throw "unknown key";
+   //  }
+    const std::regex re("[,=]");
+    std::sregex_token_iterator it(std::begin(line), std::end(line),re,-1), it_end;
+    if(*it == "IND"){
+      it++;
+      std::copy(it,it_end,std::back_inserter(individual_buffer));
+      // for(;it!=it_end;it++){
+      //   individual_buffer.push_back(*it);
+      // }
+    }else if(*it == "SYM"){
+      it++;
+      std::copy(it,it_end,std::back_inserter(symbol_buffer));
+      // for(;it!=it_end;it++){
+      //   symbol_buffer.push_back(*it);
+      // }
+    }else{
+      std::cerr << "undefined key\""<< (*it) << "\"" << std::endl;
+      exit(1);
     }
-    else if (key == "SYM") {
-      boost::algorithm::split(symbol_buffer, value,
-          boost::algorithm::is_any_of(","),
-          boost::algorithm::token_compress_on);
-    }
-    else {
-			throw "unknown key";
-    }
+  }
+  if(symbol_buffer.size() == 0 || individual_buffer.size() == 0){
+    std::cerr << "no dictionary data" << std::endl;
+    exit(1);
   }
 
   //store items
@@ -68,8 +92,10 @@ Dictionary::load(std::string& file_path) {
       conv_individual.insert(
           std::map<std::string, int>::value_type(*it, index));
     }
-    if (index + 1 <= index)
-      throw "range over";
+    if (index + 1 <= index){
+      std::cerr << "range over" << std::endl;
+      exit(1);
+    }
     index++;
     it++;
   }
@@ -82,8 +108,10 @@ Dictionary::load(std::string& file_path) {
       symbol.insert(std::map<int, std::string>::value_type(index, *it));
       conv_symbol.insert(std::map<std::string, int>::value_type(*it, index));
     }
-    if (index + 1 <= index)
-      throw "range over";
+    if (index + 1 <= index){
+      std::cerr << "range over" << std::endl;
+      exit(1);
+    }
 
     index++;
     it++;

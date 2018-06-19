@@ -11,12 +11,20 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
+#include <regex>
+#include <cstdlib>
+#include <iostream>
+#include <iterator>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/trim.hpp>
+// #include <boost/algorithm/string.hpp>
+// #include <boost/algorithm/string/trim.hpp>
+/*
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
+#include <boost/serializ
+ation/nvp.hpp>
 #include <boost/serialization/map.hpp>
+*/
 
 /*!
  * Kirbyモデルで使用する単語の辞書を提供します。例えば、内部言語列の単語「like」や「hate」など。
@@ -59,15 +67,15 @@ public:
 
 	static Dictionary copy(void);
 
-private:
+/*private:
     friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int /* file_version */){
+    void serialize(Archive &ar, const unsigned int ){
     	ar & BOOST_SERIALIZATION_NVP(individual);
     	ar & BOOST_SERIALIZATION_NVP(symbol);
     	ar & BOOST_SERIALIZATION_NVP(conv_individual);
     	ar & BOOST_SERIALIZATION_NVP(conv_symbol);
-    }
+    }*/
 };
 
 #endif /* DICTIONARY_H_ */

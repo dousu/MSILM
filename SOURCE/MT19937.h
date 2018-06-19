@@ -9,8 +9,9 @@
 #define MT19937_H_
 
 #include <vector>
-#include <boost/random.hpp>
+//#include <boost/random.hpp>
 #include <climits>
+#include <random>
 
 /*!
  * 乱数発生器を保持するクラス。
@@ -32,23 +33,27 @@ public:
 	static unsigned long long int rcount;
 
 
-	static boost::mt19937 igen;
-	static boost::uniform_int<int> idist;
-	static boost::variate_generator<boost::mt19937, boost::uniform_int<int> > _irand;
+	static std::mt19937 igen;
+	static std::uniform_int_distribution<> idist;
+	// static boost::variate_generator<boost::mt19937, boost::uniform_int<int> > _irand;
 
-	static boost::mt19937 rgen;
-	static boost::uniform_real<double> rdist;
-	static boost::variate_generator<boost::mt19937, boost::uniform_real<double> > _rrand;
+	static std::mt19937 rgen;
+	static std::uniform_real_distribution<> rdist;
+	// static boost::variate_generator<boost::mt19937, boost::uniform_real<double> > _rrand;
 
 	/*!
 	 * 整数乱数器
 	 */
 	static int irand(void);
 
+	static int irand(int, int);
+
 	/*!
 	 * 実数乱数器
 	 */
 	static double rrand(void);
+
+	static double rrand(double,double);
 
 	/*!
 	 * 使用済み乱数を破棄する
@@ -58,7 +63,7 @@ public:
 	/*!
 	 * 乱数シードを設定する
 	 */
-	static void set_seed(boost::uint32_t seed_value);
+	static void set_seed(std::uint32_t seed_value);
 };
 
 #endif /* MT19937_H_ */

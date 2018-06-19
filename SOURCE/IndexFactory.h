@@ -7,8 +7,8 @@
 
 #ifndef INDEXFACTORY_H_
 #define INDEXFACTORY_H_
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
+//#include <boost/serialization/serialization.hpp>
+//#include <boost/serialization/nvp.hpp>
 
 
 /*!
@@ -31,13 +31,14 @@ public:
 	int generate(void);
 
 	IndexFactory& operator=(const IndexFactory& dst);
-private:
+
+/*private:
     friend class boost::serialization::access;
 
     template<class Archive>
-    void serialize(Archive &ar, const unsigned int /* file_version */){
+    void serialize(Archive &ar, const unsigned int ){
     	ar & BOOST_SERIALIZATION_NVP(index_counter);
-    }
+    }*/
 };
 
 #endif /* INDEXFACTORY_H_ */
