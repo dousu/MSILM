@@ -37,8 +37,8 @@ public:
 			exit(1);
 		}
 	};
-	int & size1(){return row;};
-	int & size2(){return col;};
+	const int & size1(){return row;};
+	const int & size2(){return col;};
 };
 
 /*!
