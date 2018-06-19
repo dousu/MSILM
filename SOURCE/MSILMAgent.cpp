@@ -128,7 +128,7 @@ MSILMAgent::random_think_meaning(std::vector<Rule>& internals) {
 		LogBox::push_log("PROSPECTIVE MEANINGS:\n" + tr_vector_Rule_to_string(internals));
 	}
 	if (internals.size() > 0) {
-		int use_index = MT19937::irand() % internals.size();
+		int use_index = MT19937::irand(0,internals.size()-1);
 		result = internals[use_index];
 		if (LOGGING_FLAG) {
 			LogBox::push_log("RANDOM THINK\nRETURN MEANINGS:\n" + result.to_s());

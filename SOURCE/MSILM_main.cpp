@@ -344,11 +344,11 @@ choice_meanings(std::vector<Rule> meanings, MSILMParameters param) {
 			index = i;
 		}
 		else {
-			index = MT19937::irand() % meanings.size();
+			index = MT19937::irand(0,meanings.size()-1);
 		}
 		flag = (std::find(chosen_meaning_indexs.begin(), chosen_meaning_indexs.end(), index) != chosen_meaning_indexs.end());
 		while (flag) {
-			index = MT19937::irand() % meanings.size();
+			index = MT19937::irand(0,meanings.size()-1);
 			flag = (std::find(chosen_meaning_indexs.begin(), chosen_meaning_indexs.end(), index) != chosen_meaning_indexs.end());
 		}
 		chosen_meaning_indexs.push_back(index);
@@ -368,7 +368,7 @@ cognition_task_init(std::vector<int>& source, MSILMParameters& param) {
 	}
 	//Random r;
 	//std::random_shuffle(source.begin(), source.end(), r);
-	std::shuffle(source.begin(), source.end(), MT19937::_irand.engine());
+	std::shuffle(source.begin(), source.end(), MT19937::igen);
 
 }
 
@@ -716,7 +716,7 @@ int main(int argc, char* argv[]) {
 
 				if (cognition_task_flag[utterance_counter] == 1) {
 					use_meanings.clear();
-					use_meaning_index = MT19937::irand() % meanings_copy.size();
+					use_meaning_index = MT19937::irand(0,meanings_copy.size()-1);
 					use_meaning = meanings_copy[use_meaning_index];
 					use_meanings.push_back(use_meaning);
 					meanings = use_meanings;
