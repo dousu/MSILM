@@ -56,12 +56,12 @@ class Rule : public RuleTypeDef {
 
     //constructor
     Rule();
-    Rule(char* cstr);
+    //Rule(char* cstr);
 
     /*!
      * デバッグ用ではあるが、文字列表現のRuleを使ってインスタンスを生成する
      */
-    Rule(std::string str);
+    //Rule(std::string str);
 
     //destructor
     virtual

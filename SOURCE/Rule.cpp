@@ -17,135 +17,135 @@ Rule::Rule() {
 Rule::~Rule() {
 }
 
-Rule::Rule(char* cstr) {
-  Rule(std::string(cstr));
-}
+// Rule::Rule(char* cstr) {
+//   Rule(std::string(cstr));
+// }
 
-Rule::Rule(std::string str) {
-  std::vector<std::string> buf, inbuf, exbuf;
-  std::vector<std::string>::iterator it;
+// Rule::Rule(std::string str) {
+//   std::vector<std::string> buf, inbuf, exbuf;
+//   std::vector<std::string>::iterator it;
 
-  boost::algorithm::split(buf, str,
-      boost::algorithm::is_any_of(Prefices::ARW.c_str()),
-      boost::algorithm::token_compress_on);
+//   boost::algorithm::split(buf, str,
+//       boost::algorithm::is_any_of(Prefices::ARW.c_str()),
+//       boost::algorithm::token_compress_on);
 
-  //Left
-  buf[0] = boost::algorithm::trim_copy(buf[0]);
-  boost::algorithm::split(inbuf, buf[0], boost::algorithm::is_any_of(" "),
-      boost::algorithm::token_compress_on);
+//   //Left
+//   buf[0] = boost::algorithm::trim_copy(buf[0]);
+//   boost::algorithm::split(inbuf, buf[0], boost::algorithm::is_any_of(" "),
+//       boost::algorithm::token_compress_on);
 
-  //Rule type
-  if (inbuf[0] == Prefices::SEN) {
-    type = RULE_TYPE::SENTENCE;
-    cat = 0;
-  }
-  else if (inbuf[0].find(Prefices::CLN.c_str()) != std::string::npos) {
-    std::vector<std::string> cbuf;
-    boost::algorithm::split(cbuf, inbuf[0],
-        boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-        boost::algorithm::token_compress_on);
-    type = RULE_TYPE::NOUN;
-    cat = std::stoi(cbuf[1]);
-  }
-  else {
-    throw "Illegal String";
-  }
+//   //Rule type
+//   if (inbuf[0] == Prefices::SEN) {
+//     type = RULE_TYPE::SENTENCE;
+//     cat = 0;
+//   }
+//   else if (inbuf[0].find(Prefices::CLN.c_str()) != std::string::npos) {
+//     std::vector<std::string> cbuf;
+//     boost::algorithm::split(cbuf, inbuf[0],
+//         boost::algorithm::is_any_of(Prefices::CLN.c_str()),
+//         boost::algorithm::token_compress_on);
+//     type = RULE_TYPE::NOUN;
+//     cat = std::stoi(cbuf[1]);
+//   }
+//   else {
+//     throw "Illegal String";
+//   }
 
-  /*
-   * internal
-   */
-  it = inbuf.begin() + 1;
-  while (it != inbuf.end()) {
-    if ((*it).find(Prefices::DEL) != std::string::npos) {
-      std::vector<std::string> tbuf, cbuf, vbuf;
-      boost::algorithm::split(tbuf, *it,
-          boost::algorithm::is_any_of(Prefices::DEL.c_str()),
-          boost::algorithm::token_compress_on);
-      if (tbuf.size() != 2)
-        throw "error";
+//   /*
+//    * internal
+//    */
+//   it = inbuf.begin() + 1;
+//   while (it != inbuf.end()) {
+//     if ((*it).find(Prefices::DEL) != std::string::npos) {
+//       std::vector<std::string> tbuf, cbuf, vbuf;
+//       boost::algorithm::split(tbuf, *it,
+//           boost::algorithm::is_any_of(Prefices::DEL.c_str()),
+//           boost::algorithm::token_compress_on);
+//       if (tbuf.size() != 2)
+//         throw "error";
 
-      boost::algorithm::split(cbuf, tbuf[0],
-          boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-          boost::algorithm::token_compress_on);
-      if (cbuf.size() != 2)
-        throw "error";
+//       boost::algorithm::split(cbuf, tbuf[0],
+//           boost::algorithm::is_any_of(Prefices::CLN.c_str()),
+//           boost::algorithm::token_compress_on);
+//       if (cbuf.size() != 2)
+//         throw "error";
 
-      boost::algorithm::split(vbuf, tbuf[1],
-          boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-          boost::algorithm::token_compress_on);
-      if (vbuf.size() != 2)
-        throw "error";
+//       boost::algorithm::split(vbuf, tbuf[1],
+//           boost::algorithm::is_any_of(Prefices::CLN.c_str()),
+//           boost::algorithm::token_compress_on);
+//       if (vbuf.size() != 2)
+//         throw "error";
 
-      Element var;
-      unsigned int icat, ivar;
-      icat = std::stoi(cbuf[1]);
-      ivar = std::stoi(vbuf[1]);
-      var.set_var(ivar, icat);
-      internal.push_back(var);
-    }
-    else {
-      Element ind;
-      std::map<std::string, int>::iterator dic_it;
-      dic_it = dictionary.conv_individual.find(*it);
-      if (dic_it != dictionary.conv_individual.end()) {
-        ind.set_ind((*dic_it).second);
-        internal.push_back(ind);
-      }
-      else {
-        throw "error";
-      }
-    }
-    it++;
-  }
+//       Element var;
+//       unsigned int icat, ivar;
+//       icat = std::stoi(cbuf[1]);
+//       ivar = std::stoi(vbuf[1]);
+//       var.set_var(ivar, icat);
+//       internal.push_back(var);
+//     }
+//     else {
+//       Element ind;
+//       std::map<std::string, int>::iterator dic_it;
+//       dic_it = dictionary.conv_individual.find(*it);
+//       if (dic_it != dictionary.conv_individual.end()) {
+//         ind.set_ind((*dic_it).second);
+//         internal.push_back(ind);
+//       }
+//       else {
+//         throw "error";
+//       }
+//     }
+//     it++;
+//   }
 
-  if (buf.size() == 2) {
-    //Right
-    buf[1] = boost::algorithm::trim_copy(buf[1]);
-    boost::algorithm::split(exbuf, buf[1], boost::algorithm::is_any_of(" "),
-        boost::algorithm::token_compress_on);
+//   if (buf.size() == 2) {
+//     //Right
+//     buf[1] = boost::algorithm::trim_copy(buf[1]);
+//     boost::algorithm::split(exbuf, buf[1], boost::algorithm::is_any_of(" "),
+//         boost::algorithm::token_compress_on);
 
-    it = exbuf.begin();
-    while (it != exbuf.end()) {
-      if ((*it).find(Prefices::DEL) != std::string::npos) {
-        //CAT
-        std::vector<std::string> tbuf, cbuf, vbuf;
-        boost::algorithm::split(tbuf, *it,
-            boost::algorithm::is_any_of(Prefices::DEL.c_str()),
-            boost::algorithm::token_compress_on);
-        if (tbuf.size() != 2)
-          throw "error";
+//     it = exbuf.begin();
+//     while (it != exbuf.end()) {
+//       if ((*it).find(Prefices::DEL) != std::string::npos) {
+//         //CAT
+//         std::vector<std::string> tbuf, cbuf, vbuf;
+//         boost::algorithm::split(tbuf, *it,
+//             boost::algorithm::is_any_of(Prefices::DEL.c_str()),
+//             boost::algorithm::token_compress_on);
+//         if (tbuf.size() != 2)
+//           throw "error";
 
-        boost::algorithm::split(cbuf, tbuf[0],
-            boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-            boost::algorithm::token_compress_on);
+//         boost::algorithm::split(cbuf, tbuf[0],
+//             boost::algorithm::is_any_of(Prefices::CLN.c_str()),
+//             boost::algorithm::token_compress_on);
 
-        boost::algorithm::split(vbuf, tbuf[1],
-            boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-            boost::algorithm::token_compress_on);
+//         boost::algorithm::split(vbuf, tbuf[1],
+//             boost::algorithm::is_any_of(Prefices::CLN.c_str()),
+//             boost::algorithm::token_compress_on);
 
-        Element excat;
-        unsigned int icat, ivar;
-        icat = std::stoi(cbuf[1]);
-        ivar = std::stoi(vbuf[1]);
-        excat.set_cat(ivar, icat);
-        external.push_back(excat);
-      }
-      else {
-        Element sym;
-        std::map<std::string, int>::iterator dic_it;
-        dic_it = dictionary.conv_symbol.find(*it);
-        if (dic_it != dictionary.conv_symbol.end()) {
-          sym.set_sym((*dic_it).second);
-          external.push_back(sym);
-        }
-        else {
-          throw "error";
-        }
-      }
-      it++;
-    }
-  }
-}
+//         Element excat;
+//         unsigned int icat, ivar;
+//         icat = std::stoi(cbuf[1]);
+//         ivar = std::stoi(vbuf[1]);
+//         excat.set_cat(ivar, icat);
+//         external.push_back(excat);
+//       }
+//       else {
+//         Element sym;
+//         std::map<std::string, int>::iterator dic_it;
+//         dic_it = dictionary.conv_symbol.find(*it);
+//         if (dic_it != dictionary.conv_symbol.end()) {
+//           sym.set_sym((*dic_it).second);
+//           external.push_back(sym);
+//         }
+//         else {
+//           throw "error";
+//         }
+//       }
+//       it++;
+//     }
+//   }
+// }
 
 /*
  *
