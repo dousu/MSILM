@@ -75,13 +75,15 @@ double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
 	for (int index_ex1 = 0; index_ex1 < ex1.size(); index_ex1++) {
 		for (int index_ex2 = 0; index_ex2 < ex2.size(); index_ex2++) {
 
-			if (ex1[index_ex1].is_sym() && ex2[index_ex2].is_sym()) {
-				cost_delta = ex1[index_ex1] == ex2[index_ex2] ? 0 : 1;
-			} else if (ex1[index_ex1].is_cat() && ex2[index_ex2].is_cat()) {
-				cost_delta = ex1[index_ex1].obj == ex2[index_ex2].obj ? 0 : 1;
-			} else {
-				cost_delta = 1;
-			}
+			//入れ替えコスト1で計算
+			// if (ex1[index_ex1].is_sym() && ex2[index_ex2].is_sym()) {
+			// 	cost_delta = ex1[index_ex1] == ex2[index_ex2] ? 0 : 1;
+			// } else if (ex1[index_ex1].is_cat() && ex2[index_ex2].is_cat()) {
+			// 	cost_delta = ex1[index_ex1].obj == ex2[index_ex2].obj ? 0 : 1;
+			// } else {
+			// 	cost_delta = 1;
+			// }
+			cost_delta = ex1[index_ex1]==ex2[index_ex2] ? 0 : 1;
 
 			int x, y;
 			y = index_ex1 + 1;
@@ -112,7 +114,7 @@ double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
  * Vectorインスタンスの要素数で割らないため，値は0~無限となるLevenstein距離
  */
 template<class E>
-double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
+int levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
     
 	// boost::numeric::ublas::matrix<int> matrix(0, 0);
 	int cost_delta, cost1, cost2, cost3, cost;
@@ -140,13 +142,15 @@ double levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	for (int index_ex1 = 0; index_ex1 < ex1.size(); index_ex1++) {
 		for (int index_ex2 = 0; index_ex2 < ex2.size(); index_ex2++) {
 
-			if (ex1[index_ex1].is_sym() && ex2[index_ex2].is_sym()) {
-				cost_delta = ex1[index_ex1] == ex2[index_ex2] ? 0 : 1;
-			} else if (ex1[index_ex1].is_cat() && ex2[index_ex2].is_cat()) {
-				cost_delta = ex1[index_ex1].obj == ex2[index_ex2].obj ? 0 : 1;
-			} else {
-				cost_delta = 1;
-			}
+			//入れ替えコスト1で計算
+			// if (ex1[index_ex1].is_sym() && ex2[index_ex2].is_sym()) {
+			// 	cost_delta = ex1[index_ex1] == ex2[index_ex2] ? 0 : 1;
+			// } else if (ex1[index_ex1].is_cat() && ex2[index_ex2].is_cat()) {
+			// 	cost_delta = ex1[index_ex1].obj == ex2[index_ex2].obj ? 0 : 1;
+			// } else {
+			// 	cost_delta = 1;
+			// }
+			cost_delta = ex1[index_ex1]==ex2[index_ex2] ? 0 : 1;
 
 			int x, y;
 			y = index_ex1 + 1;

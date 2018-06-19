@@ -16,6 +16,8 @@ $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
 
 test: ms
+	${CXX} ${OPT} ${SOURCEDIR}/DistTest.cpp -o ${SOURCEDIR}/disttest.exe
+	${SOURCEDIR}/disttest.exe
 
 $(SOURCEDIR)/MSILM_main.cpp: ${OBJS} MSILM_main.h
 $(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h
