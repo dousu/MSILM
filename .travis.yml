@@ -4,5 +4,10 @@ services:
   - docker
 before_install:
   - docker pull asciian/docker-boost-gcc
+  - docker pull asciian/docker-boost-clang
+env:
+  matrix:
+    - CC=gcc
+    - CC=clang
 script:
-  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-gcc make test
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-$CC make test
