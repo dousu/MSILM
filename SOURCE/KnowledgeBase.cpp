@@ -2231,7 +2231,7 @@ KnowledgeBase::recognize_terminal_strings(Rule& target) {
 std::string
 KnowledgeBase::string_join(const std::vector<std::string> & str_v, const std::string & delim){
     std::ostringstream os;
-    std::copy(v_str.begin(), v_str.end(), std::ostream_iterator<std::string>(os, delim));
+    std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
     std::string str = os.str();
     str.erase(str.end()-delim.size(),str.end());
     return str;
