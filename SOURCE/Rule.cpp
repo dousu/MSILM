@@ -45,7 +45,7 @@ Rule::Rule(std::string str) {
         boost::algorithm::is_any_of(Prefices::CLN.c_str()),
         boost::algorithm::token_compress_on);
     type = RULE_TYPE::NOUN;
-    cat = std::to_i(cbuf[1]);
+    cat = std::stoi(cbuf[1]);
   }
   else {
     throw "Illegal String";
@@ -78,8 +78,8 @@ Rule::Rule(std::string str) {
 
       Element var;
       unsigned int icat, ivar;
-      icat = std::to_i(cbuf[1]);
-      ivar = std::to_i(vbuf[1]);
+      icat = std::stoi(cbuf[1]);
+      ivar = std::stoi(vbuf[1]);
       var.set_var(ivar, icat);
       internal.push_back(var);
     }
@@ -125,8 +125,8 @@ Rule::Rule(std::string str) {
 
         Element excat;
         unsigned int icat, ivar;
-        icat = std::to_i(cbuf[1]);
-        ivar = std::to_i(vbuf[1]);
+        icat = std::stoi(cbuf[1]);
+        ivar = std::stoi(vbuf[1]);
         excat.set_cat(ivar, icat);
         external.push_back(excat);
       }
