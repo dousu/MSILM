@@ -48,19 +48,12 @@ public:
  * 値が大きければ距離は離れていて、小さければ距離が近いと言う意味になります。計算量はO((n*m)^(1/2))
  */
 template<class E>
-double levenstein(std::vector<E> ex1, std::vector<E> ex2) {
-
-	double dist2 = static_cast<double>(levenstein2<E>(ex1,ex2));
-	int len = std::max(ex1.size(),ex2.size());
-
-	return dist2 / (static_cast<double>(len));
-}
-
+double levenstein(const std::vector<E> ex1, const std::vector<E> ex2);
 /*!
  * Vectorインスタンスの要素数で割らないため，値は0~無限(入力依存)となるLevenstein距離
  */
 template<class E>
-int levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
+int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2) {
     
 	// boost::numeric::ublas::matrix<int> matrix(0, 0);
 	int cost_delta, cost1, cost2, cost3, cost;
@@ -107,6 +100,15 @@ int levenstein2(std::vector<E> ex1, std::vector<E> ex2) {
 	}
 
 	return matrix(matrix.size1() - 1, matrix.size2() - 1);
+}
+
+template<class E>
+double levenstein(const std::vector<E> ex1, const std::vector<E> ex2) {
+
+	double dist2 = static_cast<double>(levenstein2<E>(ex1,ex2));
+	int len = std::max(ex1.size(),ex2.size());
+
+	return dist2 / (static_cast<double>(len));
 }
 
 //test implementation
