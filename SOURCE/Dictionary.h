@@ -12,6 +12,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <regex>
 
 
 // #include <boost/algorithm/string.hpp>
