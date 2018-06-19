@@ -57,7 +57,7 @@ Dictionary::load(std::string& file_path) {
 			// throw "unknown key";
    //  }
     std::regex re("[,=]");
-    std::sregex_token_iterator it(line.begin(),line.end(),re,-1), it_end;
+    std::scregex_token_iterator it(std::begin(line),std::end(line),re,-1), it_end;
     if(*it == "IND"){
       it++;
       std::copy(it,it_end,std::back_inserter(individual_buffer));
@@ -92,8 +92,10 @@ Dictionary::load(std::string& file_path) {
       conv_individual.insert(
           std::map<std::string, int>::value_type(*it, index));
     }
-    if (index + 1 <= index)
-      throw "range over";
+    if (index + 1 <= index){
+      std::cerr << "range over" << std::endl;
+      exit(1);
+    }
     index++;
     it++;
   }
@@ -106,8 +108,10 @@ Dictionary::load(std::string& file_path) {
       symbol.insert(std::map<int, std::string>::value_type(index, *it));
       conv_symbol.insert(std::map<std::string, int>::value_type(*it, index));
     }
-    if (index + 1 <= index)
-      throw "range over";
+    if (index + 1 <= index){
+      std::cerr << "range over" << std::endl;
+      exit(1);
+    }
 
     index++;
     it++;
