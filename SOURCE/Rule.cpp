@@ -258,7 +258,7 @@ Rule::to_s(void) {
       buffer.push_back((*it).to_s());
       it++;
     }
-    internal_str += boost::algorithm::join(buffer, " ");
+    internal_str += string_join(buffer, " ");
   }
 
   if (external.size() > 0) {
@@ -270,7 +270,7 @@ Rule::to_s(void) {
       buffer.push_back((*it).to_s());
       it++;
     }
-    external_str = boost::algorithm::join(buffer, " ");
+    external_str = string_join(buffer, " ");
   }
 
   return rule_type + " " + internal_str + " " + Prefices::ARW + " "
@@ -323,6 +323,15 @@ Rule::moph(void){
         moph.push_back(buf);
     
     return moph;
+}
+
+std::string
+Rule::string_join(const std::vector<std::string> & str_v, const std::string & delim){
+    std::ostringstream os;
+    std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
+    std::string str = os.str();
+    str.erase(str.end()-delim.size(),str.end());
+    return str;
 }
 
 #ifdef DEBUG_RULE

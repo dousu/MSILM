@@ -14,9 +14,9 @@
 #include <iostream>
 
 
-#include <boost/range/algorithm.hpp>
+//#include <boost/range/algorithm.hpp>
 //#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 //#include <boost/serialization/serialization.hpp>
 //#include <boost/serialization/nvp.hpp>
 //#include <boost/serialization/vector.hpp>
@@ -95,6 +95,10 @@ class Rule : public RuleTypeDef {
     
     std::vector< std::vector<Element> >
     moph(void);
+
+private:
+  std::string
+  string_join(const std::vector<std::string> & str_v, const std::string & delim);
     
   /*private:
     friend class boost::serialization::access;
