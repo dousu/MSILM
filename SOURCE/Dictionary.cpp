@@ -56,7 +56,7 @@ Dictionary::load(std::string& file_path) {
    //  else {
 			// throw "unknown key";
    //  }
-    std::regex re("[,=]");
+    const std::regex re("[,=]");
     std::sregex_token_iterator it(std::begin(line),std::end(line),re,-1), it_end;
     if(*it == "IND"){
       it++;

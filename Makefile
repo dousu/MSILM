@@ -1,5 +1,5 @@
-ID = -I/usr/local/include
-LD = -L/usr/local/lib
+#ID = -I/usr/local/include
+#LD = -L/usr/local/lib
 LIBS = -lboost_program_options
 SOURCEDIR = ./SOURCE
 OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o Parameters.o MT19937.o
@@ -9,11 +9,11 @@ HDS = $(addprefix ${SOURCEDIR}/, $(HD))
 OPT = -std=c++17
 
 ms: ${OBJS}
-	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
+	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LIBS} -o ${SOURCEDIR}/msilm.exe
 
 $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${OPT} ${ID} ${LD} ${LIBS} -o $@ -c $<
+	${CXX} ${OPT} -o $@ -c $<
 
 test: ms
 	${CXX} ${OPT} ${SOURCEDIR}/DistTest.cpp -o ${SOURCEDIR}/disttest.exe
