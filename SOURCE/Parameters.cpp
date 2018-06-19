@@ -13,7 +13,7 @@ Parameters::Parameters() {
   struct tm *stm = localtime(&now);
   char s[100];
   strftime(s,100,"%Yy%mm%dd%Hh%Mm%Ss",stm);
-  std::string date_str = std::to_string(s);
+  std::string date_str = std::string(s);
 
   //initialization with default value
   MAX_GENERATIONS = 100;
