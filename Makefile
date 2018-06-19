@@ -6,7 +6,7 @@ OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
 HD = Distance.hpp
 HDS = $(addprefix ${SOURCEDIR}/, $(HD))
-OPT = --std=c++17
+OPT = -std=c++17
 
 ms: ${OBJS}
 	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LD} ${LIBS} -o ${SOURCEDIR}/msilm.exe
