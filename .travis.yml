@@ -3,6 +3,6 @@ sudo: false
 services:
   - docker
 before_install:
-  - docker pull gcc:7
+  - docker pull asciian/docker-boost-gcc
 script:
-  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp gcc:7 make test
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-gcc make test
