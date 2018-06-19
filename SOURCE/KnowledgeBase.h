@@ -14,14 +14,13 @@
 #include <climits>
 #include <algorithm>
 #include <map>
+#include <sstream>
 
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
+//#include <boost/lexical_cast.hpp>
+//#include <boost/algorithm/string.hpp>
 //#include <boost/serialization/serialization.hpp>
 //#include <boost/serialization/nvp.hpp>
 //#include <boost/serialization/vector.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include "Rule.h"
 #include "IndexFactory.h"
@@ -277,6 +276,9 @@ private:
 
     void
     unique(RuleDBType& DB);
+
+    std::string
+    string_join(const std::vector<std::string> & str_v, const std::string & delim);
 
 /*private:
     friend class boost::serialization::access;

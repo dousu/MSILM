@@ -116,10 +116,10 @@ std::string Element::to_s(void){
 
 	case ELEM_TYPE::CAT_TYPE :
 		return Prefices::CAT + Prefices::CLN +
-				boost::lexical_cast<std::string>(cat) +
+				static_cast<std::string>(cat) +
 				Prefices::DEL +
 				Prefices::VAR + Prefices::CLN +
-				boost::lexical_cast<std::string>(obj);
+				static_cast<std::string>(obj);
 		break;
 
 	case ELEM_TYPE::MEAN_TYPE :
@@ -138,10 +138,10 @@ std::string Element::to_s(void){
 
 	case ELEM_TYPE::VAR_TYPE :
 		return Prefices::CAT + Prefices::CLN +
-				boost::lexical_cast<std::string>(cat) +
+				static_cast<std::string>(cat) +
 				Prefices::DEL +
 				Prefices::VAR + Prefices::CLN +
-				boost::lexical_cast<std::string>(obj);
+				static_cast<std::string>(obj);
 		break;
 
 	default:

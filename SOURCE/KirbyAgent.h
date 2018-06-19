@@ -11,7 +11,7 @@
 #include <iostream>
 //#include <boost/serialization/serialization.hpp>
 //#include <boost/serialization/nvp.hpp>
-#include <boost/lexical_cast.hpp>
+//#include <boost/lexical_cast.hpp>
 
 #include "IndexFactory.h"
 #include "KnowledgeBase.h"
