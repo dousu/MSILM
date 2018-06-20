@@ -262,3 +262,31 @@ Parameters::string_join(const std::vector<std::string> & str_v, const std::strin
     str.erase(str.end()-delim.size(),str.end());
     return str;
 }
+
+/*
+struct A{
+  int i;
+  A(){i=0};
+  A & add_int(){
+    return *this;
+  }
+  A & operator()(int j){
+    i += j;
+    return *this;
+  };
+};
+int main(void){
+  A a;
+  a.add_int()
+    (3)
+    (2)
+    (-1)
+    (7)
+    (5);
+  if(a.i != 16){
+    exit(1);
+  }else{
+    return 0;
+  }
+}
+*/
