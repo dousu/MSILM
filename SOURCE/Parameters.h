@@ -94,12 +94,15 @@ private:
     string_join(const std::vector<std::string> & str_v, const std::string & delim);
 };
 
-struct ProgramOption{
-    std::map<std::string, std::string> option; // <option名,値>
-    std::vector<std::pair<std::string,std::string>> description; // <option名,説明>
+/*struct ProgramOption{
+    std::map<std::string, int> optionID; // <option名,optionID>
+    std::map<int, std::string> optionValue; // <optionID,値>
+    std::map<int,std::string> description; // <optionID,説明>
+    template<const typename&...args>
+    std::tuple<args...> optionType; // <optionID,型>
     void parse(char* argv[]);
     void add_option();
     
-};
+};*/
 
 #endif /* PARAMETERS2_H_ */
