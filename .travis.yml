@@ -1,3 +1,4 @@
+language: cpp
 install: sudo apt-get install -y libboost-all-dev
 script: make test
 dist: trusty
