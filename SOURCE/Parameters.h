@@ -105,7 +105,7 @@ struct ProgramOption{
     std::map<int, std::string> optionValue; // <optionID,値>
     std::map<int, std::string> description; // <optionID,説明>
     template<typename T>
-    T value<T>(){return T();}; //型情報
+    T value(){return T();}; //型情報
      // <optionID,型>
     void parse(char* argv[]);
     ProgramOption & add_option(){return *this};
