@@ -24,6 +24,7 @@
 //#include <boost/serialization/string.hpp>
 //#include <boost/serialization/export.hpp>
 
+#include "IndexFactory.h"
 #include "KnowledgeBase.h"
 
 class Parameters {
@@ -93,16 +94,32 @@ private:
     std::string
     string_join(const std::vector<std::string> & str_v, const std::string & delim);
 };
+//template<int I, typename... Types>
+//class TypeInfo<I,Types...>{
+//
+//};
 
-/*struct ProgramOption{
+struct ProgramOption{
+    IndexFactory opt_idx;
     std::map<std::string, int> optionID; // <option名,optionID>
     std::map<int, std::string> optionValue; // <optionID,値>
-    std::map<int,std::string> description; // <optionID,説明>
-    template<const typename&...args>
-    std::tuple<args...> optionType; // <optionID,型>
+    std::map<int, std::string> description; // <optionID,説明>
+    template<typename T>
+    T value<T>(){return T();}; //型情報
+     // <optionID,型>
     void parse(char* argv[]);
-    void add_option();
-    
-};*/
+    ProgramOption & add_option(){return *this};
+    template<typename T>
+    ProgramOption & operator()(std::string name,std::string desc,T init_value){
+        //処理
+        int index = opt_idx.generate();
+        optionID[name] = index;
+        description[index] = desc;
+        if(type != ""){
+            optionValue[index] = init_value;
+        }
+        return *this;
+    };
+};
 
 #endif /* PARAMETERS2_H_ */
