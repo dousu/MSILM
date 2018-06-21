@@ -289,4 +289,30 @@ int main(void){
     return 0;
   }
 }
+
+struct C{
+  using D = std::variant<int,double,std::string>;
+  std::vector<D> vec;
+
+  template<typename T>
+  static T value(){
+    return T();
+  };
+
+  template<typename T>
+  static T value(T obj){
+    return T(obj);
+  };
+
+  C & add_option(){return *this;};
+  D & get(int i){return vec[i];};
+}
+int main(void){
+  A a;
+  a.add_option() (A::value<int>(5)) (A::value<double>(0.5)) (A::value<std::string>("Hello"));
+  std::cout << std::get<int>(a.get(0)) << std::endl;
+  std::cout << std::get<double>(a.get(1)) << std::endl;
+  std::cout << std::get<std::string>(a.get(2)) << std::endl;
+  return 0;
+}
 */
