@@ -98,6 +98,7 @@ private:
   enum type_id {itype, dtype, stype, btype};
   std::map<int, type_id> type_inf;
 public:
+  ProgramOption(){};
   ProgramOption(const ProgramOption & po){
   	idx = po.idx;
   	id = po.id;
