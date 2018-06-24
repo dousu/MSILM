@@ -115,7 +115,7 @@ public:
       obj = other.get<double>();
     }else if(other.check_type<std::string>()){
       obj = other.get<std::string>();
-    }else if(other.check_type<bool>(other.obj)){
+    }else if(other.check_type<bool>()){
       obj = other.get<bool>();
     }else{
       std::cerr << "irregular option value" << std::endl;
