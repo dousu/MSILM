@@ -173,13 +173,13 @@ MSILMParameters::set_option(ProgramOption & po) {
 	if (po.count("interspace-analysis")) {
 		ANALYZE = true;
 		INTER_ANALYSIS = true;
-		SPACE_ANALYSIS = po["interspace-analysis"].as<int>();
+		SPACE_ANALYSIS = po.get<int>("interspace-analysis");
 		ACC_MEA = true;
 	}
 	if (po.count("interspace-logging")) {
 		LOGGING = true;
 		INTER_LOG = true;
-		SPACE_LOG = po["interspace-logging"].get<bool>("interspace-logging");
+		SPACE_LOG = po.get<bool>("interspace-logging");
 		ACC_MEA = true;
 	}
 
@@ -269,7 +269,7 @@ MSILMParameters::to_s(void) {
   	if (spo.count("unique-utterance")) {
     	bag.push_back("--unique-utterance");
     	bag.push_back(
-    		std::string(spo.get<bool>("unique-utterance")));
+    		std::to_string(spo.get<bool>("unique-utterance")));
   	}
 
   	if (spo.count("dictionary")) {
@@ -345,7 +345,7 @@ MSILMParameters::to_s(void) {
 	}
 
 	if (spo.count("window")) {
-		bag.push_back("--window " + std::to_string(spo["window"].as<int>()));
+		bag.push_back("--window");
 		bag.push_back(
 			std::to_string(spo.get<int>("window")));
 	}

@@ -23,6 +23,7 @@
 
 #include "LogBox.h"
 #include "IndexFactory.h"
+#include "KnowledgeBase.h"
 
 struct OptionValue{
   using OptionTypes = std::variant<bool,int,double,std::string>;
