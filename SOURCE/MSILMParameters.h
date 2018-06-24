@@ -22,8 +22,58 @@
 /*!
  * 実行時引数を解釈して、保持するクラス
  */
-class MSILMParameters: public Parameters {
+class MSILMParameters{
 public:
+	//type definition
+    enum FORMAT {
+      BIN, XML
+    };
+
+    //experiment parameters
+    int MAX_GENERATIONS;
+    double PER_UTTERANCES; //
+    boost::uint32_t RANDOM_SEED; //
+    bool UNIQUE_UTTERANCE; //
+
+    uint32_t CONTROLS;
+    int buzz_length;
+
+    //Execution Values
+    int UTTERANCES;
+    uint32_t Generation_Counter; //
+
+    //system parameters
+    bool LOGGING;
+    bool PROGRESS;
+    bool RESUME;
+    bool SAVE_LAST_STATE;
+    bool SAVE_ALL_STATE;
+    bool ANALYZE;
+	bool OMISSION;
+    FORMAT SAVE_FORMAT;
+
+    std::string DICTIONARY_FILE;
+
+    //file parameters
+    //file prefix
+    std::string FILE_PREFIX;
+    std::string DATE_STR;
+
+    //file extentions
+    std::string STATE_EXT;
+    std::string RESULT_EXT;
+    std::string LOG_EXT;
+
+    //path
+    std::string BASE_PATH;
+
+    //file
+    std::string LOG_FILE;
+    std::string RESUME_FILE;
+    std::string SAVE_FILE;
+    std::string RESULT_FILE;
+
+    boost::program_options::variables_map svm;
 	bool INTER_ANALYSIS;
 	int SPACE_ANALYSIS;
 
