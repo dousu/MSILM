@@ -158,7 +158,7 @@ public:
   }
 
   template<typename T>
-  bool check_type(){
+  bool check_type() const{
     return std::holds_alternative<T>(obj);
   }
 };
@@ -212,7 +212,7 @@ struct ProgramOption{
   void help(){
     std::string help_comment = "HELP:\n";
     for(auto index : id){
-      help_comment += "  " + id.first + "\t" + desc_list[id.second].second + "\n";
+      help_comment += "  " + index.first + "\t" + desc_list[index.second].second + "\n";
     }
     std::cout << help_comment << std::endl;
     exit(0);
@@ -231,7 +231,7 @@ struct ProgramOption{
           std::cerr << "incorrect number of options" << std::endl;
           exit(1);
         }else{
-          type_id ti = type_inf[key];
+          type_id ti = type_inf[id[key]];
           bool b;
           switch(ti){
           case itype:
@@ -270,7 +270,7 @@ struct ProgramOption{
         help();
       }
       if(id.count(option)){
-        key = option
+        key = option;
         i++;
       }else{
         std::cerr << "unknown option" << std::endl;
@@ -281,6 +281,6 @@ struct ProgramOption{
       val_list[id[key]] = true;
     }
   }
-}
+};
 
 #endif /* PARAMETERS_H_ */
