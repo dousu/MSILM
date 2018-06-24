@@ -412,7 +412,7 @@ int main(int argc, char* argv[]) {
 	 *
 	 **************************************************/
 	ProgramOption opt;
-	opt.add_options()
+	opt.add_option()
 		("help,h", "Description")
 		//experiment parameters
 		/*ランダムシード*/
