@@ -94,32 +94,190 @@ private:
     std::string
     string_join(const std::vector<std::string> & str_v, const std::string & delim);
 };
-//template<int I, typename... Types>
-//class TypeInfo<I,Types...>{
-//
-//};
+struct OptionValue{
+  using OptionTypes=std::variant<bool,int,double,std::string>;
+private:
+  OptionTypes obj;
+public:
+  OptionValue(){};
 
-struct ProgramOption{
-    IndexFactory opt_idx;
-    std::map<std::string, int> optionID; // <option名,optionID>
-    std::map<int, std::string> optionValue; // <optionID,値>
-    std::map<int, std::string> description; // <optionID,説明>
-    template<typename T>
-    T value(){return T();}; //型情報
-     // <optionID,型>
-    void parse(char* argv[]);
-    ProgramOption & add_option(){return *this};
-    template<typename T>
-    ProgramOption & operator()(std::string name,std::string desc,T init_value){
-        //処理
-        int index = opt_idx.generate();
-        optionID[name] = index;
-        description[index] = desc;
-        if(type != ""){
-            optionValue[index] = init_value;
-        }
-        return *this;
-    };
+  template<typename T>
+  OptionValue(T val){
+    obj = val;
+  };
+  OptionValue & operator=(const OptionValue & other){
+    if(other.check_type<int>()){
+      obj = other.get<int>();
+    }else if(other.check_type<double>()){
+      obj = other.get<double>();
+    }else if(other.check_type<std::string>()){
+      obj = other.get<std::string>();
+    }else if(other.check_type<bool>(other.obj)){
+      obj = other.get<bool>();
+    }else{
+      std::cerr << "irregular option value" << std::endl;
+      exit(1);
+    }
+    return *this;
+  };
+
+  template<typename T>
+  OptionValue & operator=(const T val){
+    //型チェック
+    if(check_type<int>()){
+      if(!std::is_same<int,T>::value){
+        std::cerr << "conflict type data" << std::endl;
+      }
+    }else if(check_type<double>()){
+      if(!std::is_same<double,T>::value){
+        std::cerr << "conflict type data" << std::endl;
+      }
+    }else if(check_type<std::string>()){
+      if(!std::is_same<std::string,T>::value){
+        std::cerr << "conflict type data" << std::endl;
+      }
+    }else if(check_type<bool>()){
+      if(!std::is_same<bool,T>::value){
+        std::cerr << "conflict type data" << std::endl;
+      }
+    }else{
+      std::cerr << "irregular option value" << std::endl;
+      exit(1);
+    }
+    OptionTypes value = val;
+    obj = value;
+    return *this;
+  };
+
+  template<typename T>
+  T get() const{
+    return std::get<T>(obj);
+  }
+
+  template<typename T>
+  bool check_type(){
+    return std::holds_alternative<T>(obj);
+  }
 };
+struct ProgramOption{
+  IndexFactory idx;
+  std::map<std::string, int> id;
+  std::map<int, OptionValue> val_list;
+  std::map<int, std::string> desc_list;
+  enum type_id {itype, dtype, stype, btype};
+  std::map<int, type_id> type_inf;
 
-#endif /* PARAMETERS2_H_ */
+  template<typename T>
+  static T value(){return T();}
+
+  template<typename T>
+  static T value(T obj){return T(obj);}
+
+  ProgramOption & add_option(){return *this;}
+
+  ProgramOption & operator()(std::string key, OptionValue val, std::string str){
+    int index = idx.generate();
+    id[key] = index;
+    val_list[index] = val;
+    desc_list[index] = str;
+    if(val.check_type<int>()){
+      type_inf[index] = itype;
+    }else if(val.check_type<double>()){
+      type_inf[index] = dtype;
+    }else if(val.check_type<std::string>()){
+      type_inf[index] = stype;
+    }else if(val.check_type<bool>()){
+      type_inf[index] = btype;
+    }else{
+      std::cerr << "unknown type" << std::endl;
+    }
+    return *this;
+  }
+  ProgramOption & operator()(std::string key, std::string str){
+    int index = idx.generate();
+    id[key] = index;
+    val_list[index] = bool(false);
+    desc_list[index] = str;
+    type_inf[index] = btype;
+    return *this;
+  }
+
+  template<typename T>
+  T get(std::string str){
+    return val_list[id[str]].get<T>();
+  }
+  void help(){
+    std::string help_comment = "HELP:\n";
+    for(auto index : id){
+      help_comment += "  " + id.first + "\t" + desc_list[id.second].second + "\n";
+    }
+    std::cout << help_comment << std::endl;
+    exit(0);
+  }
+  void parse(int argc, char* argv[]){
+    int i = 1;
+    std::string key = "";
+    std::stringstream ss;
+    while(i < argc){
+      std::string str(argv[i]);
+      std::string option;
+      if(str.find("-") != 0 ||
+        (str.find("-") == 0 && str.size() < 2) ||
+        (str.find("--") == 0 && str.size() < 3)){
+        if(id.count(key) == 0){
+          std::cerr << "incorrect number of options" << std::endl;
+          exit(1);
+        }else{
+          type_id ti = type_inf[key];
+          bool b;
+          switch(ti){
+          case itype:
+            val_list[id[key]] = std::stoi(str);
+            break;
+          case dtype:
+            val_list[id[key]] = std::stod(str);
+            break;
+          case stype:
+            val_list[id[key]] = str;
+            break;
+          case btype:
+            ss << std::boolalpha << str;
+            ss >> b;
+            ss << std::noboolalpha;
+            val_list[id[key]] = b;
+            break;
+          default:
+            std::cerr << "unknown type_id" << std::endl;
+            exit(1);
+          }
+        }
+        key = "";
+        i++;
+        continue;
+      }
+      if(key != ""){
+        val_list[id[key]] = true;
+      }
+      if(str.find("--") == 0){
+        std::copy(std::begin(str)+2, std::end(str), std::back_inserter(option));
+      }else{
+        std::copy(std::begin(str)+1, std::end(str), std::back_inserter(option));
+      }
+      if(option == "h" || option == "help"){
+        help();
+      }
+      if(id.count(option)){
+        key = option
+        i++;
+      }else{
+        std::cerr << "unknown option" << std::endl;
+        exit(1);
+      }
+    }
+    if(key != ""){
+      val_list[id[key]] = true;
+    }
+  }
+}
+
+#endif /* PARAMETERS_H_ */
