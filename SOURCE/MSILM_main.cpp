@@ -419,15 +419,15 @@ int main(int argc, char* argv[]) {
 		("random-seed,r", ProgramOption::value<int>(), "Random seed (101010)")
 
 		/*実験世代数*/
-		("generations,g", ProrgamOption::value<int>(), "Max generation number (100)")
+		("generations,g", ProgramOption::value<int>(), "Max generation number (100)")
 		/*発話回数*/
-		("utterances,u", ProrgamOption::value<double>(), "Uttering ratio for meaning space (0.5/[0-1])")
+		("utterances,u", ProgramOption::value<double>(), "Uttering ratio for meaning space (0.5/[0-1])")
 		/*エージェントに渡す意味の数*/
-		("multiple-meanings,m", ProrgamOption::value<int>(), "At once utterance process, number of meanings given agent (2)")
+		("multiple-meanings,m", ProgramOption::value<int>(), "At once utterance process, number of meanings given agent (2)")
 		/*直接学習確率の設定*/
-		("term", ProrgamOption::value<double>(), "Single meaning ratio for utterances (0.0/[0-1])")
+		("term", ProgramOption::value<double>(), "Single meaning ratio for utterances (0.0/[0-1])")
 		/*バッチ処理期間の設定*/
-		("window", ProrgamOption::value<int>(), "Number of utterance for prediction of meaning")
+		("window", ProgramOption::value<int>(), "Number of utterance for prediction of meaning")
 		/*対称性バイアス*/
 		("symmetry", "When receive multiple meanings, use symmetry bias")
 		/*非完全一致対称性バイアス*/
@@ -484,7 +484,7 @@ int main(int argc, char* argv[]) {
 			std::ifstream ifs((param.BASE_PATH + param.RESUME_FILE).c_str());
 
 			switch (param.SAVE_FORMAT) {
-			case Parameters::BIN:
+			case MSILMParameters::BIN:
 			{
 				//exception of boost
 				//boost::archive::binary_iarchive ia(ifs);
@@ -492,7 +492,7 @@ int main(int argc, char* argv[]) {
 			}
 			break;
 
-			case Parameters::XML:
+			case MSILMParameters::XML:
 			{
 				//exception of boost
 				//boost::archive::xml_iarchive ia(ifs);
@@ -793,7 +793,7 @@ int main(int argc, char* argv[]) {
 	if (param.SAVE_LAST_STATE) {
 		std::ofstream ofs((param.BASE_PATH + param.SAVE_FILE).c_str());
 		switch (param.SAVE_FORMAT) {
-		case Parameters::BIN:
+		case MSILMParameters::BIN:
 		{
 			//exception of boost
 			//boost::archive::binary_oarchive oa(ofs);
@@ -804,7 +804,7 @@ int main(int argc, char* argv[]) {
 		}
 		break;
 
-		case Parameters::XML:
+		case MSILMParameters::XML:
 		{
 			//exception of boost
 			//boost::archive::xml_oarchive oa(ofs);
@@ -832,7 +832,7 @@ int main(int argc, char* argv[]) {
 			std::ofstream ofs((param.BASE_PATH + stf).c_str());
 
 			switch (param.SAVE_FORMAT) {
-			case Parameters::BIN:
+			case MSILMParameters::BIN:
 			{
 				//exception of boost
 				//boost::archive::binary_oarchive oa(ofs);
@@ -840,7 +840,7 @@ int main(int argc, char* argv[]) {
 			}
 			break;
 
-			case Parameters::XML:
+			case MSILMParameters::XML:
 			{
 				//exception of boost
 				//boost::archive::xml_oarchive oa(ofs);
