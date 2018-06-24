@@ -411,7 +411,7 @@ int main(int argc, char* argv[]) {
 	 * OPTION PROCESSING
 	 *
 	 **************************************************/
-	boost::program_options::options_description opt("option");
+	ProgramOption opt();
 	opt.add_options()
 		("help,h", "Description")
 		//experiment parameters
@@ -474,79 +474,9 @@ int main(int argc, char* argv[]) {
 		/*プログレスバー*/
 		("progress,p", "Show progress bar");
 
+	opt.parse(argc,argv);
 
-	//process options
-	boost::program_options::variables_map vm;
-	try {
-		boost::program_options::store(boost::program_options::parse_command_line(argc, argv, opt), vm);
-		boost::program_options::notify(vm);
-	}
-	catch (boost::program_options::invalid_syntax ee) {
-		std::cerr << "invalid syntax:" << ee.tokens() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::unknown_option ee) {
-		std::cerr << "unknown_option:" << ee.what() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::ambiguous_option ee) {
-		std::cerr << "ambiguous_option:" << ee.get_option_name() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::multiple_values ee) {
-		std::cerr << "multiple_values:" << ee.get_option_name() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::multiple_occurrences ee) {
-		std::cerr << "multiple_occurrences:" << ee.get_option_name() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::validation_error ee) {
-		std::cerr << "validation_error:" << ee.get_option_name() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::too_many_positional_options_error ee) {
-		std::cerr << "too_many_positional_options_error:" << ee.what() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::invalid_command_line_style ee) {
-		std::cerr << "invalid_command_line_style:" << ee.what() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::reading_file ee) {
-		std::cerr << "reading_file:" << ee.what() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-	catch (boost::program_options::required_option ee) {
-		std::cerr << "required_option:" << ee.get_option_name() << std::endl;
-		std::cerr << std::endl << "SEE HELP" << std::endl << opt << std::endl;
-		return 1;
-	}
-
-	//check options
-	if (vm.count("help")) {
-		std::cerr << opt << std::endl;
-		return 1;
-	}
-
-	//set parameters
-	try {
-		param.set_option(vm);
-	}
-	catch (std::string e) {
-		std::cerr << "option:" << e << std::endl;
-		exit(0);
-	}
-
+	param.set_option(opt);
 
 	//resume
 	if (param.RESUME) {

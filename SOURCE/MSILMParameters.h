@@ -193,6 +193,10 @@ public:
   template<typename T>
   static T value(T obj){return T(obj);}
 
+  int count(std::string str){
+  	return id.count(str);
+  }
+
   ProgramOption & add_option(){return *this;}
 
   ProgramOption & operator()(std::string key, OptionValue val, std::string str){
