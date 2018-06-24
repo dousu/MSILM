@@ -17,3 +17,6 @@ int IndexFactory::generate(void){
 	return index_counter;
 }
 
+IndexFactory::IndexFactory(IndexFactory & other){
+	index_counter = other.index_counter;
+}

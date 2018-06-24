@@ -20,6 +20,7 @@ class IndexFactory {
 public:
 	int index_counter;
 	IndexFactory():index_counter(0){};
+	IndexFactory(IndexFactory &);
 
 	/*!
 	 * 数字を生成します。

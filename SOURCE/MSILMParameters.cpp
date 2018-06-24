@@ -72,15 +72,16 @@ MSILMParameters::~MSILMParameters() {
 }
 
 void
-MSILMParameters::set_option(boost::program_options::variables_map& vm) {
-	//Files
-  if (vm.count("format")) {
-    if (vm["format"].as<std::string>() == "xml")
-      SAVE_FORMAT = Parameters::XML;
+MSILMParameters::set_option(ProgramOption & po) {
+  spo = po;
+  //Files
+  if (po.count("format")) {
+    if (po["format"].as<std::string>() == "xml")
+      SAVE_FORMAT = XML;
   }
 
-  if (vm.count("prefix")) {
-    FILE_PREFIX = vm["prefix"].as<std::string>();
+  if (po.count("prefix")) {
+    FILE_PREFIX = po["prefix"].as<std::string>();
 
     SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
     RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
@@ -88,63 +89,63 @@ MSILMParameters::set_option(boost::program_options::variables_map& vm) {
     LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
   }
 
-  if (vm.count("path")) {
-    BASE_PATH = (vm["path"].as<std::string>());
+  if (po.count("path")) {
+    BASE_PATH = (po["path"].as<std::string>());
   }
 
   //Set option values
-  if (vm.count("random-seed")) {
-    RANDOM_SEED = vm["random-seed"].as<uint32_t>();
+  if (po.count("random-seed")) {
+    RANDOM_SEED = po["random-seed"].as<uint32_t>();
   }
 
-  if (vm.count("generations")) {
-    MAX_GENERATIONS = vm["generations"].as<int>();
+  if (po.count("generations")) {
+    MAX_GENERATIONS = po["generations"].as<int>();
   }
 
-  if (vm.count("utterances")) {
-    PER_UTTERANCES = vm["utterances"].as<double>();
+  if (po.count("utterances")) {
+    PER_UTTERANCES = po["utterances"].as<double>();
   }
 
-  if (vm.count("omission")) {
+  if (po.count("omission")) {
 	  OMISSION = true;
   }
 
-  if (vm.count("analyze")) {
+  if (po.count("analyze")) {
     RESULT_FILE = (FILE_PREFIX + RESULT_EXT);
     ANALYZE = true;
   }
 
-  if (vm.count("unique-utterance")) {
+  if (po.count("unique-utterance")) {
     UNIQUE_UTTERANCE = true;
   }
 
-  if (vm.count("dictionary")) {
-    DICTIONARY_FILE = vm["dictionary"].as<std::string>();
+  if (po.count("dictionary")) {
+    DICTIONARY_FILE = po["dictionary"].as<std::string>();
   }
 
-  if (vm.count("word-length")) {
-    buzz_length = vm["word-length"].as<int>();
+  if (po.count("word-length")) {
+    buzz_length = po["word-length"].as<int>();
   }
 
-  if (vm.count("keep-random-rule")) {
+  if (po.count("keep-random-rule")) {
     CONTROLS |= KnowledgeBase::USE_ADDITION_OF_RANDOM_WORD;
   }
 
-  if (vm.count("delete-redundant-rules")) {
+  if (po.count("delete-redundant-rules")) {
     CONTROLS |= KnowledgeBase::USE_OBLITERATION;
   }
 
-  if (vm.count("invention")) {
+  if (po.count("invention")) {
     CONTROLS |= KnowledgeBase::USE_SEMICOMPLETE_FABRICATION;
   }
 
-  if (vm.count("logging")) {
+  if (po.count("logging")) {
     LOGGING = true;
   }
 
-  if (vm.count("resume")) {
+  if (po.count("resume")) {
     std::vector<std::string> args;
-    args = vm["resume"].as<std::vector<std::string> >();
+    args = po["resume"].as<std::vector<std::string> >();
 
     if (args.size() > 0) {
       RESUME_FILE = args.front();
@@ -153,59 +154,59 @@ MSILMParameters::set_option(boost::program_options::variables_map& vm) {
     RESUME = true;
   }
 
-  if (vm.count("last-save")) {
+  if (po.count("last-save")) {
     SAVE_LAST_STATE = true;
   }
 
-  if (vm.count("all-save")) {
+  if (po.count("all-save")) {
     SAVE_ALL_STATE = true;
   }
 
-  if (vm.count("progress")) {
+  if (po.count("progress")) {
     PROGRESS = true;
   }
 
-	if (vm.count("analyze")) {
+	if (po.count("analyze")) {
 		ACC_MEA = true;
 	}
-	if (vm.count("interspace-analysis")) {
+	if (po.count("interspace-analysis")) {
 		ANALYZE = true;
 		INTER_ANALYSIS = true;
-		SPACE_ANALYSIS = vm["interspace-analysis"].as<int>();
+		SPACE_ANALYSIS = po["interspace-analysis"].as<int>();
 		ACC_MEA = true;
 	}
-	if (vm.count("interspace-logging")) {
+	if (po.count("interspace-logging")) {
 		LOGGING = true;
 		INTER_LOG = true;
-		SPACE_LOG = vm["interspace-logging"].as<int>();
+		SPACE_LOG = po["interspace-logging"].as<int>();
 		ACC_MEA = true;
 	}
 
-	if (vm.count("multiple-meanings")) {
-		MULTIPLE_MEANINGS = vm["multiple-meanings"].as<int>();
+	if (po.count("multiple-meanings")) {
+		MULTIPLE_MEANINGS = po["multiple-meanings"].as<int>();
 	}
 
-	if (vm.count("term")) {
-		PER_TERM = vm["term"].as<double>();
+	if (po.count("term")) {
+		PER_TERM = po["term"].as<double>();
 	}
 
-	if (vm.count("window")) {
-		WINDOW = vm["window"].as<int>();
+	if (po.count("window")) {
+		WINDOW = po["window"].as<int>();
 	}
 
-	if (vm.count("symmetry")) {
+	if (po.count("symmetry")) {
 		SYMMETRY = true;
 	}
 
-	if (vm.count("ucsymmetry")) {
+	if (po.count("ucsymmetry")) {
 		UC_SYMMETRY = true;
 	}
 
-	if (vm.count("omission")) {
+	if (po.count("omission")) {
 		OMISSION = true;
 	}
 
-	if (vm.count("accuracy-meaning")) {
+	if (po.count("accuracy-meaning")) {
 		ACC_MEA = true;
 	}
 	//必ずprefixの変更後に行うこと
@@ -221,132 +222,132 @@ MSILMParameters::to_s(void) {
 	std::vector<std::string> bag;
 
 	//Files
-  	if (svm.count("format")) {
+  	if (spo.count("format")) {
     	bag.push_back("--format ");
-    	if (svm["format"].as<std::string>() == "xml")
+    	if (spo["format"].as<std::string>() == "xml")
       	bag.push_back("xml");
-    	else if (svm["format"].as<std::string>() == "bin")
+    	else if (spo["format"].as<std::string>() == "bin")
       	bag.push_back("bin");
   	}
 
-  	if (svm.count("prefix")) {
+  	if (spo.count("prefix")) {
     	bag.push_back("--prefix");
-    	bag.push_back(svm["prefix"].as<std::string>());
+    	bag.push_back(spo["prefix"].as<std::string>());
   	}
 
-  	if (svm.count("path")) {
+  	if (spo.count("path")) {
     	bag.push_back("--path");
-    	bag.push_back(svm["path"].as<std::string>());
+    	bag.push_back(spo["path"].as<std::string>());
   	}
 
   	//Set option values
-  	if (svm.count("random-seed")) {
+  	if (spo.count("random-seed")) {
     	bag.push_back("--random-seed");
     	bag.push_back(
-        	std::to_string(svm["random-seed"].as<uint32_t>()));
+        	std::to_string(spo["random-seed"].as<uint32_t>()));
   	}
 
-  	if (svm.count("generations")) {
+  	if (spo.count("generations")) {
     	bag.push_back("--generations");
     	bag.push_back(
-        	std::to_string(svm["generations"].as<int>()));
+        	std::to_string(spo["generations"].as<int>()));
   	}
 
-  	if (svm.count("utterances")) {
+  	if (spo.count("utterances")) {
     	bag.push_back("--utterances");
     	bag.push_back(
-        	std::to_string(svm["utterances"].as<double>()));
+        	std::to_string(spo["utterances"].as<double>()));
   	}
 
-  	if (svm.count("analyze")) {
+  	if (spo.count("analyze")) {
     	bag.push_back("--analyze");
   	}
 
-  	if (svm.count("unique-utterance")) {
+  	if (spo.count("unique-utterance")) {
     	bag.push_back("--unique-utterance");
   	}
 
-  	if (svm.count("dictionary")) {
+  	if (spo.count("dictionary")) {
     	bag.push_back("--dictionary");
-    	bag.push_back(svm["dictionary"].as<std::string>());
+    	bag.push_back(spo["dictionary"].as<std::string>());
   	}
 
-  	if (svm.count("word-length")) {
+  	if (spo.count("word-length")) {
     	bag.push_back("--word-length");
    		bag.push_back(
-        std::to_string(svm["word-length"].as<int>()));
+        std::to_string(spo["word-length"].as<int>()));
   	}
 
-  	if (svm.count("keep-random-rule")) {
+  	if (spo.count("keep-random-rule")) {
     	bag.push_back("--keep-random-rule");
   	}
 
-  	if (svm.count("delete-redundant-rules")) {
+  	if (spo.count("delete-redundant-rules")) {
     	bag.push_back("--delete-redundant-rules");
   	}
 
-  	if (svm.count("invention")) {
+  	if (spo.count("invention")) {
     	bag.push_back("--invention");
   	}
 
-  	if (svm.count("logging")) {
+  	if (spo.count("logging")) {
     	bag.push_back("--logging");
   	}
 
-  	if (svm.count("resume")) {
+  	if (spo.count("resume")) {
     	bag.push_back("--resume");
     	std::vector<std::string> args;
-    	args = svm["resume"].as<std::vector<std::string> >();
+    	args = spo["resume"].as<std::vector<std::string> >();
 
     	if (args.size() > 0) {
       		bag.push_back(args.front());
     	}
   	}
 
-  	if (svm.count("last-save")) {
+  	if (spo.count("last-save")) {
     	bag.push_back("--last-save");
   	}
 
-  	if (svm.count("all-save")) {
+  	if (spo.count("all-save")) {
     	bag.push_back("--all-save");
   	}
 
-  	if (svm.count("progress")) {
+  	if (spo.count("progress")) {
     	bag.push_back("--progress");
   	}
 
-	if (svm.count("interspace-analysis")) {
-		bag.push_back("--interspace-analysis " + std::to_string(svm["interspace-analysis"].as<int>()));
+	if (spo.count("interspace-analysis")) {
+		bag.push_back("--interspace-analysis " + std::to_string(spo["interspace-analysis"].as<int>()));
 	}
-	if (svm.count("interspace-logging")) {
-		bag.push_back("--interspace-logging " + std::to_string(svm["interspace-logging"].as<int>()));
-	}
-
-	if (svm.count("multiple-meanings")) {
-		bag.push_back("--multiple-meanings " + std::to_string(svm["multiple-meanings"].as<int>()));
+	if (spo.count("interspace-logging")) {
+		bag.push_back("--interspace-logging " + std::to_string(spo["interspace-logging"].as<int>()));
 	}
 
-	if (svm.count("term")) {
-		bag.push_back("--term " + std::to_string(svm["term"].as<double>()));
+	if (spo.count("multiple-meanings")) {
+		bag.push_back("--multiple-meanings " + std::to_string(spo["multiple-meanings"].as<int>()));
 	}
 
-	if (svm.count("window")) {
-		bag.push_back("--window " + std::to_string(svm["window"].as<int>()));
+	if (spo.count("term")) {
+		bag.push_back("--term " + std::to_string(spo["term"].as<double>()));
 	}
 
-	if (svm.count("symmetry")) {
+	if (spo.count("window")) {
+		bag.push_back("--window " + std::to_string(spo["window"].as<int>()));
+	}
+
+	if (spo.count("symmetry")) {
 		bag.push_back("--symmetry ");
 	}
 
-	if (svm.count("ucsymmetry")) {
+	if (spo.count("ucsymmetry")) {
 		bag.push_back("--ucsymmetry ");
 	}
 
-	if (svm.count("omission")) {
+	if (spo.count("omission")) {
 		bag.push_back("--omission ");
 	}
 
-	if (svm.count("accuracy-meaning")) {
+	if (spo.count("accuracy-meaning")) {
 		bag.push_back("--accuracy-meaning ");
 	}
 
