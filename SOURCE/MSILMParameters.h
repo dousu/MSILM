@@ -22,7 +22,7 @@
 #include <iterator>
 
 #include "LogBox.h"
-
+#include "IndexFactory.h"
 
 struct OptionValue{
   using OptionTypes = std::variant<bool,int,double,std::string>;
