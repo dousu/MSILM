@@ -411,7 +411,7 @@ int main(int argc, char* argv[]) {
 	 * OPTION PROCESSING
 	 *
 	 **************************************************/
-	ProgramOption opt();
+	ProgramOption opt;
 	opt.add_options()
 		("help,h", "Description")
 		//experiment parameters
