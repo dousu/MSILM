@@ -33,7 +33,7 @@ public:
   OptionValue(){};
 
   template<typename T>
-  OptionValue(T val){
+  OptionValue(T val) : obj{
     obj = val;
   };
   OptionValue & operator=(const OptionValue & other){
