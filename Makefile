@@ -1,6 +1,6 @@
 #ID = -I/usr/local/include
 #LD = -L/usr/local/lib
-LIBS = -lboost_program_options
+#LIBS = -lboost_program_options
 SOURCEDIR = ./SOURCE
 OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o Parameters.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
@@ -9,7 +9,7 @@ HDS = $(addprefix ${SOURCEDIR}/, $(HD))
 OPT = -std=c++17
 
 ms: ${OBJS}
-	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} ${LIBS} -o ${SOURCEDIR}/msilm.exe
+	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} -o ${SOURCEDIR}/msilm.exe
 
 $(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@[ -d $(SOURCEDIR/) ]
@@ -30,8 +30,7 @@ $(SOURCEDIR)/IndexFactory.o: $(SOURCEDIR)/IndexFactory.h
 $(SOURCEDIR)/Prefices.o: $(SOURCEDIR)/Prefices.h
 $(SOURCEDIR)/LogBox.o: $(SOURCEDIR)/LogBox.h
 $(SOURCEDIR)/MT19937.o: $(SOURCEDIR)/MT19937.h
-$(SOURCEDIR)/MSILMParameters: $(SOURCEDIR)/Parameters.o $(SOURCEDIR)/MSILMParameters.h
-$(SOURCEDIR)/Parameters.o: $(SOURCEDIR)/Parameters.h
+$(SOURCEDIR)/MSILMParameters: $(SOURCEDIR)/MSILMParameters.h
 
 clean:
 	rm -f ${SOURCEDIR}/*.o ${SOURCEDIR}/*.dump ${SOURCEDIR}/*.exe ${SOURCEDIR}/*.log ${SOURCEDIR}/*.rst

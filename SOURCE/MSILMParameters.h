@@ -247,7 +247,7 @@ public:
     //experiment parameters
     int MAX_GENERATIONS;
     double PER_UTTERANCES; //
-    boost::uint32_t RANDOM_SEED; //
+    int RANDOM_SEED; //
     bool UNIQUE_UTTERANCE; //
 
     uint32_t CONTROLS;
