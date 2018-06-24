@@ -212,7 +212,7 @@ struct ProgramOption{
   void help(){
     std::string help_comment = "HELP:\n";
     for(auto index : id){
-      help_comment += "  " + index.first + "\t" + desc_list[index.second].second + "\n";
+      help_comment += "  " + index.first + "\t" + desc_list[index.second] + "\n";
     }
     std::cout << help_comment << std::endl;
     exit(0);
