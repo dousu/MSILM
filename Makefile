@@ -2,7 +2,7 @@
 #LD = -L/usr/local/lib
 #LIBS = -lboost_program_options
 SOURCEDIR = ./SOURCE
-OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o Parameters.o MT19937.o
+OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o MT19937.o
 OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
 HD = Distance.hpp
 HDS = $(addprefix ${SOURCEDIR}/, $(HD))
