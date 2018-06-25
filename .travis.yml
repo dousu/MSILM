@@ -6,11 +6,11 @@ before_install:
   - docker pull rsmmr/clang:latest
 env:
   matrix:
-    - CXX=g++
-    - CXX=clang++
+    - CC=gcc
+    - CC=clang
 script:
-  - if [ $CC == gcc ]; then
-      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp gcc /bin/sh -c "CXX=$CXX make test";
+  - if [ "$CC" == "gcc" ]; then
+      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp gcc /bin/sh -c "$CC -v && make test";
     else
-      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp rsmmr/clang /bin/sh -c "CXX=$CXX make test";
+      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp rsmmr/clang /bin/sh -c "$CC -v && make test";
     fi
