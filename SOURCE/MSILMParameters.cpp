@@ -22,9 +22,9 @@ MSILMParameters::MSILMParameters() {
 	UC_SYMMETRY = false;
 	OMISSION = false;
 	ACC_MEA = false;
-	SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
+	// SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
 	RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
-	RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
+	// RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
 	LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
 	DICTIONARY_FILE = "./data.dic";
 	PER_UTTERANCES = 0.5; //意味空間の数の半分
@@ -40,16 +40,16 @@ MSILMParameters::MSILMParameters() {
   	PER_UTTERANCES = 0.5;
   	RANDOM_SEED = 101010;
   	UNIQUE_UTTERANCE = false;
-  	SAVE_FORMAT = BIN;
+  	// SAVE_FORMAT = BIN;
   	ANALYZE = false;
   	DICTIONARY_FILE = "data.dic";
   	buzz_length = 3;
 
   	LOGGING = false;
-  	PROGRESS = false;
-  	RESUME = false;
-  	SAVE_LAST_STATE = false;
-  	SAVE_ALL_STATE = false;
+  	// PROGRESS = false;
+  	// RESUME = false;
+  	// SAVE_LAST_STATE = false;
+  	// SAVE_ALL_STATE = false;
   	OMISSION = false;
 	DATE_STR = date_str;
   	STATE_EXT = ".st";
@@ -57,9 +57,9 @@ MSILMParameters::MSILMParameters() {
   	LOG_EXT = ".log";
 
   	BASE_PATH = "../RESULT/";
-  	SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
+  	// SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
   	RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
-  	RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
+  	// RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
   	LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
 
   	CONTROLS = 0x0;
@@ -76,17 +76,17 @@ void
 MSILMParameters::set_option(ProgramOption & po) {
   spo = po;
   //Files
-  if (po.count("format")) {
-    if (po.get<std::string>("format") == "xml")
-      SAVE_FORMAT = XML;
-  }
+  // if (po.count("format")) {
+  //   if (po.get<std::string>("format") == "xml")
+  //     SAVE_FORMAT = XML;
+  // }
 
   if (po.count("prefix")) {
     FILE_PREFIX = po.get<std::string>("prefix");
 
     SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
     RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
-    RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
+    // RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
     LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
   }
 
@@ -163,9 +163,9 @@ MSILMParameters::set_option(ProgramOption & po) {
   //   SAVE_ALL_STATE = true;
   // }
 
-  if (po.count("progress")) {
-    PROGRESS = po.get<bool>("progress");
-  }
+  // if (po.count("progress")) {
+  //   PROGRESS = po.get<bool>("progress");
+  // }
 
 	if (po.count("analyze")) {
 		ACC_MEA = po.get<bool>("analyze");
@@ -211,9 +211,9 @@ MSILMParameters::set_option(ProgramOption & po) {
 		ACC_MEA = po.get<bool>("accuracy-meaning");
 	}
 	//必ずprefixの変更後に行うこと
-	SAVE_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
+	// SAVE_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
 	RESULT_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + RESULT_EXT);
-	RESUME_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
+	// RESUME_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
 	LOG_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + LOG_EXT);
 }
 
@@ -223,13 +223,13 @@ MSILMParameters::to_s(void) {
 	std::vector<std::string> bag;
 
 	//Files
-  	if (spo.count("format")) {
-    	bag.push_back("--format ");
-    	if (spo.get<std::string>("format") == "xml")
-      		bag.push_back("xml");
-    	else if (spo.get<std::string>("format") == "bin")
-      		bag.push_back("bin");
-  	}
+  	// if (spo.count("format")) {
+   //  	bag.push_back("--format ");
+   //  	if (spo.get<std::string>("format") == "xml")
+   //    		bag.push_back("xml");
+   //  	else if (spo.get<std::string>("format") == "bin")
+   //    		bag.push_back("bin");
+  	// }
 
   	if (spo.count("prefix")) {
     	bag.push_back("--prefix");
@@ -315,11 +315,11 @@ MSILMParameters::to_s(void) {
    //  	bag.push_back("--all-save");
   	// }
 
-  	if (spo.count("progress")) {
-    	bag.push_back("--progress");
-    	bag.push_back(
-    		std::to_string(spo.get<bool>("progress")));
-  	}
+  	// if (spo.count("progress")) {
+   //  	bag.push_back("--progress");
+   //  	bag.push_back(
+   //  		std::to_string(spo.get<bool>("progress")));
+  	// }
 
 	if (spo.count("interspace-analysis")) {
 		bag.push_back("--interspace-analysis");

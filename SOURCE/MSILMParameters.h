@@ -30,10 +30,8 @@ struct OptionValue{
 private:
   OptionTypes obj;
 public:
-  OptionValue(){};
-
   template<typename T>
-  OptionValue(T val) : obj() {
+  OptionValue(T val){
     obj = val;
   };
   OptionValue & operator=(const OptionValue & other){
@@ -99,7 +97,6 @@ private:
   enum type_id {itype, dtype, stype, btype};
   std::map<int, type_id> type_inf;
 public:
-  ProgramOption(){};
   ProgramOption(const ProgramOption & po){
   	idx = po.idx;
   	id = po.id;
@@ -240,9 +237,9 @@ public:
 class MSILMParameters{
 public:
 	//type definition
-    enum FORMAT {
-      BIN, XML
-    };
+    // enum FORMAT {
+    //   BIN, XML
+    // };
 
     //experiment parameters
     int MAX_GENERATIONS;
@@ -260,11 +257,11 @@ public:
     //system parameters
     bool LOGGING;
     bool PROGRESS;
-    bool RESUME;
-    bool SAVE_LAST_STATE;
-    bool SAVE_ALL_STATE;
+    // bool RESUME;
+    // bool SAVE_LAST_STATE;
+    // bool SAVE_ALL_STATE;
     bool ANALYZE;
-    FORMAT SAVE_FORMAT;
+    // FORMAT SAVE_FORMAT;
 
     std::string DICTIONARY_FILE;
 
@@ -283,16 +280,16 @@ public:
 
     //file
     std::string LOG_FILE;
-    std::string RESUME_FILE;
-    std::string SAVE_FILE;
+    // std::string RESUME_FILE;
+    // std::string SAVE_FILE;
     std::string RESULT_FILE;
 
    	ProgramOption spo;
-	bool INTER_ANALYSIS;
-	int SPACE_ANALYSIS;
+	   bool INTER_ANALYSIS;
+	   int SPACE_ANALYSIS;
 
-	bool INTER_LOG;
-	int SPACE_LOG;
+	   bool INTER_LOG;
+	   int SPACE_LOG;
         
     int MULTIPLE_MEANINGS;
         
@@ -300,7 +297,7 @@ public:
     int TERMS;
     int WINDOW;
     bool SYMMETRY;
-	bool UC_SYMMETRY;
+	   bool UC_SYMMETRY;
     bool OMISSION;
     bool ACC_MEA;
 
