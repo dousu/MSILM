@@ -3,8 +3,8 @@ services:
   - docker
 env:
   matrix:
-    - DOCKERIMAGE=gcc CXX=g++
-    - DOCKERIMAGE=rsmmr/clang CXX="clang++ --stdlib=libc++"
+    - DOCKERIMAGE="gcc" CXX="g++"
+    - DOCKERIMAGE="rsmmr/clang" CXX="clang++ -stdlib=libc++"
 install:
   - docker pull $DOCKERIMAGE
 script:
