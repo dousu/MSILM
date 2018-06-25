@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <string>
-
+#include <sstream>
 #include <iostream>
 
 //#include <boost/range/algorithm.hpp>
