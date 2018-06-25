@@ -1,16 +1,11 @@
 sudo: false
 services:
   - docker
-before_install:
-  - docker pull gcc:latest
-  - docker pull rsmmr/clang:latest
 env:
   matrix:
-    - CC=gcc
-    - CC=clang
+    - DOCKERIMAGE=gcc CXX=g++
+    - DOCKERIMAGE=rsmmr/clang CXX="clang++ --stdlib=libc++"
+install:
+  - docker pull $DOCKERIMAGE
 script:
-  - if [ "$CC" == "gcc" ]; then
-      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp gcc /bin/sh -c "$CC -v && make test";
-    else
-      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp rsmmr/clang /bin/sh -c "$CC -v && make test";
-    fi
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOCKERIMAGE /bin/sh -c "$CXX -v && make test"
