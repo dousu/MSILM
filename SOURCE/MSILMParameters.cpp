@@ -8,7 +8,7 @@
 #include "MSILMParameters.h"
 
 MSILMParameters::MSILMParameters() {
-	// spo = ProgramOption();
+	spo = ProgramOption();
 	INTER_ANALYSIS = false;
 	SPACE_ANALYSIS = 0;
 	INTER_LOG = false;
@@ -84,7 +84,7 @@ MSILMParameters::set_option(ProgramOption & po) {
   if (po.count("prefix")) {
     FILE_PREFIX = po.get<std::string>("prefix");
 
-    SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
+    // SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
     RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
     // RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
     LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);

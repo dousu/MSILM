@@ -30,6 +30,8 @@ struct OptionValue{
 private:
   OptionTypes obj;
 public:
+  OptionValue() : obj() {};
+
   template<typename T>
   OptionValue(T val){
     obj = val;
@@ -97,6 +99,7 @@ private:
   enum type_id {itype, dtype, stype, btype};
   std::map<int, type_id> type_inf;
 public:
+  ProgramOption() : idx(), id(), val_list(), desc_list(), type_inf() {};
   ProgramOption(const ProgramOption & po){
   	idx = po.idx;
   	id = po.id;
