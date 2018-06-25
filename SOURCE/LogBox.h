@@ -18,28 +18,27 @@
  * ロギングデータを保持するクラス
  * 特に意識する必要なし。
  */
-class LogBox {
-  public:
-    static std::vector<std::string> log;
-    static std::string log_file;
-    static int log_size;
-    static int threads;
-    //static boost::shared_ptr<LogWriter> writer;
+class LogBox
+{
+public:
+  static std::vector<std::string> log;
+  static std::string log_file;
+  static int log_size;
+  static int threads;
+  //static boost::shared_ptr<LogWriter> writer;
 
-    LogBox();
-    virtual
-    ~LogBox();
+  LogBox();
+  virtual ~LogBox();
 
-    static void
-    push_log(std::string);
-    static void
-    pop_log(int nth = 1);
-    static void
-    refresh_log(void);
+  static void
+      push_log(std::string);
+  static void
+  pop_log(int nth = 1);
+  static void
+  refresh_log(void);
 
-    static void
-    set_filepath(std::string);
+  static void
+      set_filepath(std::string);
 };
-
 
 #endif /* LOGBOX_H_ */

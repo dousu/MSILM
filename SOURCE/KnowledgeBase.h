@@ -29,52 +29,58 @@
 
 #include "Distance.hpp"
 
-class VectorSizeSort {
-public:
-
+class VectorSizeSort
+{
+  public:
     bool
     operator()(const std::vector<Rule> left,
-            const std::vector<Rule> right) const {
+               const std::vector<Rule> right) const
+    {
         return left.size() > right.size();
     }
 };
 
-class ExternalSizeSort {
-public:
-
+class ExternalSizeSort
+{
+  public:
     bool
-    operator()(const Rule left, const Rule right) const {
+    operator()(const Rule left, const Rule right) const
+    {
         return left.external.size() < right.external.size();
     }
 };
 
-class RuleCompositionSort {
-public:
-
+class RuleCompositionSort
+{
+  public:
     bool
-    operator()(const Rule left, const Rule right) const {
+    operator()(const Rule left, const Rule right) const
+    {
         return left.composition() > right.composition();
     }
 };
 
-class KnowledgeBaseTypeDef {
-public:
+class KnowledgeBaseTypeDef
+{
+  public:
     typedef std::vector<Rule> RuleDBType;
-    typedef std::map<int, std::multimap<int, Rule> > DicDBType;
+    typedef std::map<int, std::multimap<int, Rule>> DicDBType;
     typedef std::multimap<Element, Rule> NormalDicType;
 
     typedef std::vector<Rule> PatternType;
-
 };
 
 /*!
  * 知識集合を表すクラスです
  */
-class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef {
-public:
-
-    enum PATTERN_TYPE {
-        ABSOLUTE, COMPLETE, SEMICOMPLETE
+class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
+{
+  public:
+    enum PATTERN_TYPE
+    {
+        ABSOLUTE,
+        COMPLETE,
+        SEMICOMPLETE
     };
 
     IndexFactory cat_indexer;
@@ -151,7 +157,7 @@ public:
      *
      */
     Rule
-    fabricate(Rule& src1);
+    fabricate(Rule &src1);
     /*!
      * Ruleを受け取り、その内部言語列に対応する外部言語列を生成し、
      * その外部言語列をRuleに代入して返します。なお生成ルールは以下のようになります。
@@ -159,15 +165,15 @@ public:
      * -# 合成度の高いルールで、内部言語1要素だけが適合しない場合、その1要素についてランダムの文字列を当てて外部言語列を生成する
      * .
      *
-     */Rule
-    fabricate_for_complementing(Rule& src1);
+     */ Rule
+    fabricate_for_complementing(Rule &src1);
 
     /*!
      * 渡されたRuleの内部言語から完全に外部言語列を構成可能かどうかを返す。
      * 真なら構成可能、偽なら不可能
      */
     bool
-    acceptable(Rule& src);
+    acceptable(Rule &src);
 
     /*!
      * Ruleを知識集合のメールボックスに送ります。Ruleはそのまま知識集合に格納されません。
@@ -175,17 +181,17 @@ public:
      * 知識集合に格納されます。
      */
     void
-    send_box(Rule& mail);
+    send_box(Rule &mail);
     void
-    send_box(std::vector<Rule>& mails);
+    send_box(std::vector<Rule> &mails);
 
     /*!
      * Ruleを直接知識集合に追加します。
      */
     void
-    send_db(Rule& mail);
+    send_db(Rule &mail);
     void
-    send_db(std::vector<Rule>& mails);
+    send_db(std::vector<Rule> &mails);
 
     /*!
      * 実行速度を上げるために、単語規則のハッシュを構成します。
@@ -215,10 +221,10 @@ public:
     logging_off(void);
     static void
     omission_on(void);
-	static void
-	omission_off(void);
-    KnowledgeBase&
-            operator=(const KnowledgeBase& dst);
+    static void
+    omission_off(void);
+    KnowledgeBase &
+    operator=(const KnowledgeBase &dst);
     static void
     set_control(uint32_t FLAGS);
 
@@ -230,57 +236,57 @@ public:
      * - 2:完全構成（変数を含むRuleと単語Ruleの集合）
      * - 3:不完全構成（変数を含むRuleと、単語Rule、そしてランダム生成された単語規則）
      */
-    std::map<PATTERN_TYPE, std::vector<PatternType> >
-    construct_grounding_patterns(Rule& src);
- /*   std::map<PATTERN_TYPE, std::vector<PatternType> >
+    std::map<PATTERN_TYPE, std::vector<PatternType>>
+    construct_grounding_patterns(Rule &src);
+    /*   std::map<PATTERN_TYPE, std::vector<PatternType> >
     natural_construct_grounding_patterns(Rule& src);*/
 
     void
-    ground_with_pattern(Rule& src, PatternType& pattern);
+    ground_with_pattern(Rule &src, PatternType &pattern);
     std::vector<Rule>
-    groundable_rules(Rule& src);
+    groundable_rules(Rule &src);
     std::vector<Rule>
     grounded_rules(Rule src);
     /*std::vector<Rule>
     grounded_rules2(Rule src, std::vector<KnowledgeBase::PatternType>& all_patterns);*/
     bool
-    clipping(Rule& mean, KnowledgeBase::PatternType& ptn, KnowledgeBase::PatternType& res);
+    clipping(Rule &mean, KnowledgeBase::PatternType &ptn, KnowledgeBase::PatternType &res);
     std::vector<Rule>
     rules(void);
     std::vector<Rule>
     utterances(void);
-    std::vector<std::vector<Element> >
-    recognize_terminal_strings(Rule& target);
+    std::vector<std::vector<Element>>
+    recognize_terminal_strings(Rule &target);
 
-private:
+  private:
     std::vector<Rule>
-    chunking(Rule& src, Rule& dst);
+    chunking(Rule &src, Rule &dst);
     bool
-    chunking_loop(Rule& unchecked_sent, RuleDBType& checked_rules);
+    chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules);
 
     bool
-    merging(Rule& src);
-	void collect_merge_cat(Rule& src, std::vector<Rule>& words, std::map<int, bool>& unified_cat);
+    merging(Rule &src);
+    void collect_merge_cat(Rule &src, std::vector<Rule> &words, std::map<int, bool> &unified_cat);
     void
-    merge_noun_proc(Rule& src, RuleDBType& DB,
-            std::map<int, bool>& unified_cat);
+    merge_noun_proc(Rule &src, RuleDBType &DB,
+                    std::map<int, bool> &unified_cat);
     RuleDBType
-    merge_sent_proc(Rule& base_word, RuleDBType& DB,
-            std::map<int, bool>& unified_cat);
+    merge_sent_proc(Rule &base_word, RuleDBType &DB,
+                    std::map<int, bool> &unified_cat);
 
     bool
-    replacing(Rule& word, RuleDBType& checking_sents);
+    replacing(Rule &word, RuleDBType &checking_sents);
 
     KnowledgeBase::ExType
     construct_buzz_word(void);
 
     void
-    unique(RuleDBType& DB);
+    unique(RuleDBType &DB);
 
     std::string
-    string_join(const std::vector<std::string> & str_v, const std::string & delim);
+    string_join(const std::vector<std::string> &str_v, const std::string &delim);
 
-/*private:
+    /*private:
     friend class boost::serialization::access;
 
     template<class Archive>

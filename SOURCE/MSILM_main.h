@@ -6,7 +6,7 @@
  */
 
 #ifndef MSILM_MAIN_H
-#define	MSILM_MAIN_H
+#define MSILM_MAIN_H
 
 #include <iostream>
 #include <vector>
@@ -45,48 +45,41 @@
 #include "MSILMParameters.h"
 #include "Distance.hpp"
 
- //construct function
-void
-construct_meanings(std::vector<Rule>& meanings);
-void
-construct_individuals(std::vector<Element>& inds, Dictionary &dic);
-void
-cognition_task_init(std::vector<int>& source, MSILMParameters& param);
+//construct function
+void construct_meanings(std::vector<Rule> &meanings);
+void construct_individuals(std::vector<Element> &inds, Dictionary &dic);
+void cognition_task_init(std::vector<int> &source, MSILMParameters &param);
 
 //analyze function
-void
-unit_analyze(std::vector<double>& result_vector,
-	std::vector<Rule>& meanings, MSILMAgent& agent);
+void unit_analyze(std::vector<double> &result_vector,
+				  std::vector<Rule> &meanings, MSILMAgent &agent);
 
 double
-expression(std::vector<Rule>& meanings, MSILMAgent& agent);
+expression(std::vector<Rule> &meanings, MSILMAgent &agent);
 
-void
-calculate_language_distance(
-	std::vector<double>& lev_dist_vector,
-	std::vector<Rule>& meanings, MSILMAgent& agent1,
-	MSILMAgent& agent2);
+void calculate_language_distance(
+	std::vector<double> &lev_dist_vector,
+	std::vector<Rule> &meanings, MSILMAgent &agent1,
+	MSILMAgent &agent2);
 
-void
-analyze_and_output(MSILMParameters& param, std::vector<Rule> meaning_space,
-	MSILMAgent& agent1, MSILMAgent& agent2, int index);
+void analyze_and_output(MSILMParameters &param, std::vector<Rule> meaning_space,
+						MSILMAgent &agent1, MSILMAgent &agent2, int index);
 
 double
-calculate_distance(std::vector<Rule>& meanings,
-	KnowledgeBase& kb1, KnowledgeBase& kb2, double& word_length);
+calculate_distance(std::vector<Rule> &meanings,
+				   KnowledgeBase &kb1, KnowledgeBase &kb2, double &word_length);
 
 //utility
-void
-calculate_average_word_length(std::vector<Rule>& meanings, KnowledgeBase& kb1, double& word_length);
+void calculate_average_word_length(std::vector<Rule> &meanings, KnowledgeBase &kb1, double &word_length);
 
 std::string
 tr_vector_double_to_string(std::vector<double> vector);
 
 double limit_time;
 
-void logging_off(MSILMParameters& param);
+void logging_off(MSILMParameters &param);
 
-void logging_on(MSILMParameters& param);
+void logging_on(MSILMParameters &param);
 
 /*template<typename _IFS>
 void resume_agent(
@@ -110,5 +103,4 @@ void save_agent(
 	MSILMAgent&
 );*/
 
-#endif	/* MSILM_MAIN_H */
-
+#endif /* MSILM_MAIN_H */

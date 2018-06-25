@@ -18,7 +18,8 @@
 //const std::string Prefices::ARW = "->";
 
 #ifdef DEBUG_PREFICES
-int main(int arg, char** argv){
+int main(int arg, char **argv)
+{
 	return 0;
 }
 #endif

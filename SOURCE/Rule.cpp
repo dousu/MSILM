@@ -12,9 +12,11 @@ Dictionary Rule::dictionary = Dictionary::copy();
  }
  */
 
-Rule::Rule() {
+Rule::Rule()
+{
 }
-Rule::~Rule() {
+Rule::~Rule()
+{
 }
 
 // Rule::Rule(char* cstr) {
@@ -153,29 +155,29 @@ Rule::~Rule() {
  *
  */
 
-bool
-Rule::operator!=(Rule& dst) const {
+bool Rule::operator!=(Rule &dst) const
+{
   return !(*this == dst);
 }
 
-bool
-Rule::operator==(const Rule& dst) const {
-  if (type == dst.type && internal.size() == dst.internal.size()
-      && external.size() == dst.external.size()) {
-    switch (type) {
-      case RULE_TYPE::SENTENCE:
-        if (internal == dst.internal && external == dst.external)
-          return true;
-        break;
+bool Rule::operator==(const Rule &dst) const
+{
+  if (type == dst.type && internal.size() == dst.internal.size() && external.size() == dst.external.size())
+  {
+    switch (type)
+    {
+    case RULE_TYPE::SENTENCE:
+      if (internal == dst.internal && external == dst.external)
+        return true;
+      break;
 
-      case RULE_TYPE::NOUN:
-        if (cat == dst.cat && internal == dst.internal
-            && external == dst.external)
-          return true;
-        break;
+    case RULE_TYPE::NOUN:
+      if (cat == dst.cat && internal == dst.internal && external == dst.external)
+        return true;
+      break;
 
-      default:
-        std::cout << "error type" << std::endl;
+    default:
+      std::cout << "error type" << std::endl;
     }
   }
 
@@ -188,8 +190,9 @@ Rule::operator==(const Rule& dst) const {
  }
  */
 
-Rule&
-Rule::operator=(const Rule& dst) {
+Rule &
+Rule::operator=(const Rule &dst)
+{
   type = dst.type;
   cat = dst.cat;
   internal = dst.internal;
@@ -198,27 +201,28 @@ Rule::operator=(const Rule& dst) {
   return *this;
 }
 
-bool
-Rule::is_sentence(void) const {
+bool Rule::is_sentence(void) const
+{
   if (type == RULE_TYPE::SENTENCE)
     return true;
   return false;
 }
 
-bool
-Rule::is_noun(void) const {
+bool Rule::is_noun(void) const
+{
   if (type == RULE_TYPE::NOUN)
     return true;
   return false;
 }
 
-int
-Rule::composition(void) const {
+int Rule::composition(void) const
+{
   InType::const_iterator it;
   int comp;
   comp = 0;
 
-  for (it = internal.begin(); it != internal.end(); it++) {
+  for (it = internal.begin(); it != internal.end(); it++)
+  {
     if ((*it).is_var())
       comp++;
   }
@@ -226,64 +230,68 @@ Rule::composition(void) const {
 }
 
 std::string
-Rule::to_s(void) {
+Rule::to_s(void)
+{
   //rule category
   std::string rule_type = "";
   std::string internal_str = "";
   std::string external_str = "";
 
-  switch (type) {
-    case RULE_TYPE::SENTENCE:
-      rule_type = Prefices::SEN;
-      break;
+  switch (type)
+  {
+  case RULE_TYPE::SENTENCE:
+    rule_type = Prefices::SEN;
+    break;
 
-    case RULE_TYPE::NOUN:
-      rule_type = Prefices::CAT + Prefices::CLN
-          + std::to_string(cat);
+  case RULE_TYPE::NOUN:
+    rule_type = Prefices::CAT + Prefices::CLN + std::to_string(cat);
 
-      break;
-    default:
-      std::cerr << "RULE TYPE : " << type << std::endl;
-      throw "unknown rule type";
+    break;
+  default:
+    std::cerr << "RULE TYPE : " << type << std::endl;
+    throw "unknown rule type";
   }
 
   std::vector<std::string> buffer;
 
-  if (internal.size() > 0) {
+  if (internal.size() > 0)
+  {
     InType::iterator it;
     //internal
     buffer.clear();
     it = internal.begin();
-    while (it != internal.end()) {
+    while (it != internal.end())
+    {
       buffer.push_back((*it).to_s());
       it++;
     }
     internal_str += string_join(buffer, " ");
   }
 
-  if (external.size() > 0) {
+  if (external.size() > 0)
+  {
     ExType::iterator it;
     //external
     it = external.begin();
     buffer.clear();
-    while (it != external.end()) {
+    while (it != external.end())
+    {
       buffer.push_back((*it).to_s());
       it++;
     }
     external_str = string_join(buffer, " ");
   }
 
-  return rule_type + " " + internal_str + " " + Prefices::ARW + " "
-      + external_str;
+  return rule_type + " " + internal_str + " " + Prefices::ARW + " " + external_str;
 }
 
-void
-Rule::set_noun(Element& dcat, Element& dind, std::vector<Element>& dex) {
+void Rule::set_noun(Element &dcat, Element &dind, std::vector<Element> &dex)
+{
   set_noun(dcat.cat, dind, dex);
 }
 
-void
-Rule::set_noun(int dcat, Element& dind, std::vector<Element>& dex) {
+void Rule::set_noun(int dcat, Element &dind, std::vector<Element> &dex)
+{
   type = RULE_TYPE::NOUN;
   cat = dcat;
   internal.clear();
@@ -291,84 +299,95 @@ Rule::set_noun(int dcat, Element& dind, std::vector<Element>& dex) {
   external = dex;
 }
 
-void
-Rule::set_sentence(std::vector<Element>& din, std::vector<Element>& dex) {
+void Rule::set_sentence(std::vector<Element> &din, std::vector<Element> &dex)
+{
   type = RULE_TYPE::SENTENCE;
   cat = 0; //feature
   internal = din;
   external = dex;
 }
 
-std::vector<std::vector<Element> >
-Rule::moph(void){
-    std::vector<Element>::iterator it; 
-    std::vector<std::vector<Element> > moph;
-    std::vector<Element> buf;
-    
-    it = external.begin();
-    for(;it != external.end();it++){
-        switch((*it).type){
-            case ELEM_TYPE::SYM_TYPE:
-                buf.push_back(*it);
-                break;
-            case ELEM_TYPE::VAR_TYPE:
-                if(buf.size()!=0)
-                    moph.push_back(buf);
-                std::vector<Element> new_buf;
-                buf=new_buf;
-                break;
-        }
-    }
-    if(buf.size()!=0)
+std::vector<std::vector<Element>>
+Rule::moph(void)
+{
+  std::vector<Element>::iterator it;
+  std::vector<std::vector<Element>> moph;
+  std::vector<Element> buf;
+
+  it = external.begin();
+  for (; it != external.end(); it++)
+  {
+    switch ((*it).type)
+    {
+    case ELEM_TYPE::SYM_TYPE:
+      buf.push_back(*it);
+      break;
+    case ELEM_TYPE::VAR_TYPE:
+      if (buf.size() != 0)
         moph.push_back(buf);
-    
-    return moph;
+      std::vector<Element> new_buf;
+      buf = new_buf;
+      break;
+    }
+  }
+  if (buf.size() != 0)
+    moph.push_back(buf);
+
+  return moph;
 }
 
 std::string
-Rule::string_join(const std::vector<std::string> & str_v, const std::string & delim){
-    std::ostringstream os;
-    std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
-    std::string str = os.str();
-    str.erase(str.end()-delim.size(),str.end());
-    return str;
+Rule::string_join(const std::vector<std::string> &str_v, const std::string &delim)
+{
+  std::ostringstream os;
+  std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
+  std::string str = os.str();
+  str.erase(str.end() - delim.size(), str.end());
+  return str;
 }
 
 #ifdef DEBUG_RULE
 #include <vector>
 #include <iostream>
 
-int main(int arg, char** argv) {
-  Element::load_dictionary((char*)"data.dic");
+int main(int arg, char **argv)
+{
+  Element::load_dictionary((char *)"data.dic");
 
-  int internal_size =3;
+  int internal_size = 3;
 
-  std::vector<Element> cat,var,sym,ind;
-  int type=0;
+  std::vector<Element> cat, var, sym, ind;
+  int type = 0;
 
-  while (type <= 3) {
+  while (type <= 3)
+  {
     Element elm;
-    switch(type) {
-      case ELEM_TYPE::CAT_TYPE :
-      for(unsigned int i=0;i<3;i++) {
+    switch (type)
+    {
+    case ELEM_TYPE::CAT_TYPE:
+      for (unsigned int i = 0; i < 3; i++)
+      {
         elm.set_cat(i, i);
         cat.push_back(elm);
       }
       break;
-      case ELEM_TYPE::MEAN_TYPE :
-      for(unsigned int i=0;i<Element::dic.individual.size();i++) {
+    case ELEM_TYPE::MEAN_TYPE:
+      for (unsigned int i = 0; i < Element::dic.individual.size(); i++)
+      {
         elm.set_ind(i);
         ind.push_back(elm);
       }
       break;
-      case ELEM_TYPE::SYM_TYPE :
-      for(unsigned int i=0;i<Element::dic.symbol.size();i++) {
+    case ELEM_TYPE::SYM_TYPE:
+      for (unsigned int i = 0; i < Element::dic.symbol.size(); i++)
+      {
         elm.set_sym(i);
         sym.push_back(elm);
       }
       break;
-      case ELEM_TYPE::VAR_TYPE :
-      for(unsigned int i=0;i<internal_size;i++) {
+    case ELEM_TYPE::VAR_TYPE:
+      for (unsigned int i = 0; i < internal_size; i++)
+      {
         elm.set_var(i, i);
         var.push_back(elm);
       }
@@ -379,7 +398,7 @@ int main(int arg, char** argv) {
 
   Rule noun1, noun2, noun3, noun4;
   Rule sent1, sent2, sent3, sent4;
-  std::vector<Element> ex1,ex2,ex3,ex4;
+  std::vector<Element> ex1, ex2, ex3, ex4;
   ex1.push_back(sym[0]);
   ex1.push_back(sym[1]);
   ex1.push_back(sym[2]);
@@ -393,7 +412,7 @@ int main(int arg, char** argv) {
   noun3.set_noun(cat[0].cat, ind[1], ex1);
   noun4.set_noun(cat[0].cat, ind[0], ex2);
 
-  std::vector<Element> in1,in2,in3,in4;
+  std::vector<Element> in1, in2, in3, in4;
   in1.push_back(ind[0]);
   in1.push_back(ind[0]);
   in1.push_back(ind[0]);
@@ -410,7 +429,7 @@ int main(int arg, char** argv) {
   in4.push_back(ind[0]);
   in4.push_back(ind[0]);
 
-  std::vector<Element> ex5,ex6,ex7,ex8;
+  std::vector<Element> ex5, ex6, ex7, ex8;
   ex5.push_back(sym[0]);
   ex5.push_back(sym[1]);
   ex5.push_back(sym[2]);
@@ -427,23 +446,25 @@ int main(int arg, char** argv) {
   ex8.push_back(sym[1]);
   ex8.push_back(sym[3]);
 
-  sent1.set_sentence(in1,ex5);
-  sent2.set_sentence(in2,ex6);
-  sent3.set_sentence(in3,ex7);
-  sent4.set_sentence(in4,ex8);
+  sent1.set_sentence(in1, ex5);
+  sent2.set_sentence(in2, ex6);
+  sent3.set_sentence(in3, ex7);
+  sent4.set_sentence(in4, ex8);
 
   //	std::cout << noun1.to_s() << std::endl;
   std::cout << "*************************" << std::endl;
-  if(noun1 == noun2) {
+  if (noun1 == noun2)
+  {
     std::cout << noun1.to_s() << " = " << noun2.to_s() << std::endl;
   }
 
   Rule test;
 
   test = noun1;
-  std::cout << "test" << std::endl << sent3.to_s() << std::endl;
+  std::cout << "test" << std::endl
+            << sent3.to_s() << std::endl;
 
-  std::vector<Rule> sents1,sents2;
+  std::vector<Rule> sents1, sents2;
   sents1.push_back(sent1);
   sents1.push_back(sent2);
   sents1.push_back(sent3);
@@ -462,16 +483,18 @@ int main(int arg, char** argv) {
   std::vector<Element>::iterator it2;
   std::cout << "internal: " << std::endl;
   it2 = sent3.internal.begin();
-  while(it2 != sent3.internal.end()) {
-    std::cout << (*it2).to_s()+"+";
+  while (it2 != sent3.internal.end())
+  {
+    std::cout << (*it2).to_s() + "+";
     it2++;
   }
   std::cout << std::endl;
 
   std::cout << "external: " << std::endl;
   it2 = sent3.external.begin();
-  while(it2 != sent3.external.end()) {
-    std::cout << (*it2).to_s()+"+";
+  while (it2 != sent3.external.end())
+  {
+    std::cout << (*it2).to_s() + "+";
     it2++;
   }
   std::cout << std::endl;
@@ -483,24 +506,26 @@ int main(int arg, char** argv) {
 
   std::cout << "internal: " << std::endl;
   it2 = temp.internal.begin();
-  while(it2 != temp.internal.end()) {
-    std::cout << (*it2).to_s()+"+";
+  while (it2 != temp.internal.end())
+  {
+    std::cout << (*it2).to_s() + "+";
     it2++;
   }
   std::cout << std::endl;
 
   std::cout << "external: " << std::endl;
   it2 = temp.external.begin();
-  while(it2 != temp.external.end()) {
-    std::cout << (*it2).to_s()+"+";
+  while (it2 != temp.external.end())
+  {
+    std::cout << (*it2).to_s() + "+";
     it2++;
   }
   std::cout << std::endl;
 
-  if(temp == sent3)
-  std::cout << "true" << std::endl;
+  if (temp == sent3)
+    std::cout << "true" << std::endl;
   else
-  std::cout << "false" << std::endl;
+    std::cout << "false" << std::endl;
 
   std::cout << temp.to_s() << std::endl;
   return 0;
