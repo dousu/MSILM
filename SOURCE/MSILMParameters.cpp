@@ -8,7 +8,7 @@
 #include "MSILMParameters.h"
 
 MSILMParameters::MSILMParameters() {
-	spo = ProgramOption();
+	// spo = ProgramOption();
 	INTER_ANALYSIS = false;
 	SPACE_ANALYSIS = 0;
 	INTER_LOG = false;
