@@ -472,7 +472,8 @@ int main(int argc, char* argv[]) {
 		//("format", ProgramOption::value<std::string>(), "Set saving format (bin/[xml])")
 
 		///*プログレスバー*/
-		//("progress,p", "Show progress bar");
+		//("progress,p", "Show progress bar")
+		;
 
 	opt.parse(argc,argv);
 
