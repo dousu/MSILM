@@ -1,28 +1,16 @@
-language: cpp
-install: true
-script: make test
-dist: trusty
-sudo: required
-os: linux
-branches:
-  only:
-    - master
-    - readability
-    - ex_boost
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-
+sudo: false
+services:
+  - docker
 before_install:
-    - eval "${MATRIX_EVAL}"
-notifications:
-  email:
-    on_failure: change
+  - docker pull gcc:latest
+  - docker pull rsmmr/clang:latest
+env:
+  matrix:
+    - CXX=g++
+    - CXX=clang++
+script:
+  - if [ $CC == gcc ]; then
+      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp gcc /bin/sh -c "CXX=$CXX make test";
+    else
+      docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp rsmmr/clang /bin/sh -c "CXX=$CXX make test";
+    fi
