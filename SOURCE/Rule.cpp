@@ -119,8 +119,8 @@ Rule::Rule(std::string str) {
       }
     }
   }
-  auto symbol_it = std::begin(r);
-  for(; symbol_it != std::end(r); symbol_it++){
+  auto r_it = std::begin(r);
+  for(; r_it != std::end(r); symbol_it++){
     if(std::string{*symbol_it} == Prefices::CAT){
       int var_num, cat_num;
       std::sregex_token_iterator it6(r_it, std::end(r), nums, {1,2});
