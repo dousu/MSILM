@@ -103,7 +103,7 @@ Rule::Rule(std::string str) {
         if(std::string(*it5) != Prefices::VAR){
           Element el;
           std::map<std::string, int>::iterator dic_it;
-          dic_it = dictionary.conv_individual.find(*it5);
+          dic_it = dictionary.conv_individual.find(std::string(*it5));
           if (dic_it != dictionary.conv_individual.end()) {
             el.set_ind((*dic_it).second);
           }else{
@@ -144,7 +144,7 @@ Rule::Rule(std::string str) {
     }else{
       Element sym;
       std::map<std::string, int>::iterator dic_it;
-      dic_it = dictionary.conv_symbol.find(*r_it);
+      dic_it = dictionary.conv_symbol.find(std::string{*r_it});
       if (dic_it != dictionary.conv_symbol.end()) {
         sym.set_sym((*dic_it).second);
       }else{
@@ -163,7 +163,7 @@ Rule::Rule(std::string str) {
     }else if(std::holds_alternative<std::string>(il)){
       Element mean;
       std::map<std::string, int>::iterator dic_it;
-      dic_it = dictionary.conv_individual.find(*it);
+      dic_it = dictionary.conv_individual.find(std::get<std::string>(il));
       if (dic_it != dictionary.conv_individual.end()) {
         mean.set_ind((*dic_it).second);
         internal.push_back(mean);
