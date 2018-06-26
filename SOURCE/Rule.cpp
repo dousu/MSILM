@@ -58,6 +58,7 @@ Rule::Rule(std::string str) {
       mean = *it2;
     }
   }
+  int cnum;
   std::sregex_token_iterator it3(std::begin(mean), std::end(mean), pas, -1);
   std::copy(it3, it, std::back_inserter(meanings));
   if(cat_alp.size() > 2){

@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
+#include <variant>
 
 //#include <boost/range/algorithm.hpp>
 //#include <boost/lexical_cast.hpp>
