@@ -10,7 +10,10 @@
 
 #include <vector>
 #include <string>
-
+#include <regex>
+#include <iterator>
+#include <algorithm>
+#include <cstdlib>
 #include <iostream>
 
 //#include <boost/range/algorithm.hpp>
@@ -58,12 +61,12 @@ public:
 
   //constructor
   Rule();
-  //Rule(char* cstr);
+  Rule(char* cstr);
 
   /*!
      * デバッグ用ではあるが、文字列表現のRuleを使ってインスタンスを生成する
      */
-  //Rule(std::string str);
+  Rule(std::string str);
 
   //destructor
   virtual ~Rule();
