@@ -160,17 +160,8 @@ Rule::Rule(std::string str) {
       Element mean;
       mean.set_var(var_num, cat_num);
       internal.push_back(mean);
-    }else if(std::holds_alternative<std::string>(il)){
-      Element mean;
-      std::map<std::string, int>::iterator dic_it;
-      dic_it = dictionary.conv_individual.find(std::get<std::string>(il));
-      if (dic_it != dictionary.conv_individual.end()) {
-        mean.set_ind((*dic_it).second);
-        internal.push_back(mean);
-      }else{
-        std::cerr << "no candidate in dictionary" << std::endl;
-        exit(1);
-      }
+    }else if(std::holds_alternative<Element>(il)){
+      internal.push_back(std::get<Element>(il));
     }
   }
 }
