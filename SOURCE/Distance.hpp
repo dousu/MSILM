@@ -17,29 +17,37 @@
 /*!
  *
  */
-namespace {
+namespace
+{
 /*!
  * Distance
  */
-namespace Distance {
+namespace Distance
+{
 
-template<typename T = int>
-class MatrixExp{
-private:
+template <typename T = int>
+class MatrixExp
+{
+  private:
 	const int row, col;
 	std::valarray<int> data;
-public:
-	MatrixExp(const int r, const int c) : row(r), col(c), data(r*c) {};
-	T & operator()(const int i, const int j){
-		if(0<=i && i<row && 0<=j && j<col){
-			return data[i*col+j];
-		}else{
+
+  public:
+	MatrixExp(const int r, const int c) : row(r), col(c), data(r * c){};
+	T &operator()(const int i, const int j)
+	{
+		if (0 <= i && i < row && 0 <= j && j < col)
+		{
+			return data[i * col + j];
+		}
+		else
+		{
 			std::cerr << "invalid location in Distancce::Matrix_exp" << std::endl;
 			exit(1);
 		}
 	};
-	const int & size1(){return row;};
-	const int & size2(){return col;};
+	const int &size1() { return row; };
+	const int &size2() { return col; };
 };
 
 /*!
@@ -47,14 +55,15 @@ public:
  * 返値は引数に渡されるVectorインスタンスの要素数で割られるため、0~1の値を取ります。
  * 値が大きければ距離は離れていて、小さければ距離が近いと言う意味になります。計算量はO((n*m)^(1/2))
  */
-template<class E>
+template <class E>
 double levenstein(const std::vector<E> ex1, const std::vector<E> ex2);
 /*!
  * Vectorインスタンスの要素数で割らないため，値は0~無限(入力依存)となるLevenstein距離
  */
-template<class E>
-int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2) {
-    
+template <class E>
+int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2)
+{
+
 	// boost::numeric::ublas::matrix<int> matrix(0, 0);
 	int cost_delta, cost1, cost2, cost3, cost;
 
@@ -71,18 +80,22 @@ int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2) {
 	// matrix.resize(row_size, col_size);
 	MatrixExp<int> matrix(row_size, col_size);
 
-	for (int j = 0; j < col_size; j++) {
+	for (int j = 0; j < col_size; j++)
+	{
 		matrix(0, j) = j;
 	}
-	for (int i = 0; i < row_size; i++) {
+	for (int i = 0; i < row_size; i++)
+	{
 		matrix(i, 0) = i;
 	}
 
-	for (int index_ex1 = 0; index_ex1 < ex1.size(); index_ex1++) {
-		for (int index_ex2 = 0; index_ex2 < ex2.size(); index_ex2++) {
+	for (int index_ex1 = 0; index_ex1 < ex1.size(); index_ex1++)
+	{
+		for (int index_ex2 = 0; index_ex2 < ex2.size(); index_ex2++)
+		{
 
 			//入れ替えコスト1で計算
-			cost_delta = ex1[index_ex1]==ex2[index_ex2] ? 0 : 1;
+			cost_delta = ex1[index_ex1] == ex2[index_ex2] ? 0 : 1;
 
 			int x, y;
 			y = index_ex1 + 1;
@@ -102,11 +115,12 @@ int levenstein2(const std::vector<E> ex1, const std::vector<E> ex2) {
 	return matrix(matrix.size1() - 1, matrix.size2() - 1);
 }
 
-template<class E>
-double levenstein(const std::vector<E> ex1, const std::vector<E> ex2) {
+template <class E>
+double levenstein(const std::vector<E> ex1, const std::vector<E> ex2)
+{
 
-	double dist2 = static_cast<double>(levenstein2<E>(ex1,ex2));
-	int len = std::max(ex1.size(),ex2.size());
+	double dist2 = static_cast<double>(levenstein2<E>(ex1, ex2));
+	int len = std::max(ex1.size(), ex2.size());
 
 	return dist2 / (static_cast<double>(len));
 }
@@ -197,26 +211,29 @@ double onp_lv(std::vector<E>& ary1, std::vector<E>& ary2, double limit = -1) {
 }
 */
 
-template<class E> 
-double hamming(std::vector<E> ex1, std::vector<E> ex2){
-        
-    if(ex1.size()!=ex2.size()){
-        std::cerr <<  "Happened error on hamming distance method." << std::endl;
-        std::exit(0);
-    }
-    typename std::vector<E>::iterator ex1_it;
+template <class E>
+double hamming(std::vector<E> ex1, std::vector<E> ex2)
+{
 
-    ex1_it = ex1.begin();
-    int cnt = 0;
-    double ham_sum=0;
-    for(; ex1_it != ex1.end(); ex1_it++) {
-        
-        if((*ex1_it)!=ex2[cnt])
-            ham_sum+=1;
-        
-        cnt+=1;
-    }
-    return (ham_sum/(double)cnt);
+	if (ex1.size() != ex2.size())
+	{
+		std::cerr << "Happened error on hamming distance method." << std::endl;
+		std::exit(0);
+	}
+	typename std::vector<E>::iterator ex1_it;
+
+	ex1_it = ex1.begin();
+	int cnt = 0;
+	double ham_sum = 0;
+	for (; ex1_it != ex1.end(); ex1_it++)
+	{
+
+		if ((*ex1_it) != ex2[cnt])
+			ham_sum += 1;
+
+		cnt += 1;
+	}
+	return (ham_sum / (double)cnt);
 }
 
 } /*Distance*/

@@ -21,8 +21,7 @@
 // #include <boost/algorithm/string/trim.hpp>
 /*
 #include <boost/serialization/serialization.hpp>
-#include <boost/serializ
-ation/nvp.hpp>
+#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/map.hpp>
 */
 
@@ -45,8 +44,9 @@ ation/nvp.hpp>
  *
  * なお、boost/serializationに対応しています
  */
-class Dictionary {
-public:
+class Dictionary
+{
+  public:
 	typedef std::map<int, std::string> DictionaryType;
 
 	static std::map<int, std::string> individual;
@@ -63,11 +63,11 @@ public:
 	 \endcode
 	 */
 	//static void load(boost::filesystem::path file_path);
-	static void load(std::string&);
+	static void load(std::string &);
 
 	static Dictionary copy(void);
 
-/*private:
+	/*private:
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive &ar, const unsigned int ){

@@ -1,12 +1,11 @@
 sudo: false
 services:
   - docker
-before_install:
-  - docker pull asciian/docker-boost-gcc
-  - docker pull asciian/docker-boost-clang
 env:
   matrix:
-    - CC=gcc CXX=g++-7
-    - CC=clang CXX=clang++-5.0
+    - DOCKERIMAGE="gcc" CXX="g++"
+    - DOCKERIMAGE="rsmmr/clang" CXX="clang++ -stdlib=libc++"
+install:
+  - docker pull $DOCKERIMAGE
 script:
-  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp asciian/docker-boost-$CC /bin/sh -c "CXX=$CXX make test"
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOCKERIMAGE /bin/sh -c "$CXX -v && make test"

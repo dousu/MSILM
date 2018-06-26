@@ -10,16 +10,17 @@
 //#include <boost/serialization/serialization.hpp>
 //#include <boost/serialization/nvp.hpp>
 
-
 /*!
  * ユニークな番号を生成するクラスです。生成可能な範囲は、int型の範囲に依存します。
  *
  * boost/serializationに対応しています。
  */
-class IndexFactory {
-public:
+class IndexFactory
+{
+  public:
 	int index_counter;
-	IndexFactory():index_counter(0){};
+	IndexFactory() : index_counter(0){};
+	IndexFactory(IndexFactory &);
 
 	/*!
 	 * 数字を生成します。
@@ -30,9 +31,9 @@ public:
 	 */
 	int generate(void);
 
-	IndexFactory& operator=(const IndexFactory& dst);
+	IndexFactory &operator=(const IndexFactory &dst);
 
-/*private:
+	/*private:
     friend class boost::serialization::access;
 
     template<class Archive>

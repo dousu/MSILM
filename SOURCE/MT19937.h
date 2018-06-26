@@ -23,15 +23,14 @@
  * これにより、シリアライズデータからレジュームした場合は、
  * 正確に使用済み乱数を破棄する。
  */
-class MT19937 {
-public:
+class MT19937
+{
+  public:
 	MT19937();
 	virtual ~MT19937();
 
-
 	static unsigned long long int icount;
 	static unsigned long long int rcount;
-
 
 	static std::mt19937 igen;
 	static std::uniform_int_distribution<> idist;
@@ -53,7 +52,7 @@ public:
 	 */
 	static double rrand(void);
 
-	static double rrand(double,double);
+	static double rrand(double, double);
 
 	/*!
 	 * 使用済み乱数を破棄する

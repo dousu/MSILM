@@ -15,15 +15,18 @@ int KnowledgeBase::buzz_length = 3;
 bool KnowledgeBase::OMISSION_FLAG = false;
 std::vector<Rule> KnowledgeBase::MEANING_SPACE;
 
-KnowledgeBase::KnowledgeBase() {
+KnowledgeBase::KnowledgeBase()
+{
     DIC_BLD = false;
 }
 
-KnowledgeBase::~KnowledgeBase() {
+KnowledgeBase::~KnowledgeBase()
+{
 }
 
-KnowledgeBase&
-        KnowledgeBase::operator=(const KnowledgeBase& dst) {
+KnowledgeBase &
+KnowledgeBase::operator=(const KnowledgeBase &dst)
+{
     cat_indexer = dst.cat_indexer;
 
     sbox_buffer = dst.sbox_buffer;
@@ -44,8 +47,8 @@ KnowledgeBase&
     return *this;
 }
 
-void
-KnowledgeBase::clear(void) {
+void KnowledgeBase::clear(void)
+{
     cat_indexer.index_counter = 0;
 
     sbox_buffer.clear();
@@ -58,54 +61,67 @@ KnowledgeBase::clear(void) {
     word_dic.clear();
 }
 
-void
-KnowledgeBase::send_box(Rule& mail) {
-    if (mail.type == RULE_TYPE::NOUN) {
+void KnowledgeBase::send_box(Rule &mail)
+{
+    if (mail.type == RULE_TYPE::NOUN)
+    {
         word_box.push_back(mail);
-    } else if (mail.type == RULE_TYPE::SENTENCE) {
+    }
+    else if (mail.type == RULE_TYPE::SENTENCE)
+    {
         sentence_box.push_back(mail);
     }
 }
 
-void
-KnowledgeBase::send_box(std::vector<Rule>& mails) {
+void KnowledgeBase::send_box(std::vector<Rule> &mails)
+{
     std::vector<Rule>::iterator it;
     it = mails.begin();
-    while (it != mails.end()) {
+    while (it != mails.end())
+    {
         send_box(*it);
         it++;
     }
 }
 
-void
-KnowledgeBase::send_db(Rule& mail) {
-    if (mail.type == RULE_TYPE::NOUN) {
+void KnowledgeBase::send_db(Rule &mail)
+{
+    if (mail.type == RULE_TYPE::NOUN)
+    {
         wordDB.push_back(mail);
-    } else if (mail.type == RULE_TYPE::SENTENCE) {
+    }
+    else if (mail.type == RULE_TYPE::SENTENCE)
+    {
         sentenceDB.push_back(mail);
     }
 }
 
-void
-KnowledgeBase::send_db(std::vector<Rule>& mails) {
+void KnowledgeBase::send_db(std::vector<Rule> &mails)
+{
     std::vector<Rule>::iterator it;
     it = mails.begin();
-    while (it != mails.end()) {
+    while (it != mails.end())
+    {
         send_db(*it);
         it++;
     }
 }
 
-void
-KnowledgeBase::unique(RuleDBType& DB) {
+void KnowledgeBase::unique(RuleDBType &DB)
+{
     RuleDBType::iterator it, it2;
     it = DB.begin();
-    while (it != DB.end()) {
+    while (it != DB.end())
+    {
         it2 = it + 1;
-        while (it2 != DB.end()) {
-            if (*it == *it2) {
+        while (it2 != DB.end())
+        {
+            if (*it == *it2)
+            {
                 it2 = DB.erase(it2);
-            } else {
+            }
+            else
+            {
                 it2++;
             }
         }
@@ -145,10 +161,11 @@ KnowledgeBase::unique(RuleDBType& DB) {
  * Replace:決定的アルゴリズムでOK
  */
 
-bool
-KnowledgeBase::consolidate(void) {
+bool KnowledgeBase::consolidate(void)
+{
     bool flag = true, flag1, flag2, flag3, flag4;
-    while (flag) {
+    while (flag)
+    {
         flag = false;
 
         flag1 = chunk();
@@ -158,7 +175,8 @@ KnowledgeBase::consolidate(void) {
         flag = flag1 | flag2 | flag3;
     }
 
-    if (sentence_box.size() != 0) {
+    if (sentence_box.size() != 0)
+    {
         std::cerr << "UNCHECKED SENTENCE REMAINNED" << std::endl;
         for (int i = 0; i < sentence_box.size(); i++)
             std::cerr << sentence_box[i].to_s() << std::endl;
@@ -188,15 +206,16 @@ KnowledgeBase::consolidate(void) {
     return true;
 }
 
-bool
-KnowledgeBase::chunk(void) {
+bool KnowledgeBase::chunk(void)
+{
     RuleDBType::iterator it;
     Rule unchecked_sent;
     bool chunked;
     bool total_chunked = false;
 
     //BOXがからになるまで
-    while (sentence_box.size() != 0) {
+    while (sentence_box.size() != 0)
+    {
         //chunk ベースルール取り出し,取り出した要素を削除
         unchecked_sent = sentence_box.back();
         sentence_box.pop_back();
@@ -220,8 +239,8 @@ KnowledgeBase::chunk(void) {
     return total_chunked;
 }
 
-bool
-KnowledgeBase::chunking_loop(Rule& unchecked_sent, RuleDBType& checked_rules) {
+bool KnowledgeBase::chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules)
+{
     RuleDBType buffer;
     RuleDBType::iterator it;
     Rule logging_rule;
@@ -229,16 +248,20 @@ KnowledgeBase::chunking_loop(Rule& unchecked_sent, RuleDBType& checked_rules) {
 
     chunked = false;
     it = checked_rules.begin();
-    while (!chunked && it != checked_rules.end()) { //CHUNKが未発生 且つ 最後に行くまで
+    while (!chunked && it != checked_rules.end())
+    { //CHUNKが未発生 且つ 最後に行くまで
         //Chunk
         buffer.clear();
         //		if(abs(unchecked_sent.composition() - (*it).composition()) <= 1)
         buffer = chunking(unchecked_sent, *it);
 
         //結果解析
-        if (buffer.size() == 0) { //未発生
+        if (buffer.size() == 0)
+        { //未発生
             it++;
-        } else { //発生
+        }
+        else
+        { //発生
             if (LOGGING_FLAG)
                 logging_rule = *it;
 
@@ -252,7 +275,8 @@ KnowledgeBase::chunking_loop(Rule& unchecked_sent, RuleDBType& checked_rules) {
     } //Chunkが発生したか、全既存規則とテスト終了
 
     //log取得
-    if (chunked & LOGGING_FLAG) {
+    if (chunked & LOGGING_FLAG)
+    {
         LogBox::push_log("\n-->>CHUNK:");
         LogBox::push_log("**FROM");
         LogBox::push_log(unchecked_sent.to_s());
@@ -261,7 +285,8 @@ KnowledgeBase::chunking_loop(Rule& unchecked_sent, RuleDBType& checked_rules) {
 
         std::vector<Rule>::iterator it_log;
         it_log = buffer.begin();
-        for (; it_log != buffer.end(); it_log++) {
+        for (; it_log != buffer.end(); it_log++)
+        {
             LogBox::push_log((*it_log).to_s());
         }
         LogBox::push_log("<<--CHUNK");
@@ -296,13 +321,17 @@ KnowledgeBase::chunking_loop(Rule& unchecked_sent, RuleDBType& checked_rules) {
  #
  */
 std::vector<Rule>
-KnowledgeBase::chunking(Rule& src, Rule& dst) {
+KnowledgeBase::chunking(Rule &src, Rule &dst)
+{
     //0: unchunkable
     //1: chunk type 1
     //2: chunk type 2
 
-    enum CHUNK_TYPE {
-        UNABLE, TYPE1, TYPE2
+    enum CHUNK_TYPE
+    {
+        UNABLE,
+        TYPE1,
+        TYPE2
     };
     RuleDBType buf;
     buf.clear();
@@ -316,8 +345,10 @@ KnowledgeBase::chunking(Rule& src, Rule& dst) {
     //内部言語列差異数検索
     int idiff_index = 0;
     int idiff_counter = 0;
-    for (int i = 0; idiff_counter <= 1 && i < src.internal.size(); i++) {
-        if (src.internal[i] != dst.internal[i]) {
+    for (int i = 0; idiff_counter <= 1 && i < src.internal.size(); i++)
+    {
+        if (src.internal[i] != dst.internal[i])
+        {
             idiff_index = i;
             idiff_counter++;
         }
@@ -335,8 +366,8 @@ KnowledgeBase::chunking(Rule& src, Rule& dst) {
     src_it = src.external.begin();
     dst_it = dst.external.begin();
     int fmatch_length = 0;
-    while (src_it != src.external.end() && dst_it != dst.external.end()
-            && *src_it == *dst_it) {
+    while (src_it != src.external.end() && dst_it != dst.external.end() && *src_it == *dst_it)
+    {
         fmatch_length++;
         src_it++;
         dst_it++;
@@ -347,8 +378,8 @@ KnowledgeBase::chunking(Rule& src, Rule& dst) {
     src_rit = src.external.rbegin();
     dst_rit = dst.external.rbegin();
     int rmatch_length = 0;
-    while (src_rit != src.external.rend() && dst_rit != dst.external.rend()
-            && *src_rit == *dst_rit) {
+    while (src_rit != src.external.rend() && dst_rit != dst.external.rend() && *src_rit == *dst_rit)
+    {
         rmatch_length++;
         src_rit++;
         dst_rit++;
@@ -367,162 +398,179 @@ KnowledgeBase::chunking(Rule& src, Rule& dst) {
     //チャンクタイプ検査
     CHUNK_TYPE chunk_type = UNABLE;
     Rule base, targ;
-    if (src.internal[idiff_index].is_var()
-            && dst.internal[idiff_index].is_ind()) {
+    if (src.internal[idiff_index].is_var() && dst.internal[idiff_index].is_ind())
+    {
         base = src;
         targ = dst;
         chunk_type = TYPE2;
-    } else if (src.internal[idiff_index].is_ind()
-            && dst.internal[idiff_index].is_var()) {
+    }
+    else if (src.internal[idiff_index].is_ind() && dst.internal[idiff_index].is_var())
+    {
         base = dst;
         targ = src;
         chunk_type = TYPE2;
-    } else if (src.internal[idiff_index].is_ind()
-            && dst.internal[idiff_index].is_ind()) {
+    }
+    else if (src.internal[idiff_index].is_ind() && dst.internal[idiff_index].is_ind())
+    {
         base = src;
         targ = dst;
         chunk_type = TYPE1;
-    } else {
+    }
+    else
+    {
         std::cerr << "Illegal Chunk Type" << std::endl;
         throw "Illegal Chunk Type";
     }
 
     //chunk check : Base
     //TYPE2
-    switch (chunk_type) {
-        case TYPE2:
-            //インターナルは変数と対象、変数のほうは外部が変数1つのみ、対象の方は全部記号
-            if (base.external.size() != fmatch_length + rmatch_length + 1)
+    switch (chunk_type)
+    {
+    case TYPE2:
+        //インターナルは変数と対象、変数のほうは外部が変数1つのみ、対象の方は全部記号
+        if (base.external.size() != fmatch_length + rmatch_length + 1)
+            return buf;
+
+        if (!(base.external[fmatch_length].is_cat()))
+            return buf;
+
+        break;
+
+    case TYPE1:
+        //外部差異要素が全て記号
+        for (int i = fmatch_length; i < base.external.size() - rmatch_length;
+             i++)
+        {
+            if (!(base.external[i].is_sym()))
                 return buf;
+        }
+        break;
 
-            if (!(base.external[fmatch_length].is_cat()))
-                return buf;
-
-            break;
-
-        case TYPE1:
-            //外部差異要素が全て記号
-            for (int i = fmatch_length; i < base.external.size() - rmatch_length;
-                    i++) {
-                if (!(base.external[i].is_sym()))
-                    return buf;
-            }
-            break;
-
-        default:
-            throw "unknow chunk type";
+    default:
+        throw "unknow chunk type";
     }
 
     //chunk check: Target
     //外部差異要素が全て記号
-    for (int i = fmatch_length; i < targ.external.size() - rmatch_length; i++) {
+    for (int i = fmatch_length; i < targ.external.size() - rmatch_length; i++)
+    {
         if (!(targ.external[i].is_sym()))
             return buf;
     }
 
     //CHUNK処理
     Rule sent, noun1, noun2;
-    switch (chunk_type) {
-        case TYPE1:
+    switch (chunk_type)
+    {
+    case TYPE1:
+    {
+        int new_cat_id;
+
+        //internal
+        //noun
+        new_cat_id = cat_indexer.generate();
+        ExType noun1_ex, noun2_ex;
+
+        for (int i = fmatch_length; i < base.external.size() - rmatch_length;
+             i++)
         {
-            int new_cat_id;
-
-            //internal
-            //noun
-            new_cat_id = cat_indexer.generate();
-            ExType noun1_ex, noun2_ex;
-
-            for (int i = fmatch_length; i < base.external.size() - rmatch_length;
-                    i++) {
-                noun1_ex.push_back(base.external[i]);
-            }
-            for (int i = fmatch_length; i < targ.external.size() - rmatch_length;
-                    i++) {
-                noun2_ex.push_back(targ.external[i]);
-            }
-
-            //		ExType::iterator diff_bit, diff_eit;
-            //		diff_bit = base.external.begin() + fmatch_length;
-            //		diff_eit = base.external.begin() + (base.external.size() - rmatch_length);
-            //		noun1_ex.insert(noun1_ex.end(), diff_bit, diff_eit);
-            //		diff_bit = targ.external.begin() + fmatch_length;
-            //		diff_eit = targ.external.begin() + (targ.external.size() - rmatch_length);
-            //		noun2_ex.insert(noun2_ex.end(), diff_bit, diff_eit);
-
-            noun1.set_noun(new_cat_id, base.internal[idiff_index], noun1_ex);
-            noun2.set_noun(new_cat_id, targ.internal[idiff_index], noun2_ex);
-
-            //sentence
-            Element new_cat, new_var;
-            new_cat.set_cat(idiff_index, new_cat_id);
-            new_var.set_var(idiff_index, new_cat_id);
-
-            sent = base;
-            sent.internal[idiff_index] = new_var;
-            sent.external.clear();
-
-            ExType::iterator it;
-            it = base.external.begin();
-            while (it != base.external.begin() + fmatch_length) {
-                sent.external.push_back(*it);
-                it++;
-            }
-
-            sent.external.push_back(new_cat);
-
-            std::vector<Element> ext_buf;
-            std::vector<Element>::reverse_iterator rit;
-            rit = base.external.rbegin();
-            while (rit != base.external.rbegin() + rmatch_length) {
-                ext_buf.insert(ext_buf.begin(),*rit);
-                rit++;
-            }
-            sent.external.insert(sent.external.end(),ext_buf.begin(),ext_buf.end());
-
-            buf.push_back(sent);
-            buf.push_back(noun1);
-            buf.push_back(noun2);
-            break;
+            noun1_ex.push_back(base.external[i]);
+        }
+        for (int i = fmatch_length; i < targ.external.size() - rmatch_length;
+             i++)
+        {
+            noun2_ex.push_back(targ.external[i]);
         }
 
-        case TYPE2:
+        //		ExType::iterator diff_bit, diff_eit;
+        //		diff_bit = base.external.begin() + fmatch_length;
+        //		diff_eit = base.external.begin() + (base.external.size() - rmatch_length);
+        //		noun1_ex.insert(noun1_ex.end(), diff_bit, diff_eit);
+        //		diff_bit = targ.external.begin() + fmatch_length;
+        //		diff_eit = targ.external.begin() + (targ.external.size() - rmatch_length);
+        //		noun2_ex.insert(noun2_ex.end(), diff_bit, diff_eit);
+
+        noun1.set_noun(new_cat_id, base.internal[idiff_index], noun1_ex);
+        noun2.set_noun(new_cat_id, targ.internal[idiff_index], noun2_ex);
+
+        //sentence
+        Element new_cat, new_var;
+        new_cat.set_cat(idiff_index, new_cat_id);
+        new_var.set_var(idiff_index, new_cat_id);
+
+        sent = base;
+        sent.internal[idiff_index] = new_var;
+        sent.external.clear();
+
+        ExType::iterator it;
+        it = base.external.begin();
+        while (it != base.external.begin() + fmatch_length)
         {
-            Rule noun;
-            ExType noun_ex;
-
-            for (int i = fmatch_length; i < targ.external.size() - rmatch_length;
-                    i++) {
-                noun_ex.push_back(targ.external[i]);
-            }
-            noun.set_noun(base.internal[idiff_index].cat, targ.internal[idiff_index],
-                    noun_ex);
-
-            buf.push_back(base);
-            buf.push_back(noun);
-            break;
+            sent.external.push_back(*it);
+            it++;
         }
-        default:
-            std::cerr << "CHUNK PROC ERROR" << std::endl;
-            throw "CHUNK PROC ERROR";
+
+        sent.external.push_back(new_cat);
+
+        std::vector<Element> ext_buf;
+        std::vector<Element>::reverse_iterator rit;
+        rit = base.external.rbegin();
+        while (rit != base.external.rbegin() + rmatch_length)
+        {
+            ext_buf.insert(ext_buf.begin(), *rit);
+            rit++;
+        }
+        sent.external.insert(sent.external.end(), ext_buf.begin(), ext_buf.end());
+
+        buf.push_back(sent);
+        buf.push_back(noun1);
+        buf.push_back(noun2);
+        break;
+    }
+
+    case TYPE2:
+    {
+        Rule noun;
+        ExType noun_ex;
+
+        for (int i = fmatch_length; i < targ.external.size() - rmatch_length;
+             i++)
+        {
+            noun_ex.push_back(targ.external[i]);
+        }
+        noun.set_noun(base.internal[idiff_index].cat, targ.internal[idiff_index],
+                      noun_ex);
+
+        buf.push_back(base);
+        buf.push_back(noun);
+        break;
+    }
+    default:
+        std::cerr << "CHUNK PROC ERROR" << std::endl;
+        throw "CHUNK PROC ERROR";
     }
 
     return buf;
 }
 
-bool
-KnowledgeBase::merge(void) {
+bool KnowledgeBase::merge(void)
+{
     RuleDBType::iterator it;
     bool occurrence = false;
     bool merged;
 
     it = word_box.begin();
-    while (it != word_box.end()) {
+    while (it != word_box.end())
+    {
         merged = merging(*it);
         occurrence |= merged;
 
-        if (merged) {
+        if (merged)
+        {
             it = word_box.erase(it);
-        } else {
+        }
+        else
+        {
             it++;
         }
     }
@@ -530,8 +578,8 @@ KnowledgeBase::merge(void) {
     return occurrence;
 }
 
-bool
-KnowledgeBase::merging(Rule& src) {
+bool KnowledgeBase::merging(Rule &src)
+{
     //word_boxを変更しなければイテレータは使える
     RuleDBType::iterator it;
     RuleDBType buf, sub_buf;
@@ -553,16 +601,18 @@ KnowledgeBase::merging(Rule& src) {
     if (unified_cat.size() == 0)
         return false;
 
-    if (LOGGING_FLAG) {
+    if (LOGGING_FLAG)
+    {
         LogBox::push_log("\n-->>MERGE:");
         LogBox::push_log(src_tmp.to_s());
         LogBox::push_log("**ABOUT");
         std::map<int, bool>::iterator it;
         std::vector<std::string> cat_vec;
         it = unified_cat.begin();
-        for (; it != unified_cat.end(); it++) {
+        for (; it != unified_cat.end(); it++)
+        {
             cat_vec.push_back(
-                    Prefices::CAT + ":" + std::to_string((*it).first));
+                Prefices::CAT + ":" + std::to_string((*it).first));
         }
         std::string ss = string_join(cat_vec, ",");
         LogBox::push_log(ss);
@@ -590,7 +640,8 @@ KnowledgeBase::merging(Rule& src) {
     //カテゴリが書き換えられた文規則をBOXへ追加
     sentence_box.insert(sentence_box.end(), buf.begin(), buf.end());
 
-    if (LOGGING_FLAG) {
+    if (LOGGING_FLAG)
+    {
         LogBox::push_log("<<--MERGE");
     }
 
@@ -599,34 +650,40 @@ KnowledgeBase::merging(Rule& src) {
     return true;
 }
 
-void
-KnowledgeBase::collect_merge_cat(Rule& src, std::vector<Rule>& words,
-        std::map<int, bool>& unified_cat) {
+void KnowledgeBase::collect_merge_cat(Rule &src, std::vector<Rule> &words,
+                                      std::map<int, bool> &unified_cat)
+{
     std::vector<Rule>::iterator it, sbit, seit, dbit, deit;
     it = words.begin();
-    while (it != words.end()) {
+    while (it != words.end())
+    {
         if (src.cat != (*it).cat && //要らないけど一応
-                src.internal == (*it).internal && src.external == (*it).external) {
+            src.internal == (*it).internal && src.external == (*it).external)
+        {
             unified_cat.insert(std::map<int, bool>::value_type((*it).cat, true));
         }
         it++;
     }
 }
 
-void
-KnowledgeBase::merge_noun_proc(Rule& src, RuleDBType& DB,
-        std::map<int, bool>& unified_cat) {
+void KnowledgeBase::merge_noun_proc(Rule &src, RuleDBType &DB,
+                                    std::map<int, bool> &unified_cat)
+{
     RuleDBType::iterator it;
     it = DB.begin();
-    while (it != DB.end()) {
-        if (unified_cat.find((*it).cat) != unified_cat.end()) {
-            if (LOGGING_FLAG) {
+    while (it != DB.end())
+    {
+        if (unified_cat.find((*it).cat) != unified_cat.end())
+        {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("MERGE-> " + (*it).to_s());
             }
 
             (*it).cat = src.cat;
 
-            if (LOGGING_FLAG) {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("MERGE<- " + (*it).to_s());
             }
         }
@@ -635,23 +692,27 @@ KnowledgeBase::merge_noun_proc(Rule& src, RuleDBType& DB,
 }
 
 KnowledgeBase::RuleDBType
-KnowledgeBase::merge_sent_proc(Rule& base_word, RuleDBType& DB,
-        std::map<int, bool>& unified_cat) {
+KnowledgeBase::merge_sent_proc(Rule &base_word, RuleDBType &DB,
+                               std::map<int, bool> &unified_cat)
+{
     RuleDBType buf; //BOXへ送られる規則のバッファ
     RuleDBType::iterator it;
     Rule temp;
     bool modified;
 
     it = DB.begin();
-    while (it != DB.end()) {
+    while (it != DB.end())
+    {
         modified = false;
         temp = *it;
 
         //内部に被変更カテゴリの変数があるか調べ、合ったら書き換える
-        for (int i = 0; i < temp.internal.size(); i++) {
-            if (temp.internal[i].is_var()
-                    && unified_cat.find(temp.internal[i].cat) != unified_cat.end()) {
-                if (LOGGING_FLAG) {
+        for (int i = 0; i < temp.internal.size(); i++)
+        {
+            if (temp.internal[i].is_var() && unified_cat.find(temp.internal[i].cat) != unified_cat.end())
+            {
+                if (LOGGING_FLAG)
+                {
                     LogBox::push_log("MERGE-> " + (*it).to_s());
                 }
 
@@ -661,27 +722,33 @@ KnowledgeBase::merge_sent_proc(Rule& base_word, RuleDBType& DB,
         }
 
         //内部に変更があった場合
-        if (modified) {
+        if (modified)
+        {
             //外部のカテゴリ変数も書き換える
-            for (int j = 0; j < temp.external.size(); j++) {
-                if (//find unified cat
-                        temp.external[j].type == ELEM_TYPE::CAT_TYPE
-                        && unified_cat.find(temp.external[j].cat) != unified_cat.end()) {
+            for (int j = 0; j < temp.external.size(); j++)
+            {
+                if ( //find unified cat
+                    temp.external[j].type == ELEM_TYPE::CAT_TYPE && unified_cat.find(temp.external[j].cat) != unified_cat.end())
+                {
                     temp.external[j].cat = base_word.cat;
                 }
             }
-            if (LOGGING_FLAG) {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("MERGE<- " + temp.to_s());
             }
         }
 
-        if (modified) { //カテゴリの書き換えが発生している場合
+        if (modified)
+        { //カテゴリの書き換えが発生している場合
             //バッファに書き換えられた規則を追加
             buf.push_back(temp);
 
             //書き換えられた元の規則をメインDBから削除
             it = DB.erase(it);
-        } else { //カテゴリの書き換えが発生していない場合
+        }
+        else
+        { //カテゴリの書き換えが発生していない場合
             //検査対象の文規則イテレータを次に進める
             it++;
         }
@@ -690,16 +757,18 @@ KnowledgeBase::merge_sent_proc(Rule& base_word, RuleDBType& DB,
     return buf;
 }
 
-bool
-KnowledgeBase::replace(void) {
+bool KnowledgeBase::replace(void)
+{
     RuleDBType::iterator it;
     bool occurrence = false;
     bool flag1, flag2, flag3;
 
     it = word_box.begin();
-    while (it != word_box.end()) {
+    while (it != word_box.end())
+    {
         flag1 = flag2 = flag3 = false;
-        if (LOGGING_FLAG) {
+        if (LOGGING_FLAG)
+        {
             LogBox::push_log("\n-->>REPLACE");
         }
         flag1 = replacing(*it, sbox_buffer);
@@ -707,13 +776,17 @@ KnowledgeBase::replace(void) {
         flag3 = replacing(*it, sentence_box);
 
         occurrence = occurrence | flag1 | flag2 | flag3;
-        if (flag1 || flag2 || flag3) {
-            if (LOGGING_FLAG) {
+        if (flag1 || flag2 || flag3)
+        {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("USED WORD:");
                 LogBox::push_log((*it).to_s());
                 LogBox::push_log("<<--REPLACE");
             }
-        } else {
+        }
+        else
+        {
             if (LOGGING_FLAG)
                 LogBox::pop_log();
         }
@@ -721,10 +794,12 @@ KnowledgeBase::replace(void) {
     }
 
     it = wordDB.begin();
-    while (it != wordDB.end()) {
+    while (it != wordDB.end())
+    {
         flag1 = flag2 = flag3 = false;
 
-        if (LOGGING_FLAG) {
+        if (LOGGING_FLAG)
+        {
             LogBox::push_log("\n-->>REPLACE");
         }
 
@@ -734,13 +809,17 @@ KnowledgeBase::replace(void) {
 
         //		occurrence = occurrence | flag1 | flag2 | flag3;
         occurrence = occurrence | flag1 | flag2;
-        if (flag1 || flag2 || flag3) {
-            if (LOGGING_FLAG) {
+        if (flag1 || flag2 || flag3)
+        {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("USED WORD:");
                 LogBox::push_log((*it).to_s());
                 LogBox::push_log("<<--REPLACE");
             }
-        } else {
+        }
+        else
+        {
             if (LOGGING_FLAG)
                 LogBox::pop_log();
         }
@@ -750,8 +829,8 @@ KnowledgeBase::replace(void) {
     return occurrence;
 }
 
-bool
-KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
+bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
+{
     RuleDBType::iterator it;
     RuleDBType buffer;
 
@@ -765,11 +844,13 @@ KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
 
     //文規則をWordでReplaceできるか調べる
     it = checking_sents.begin();
-    while (it != checking_sents.end()) {
+    while (it != checking_sents.end())
+    {
         replaced = false;
 
         //ガード
-        if ((*it).external.size() < word.external.size()) {
+        if ((*it).external.size() < word.external.size())
+        {
             it++;
             continue; //while
         }
@@ -778,15 +859,18 @@ KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
         //文規則の内部にWordの内部言語があるか検査
         imatched = false;
         imatchp = 0;
-        for (int i = 0; !imatched && i < (*it).internal.size(); i++) {
+        for (int i = 0; !imatched && i < (*it).internal.size(); i++)
+        {
             //内部言語に一致部分がある場合
-            if ((*it).internal[i] == word.internal.front()) {
+            if ((*it).internal[i] == word.internal.front())
+            {
                 imatchp = i;
                 imatched = true;
             }
         }
         //後処理
-        if (!imatched) { //内部言語列に一致部分無し
+        if (!imatched)
+        { //内部言語列に一致部分無し
             it++;
             continue; // while
         }
@@ -796,23 +880,27 @@ KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
         ex_limit = (*it).external.size() - word.external.size();
         ematched = false;
         ematchb = 0;
-        for (int i = 0; !ematched && i <= ex_limit; i++) {
+        for (int i = 0; !ematched && i <= ex_limit; i++)
+        {
             if (std::equal((*it).external.begin() + i,
-                    (*it).external.begin() + i + word.external.size(),
-                    word.external.begin())) {
+                           (*it).external.begin() + i + word.external.size(),
+                           word.external.begin()))
+            {
                 ematched = true;
                 ematchb = i;
                 break;
             }
         }
         //後処理
-        if (!ematched) { //外部言語列に一致部分無し
+        if (!ematched)
+        { //外部言語列に一致部分無し
             it++;
             continue; // while
         }
 
         //文規則内部言語に一致箇所がある場合
-        if (imatched && ematched) {
+        if (imatched && ematched)
+        {
             Element catvar, var;
             ExType::iterator eit;
 
@@ -822,7 +910,8 @@ KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
             //外部言語置き換え用のカテゴリ
             catvar.set_cat(imatchp, word.cat);
 
-            if (LOGGING_FLAG) {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("REPLACE-> " + (*it).to_s());
             }
 
@@ -833,11 +922,12 @@ KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
             //外部
             eit = (*it).external.begin();
             eit = (*it).external.erase(eit + ematchb,
-                    eit + ematchb + word.external.size());
+                                       eit + ematchb + word.external.size());
             (*it).external.insert(eit, catvar);
             buffer.push_back(*it);
 
-            if (LOGGING_FLAG) {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("REPLACE<- " + (*it).to_s());
             }
             replaced = true;
@@ -845,9 +935,12 @@ KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
         }
 
         //文DBイテレータ
-        if (replaced) {
+        if (replaced)
+        {
             it = checking_sents.erase(it);
-        } else { //次の文規則へ
+        }
+        else
+        { //次の文規則へ
             it++;
         }
     } //while
@@ -857,29 +950,35 @@ KnowledgeBase::replacing(Rule& word, RuleDBType& checking_sents) {
     return total_match;
 }
 
-bool
-KnowledgeBase::obliterate(void) {
+bool KnowledgeBase::obliterate(void)
+{
     std::vector<Rule>::iterator it1, it2;
     std::vector<Rule> buf;
     bool is_remained, occurrence = false;
 
     //単語規則削除
     it1 = wordDB.begin();
-    while (it1 != wordDB.end()) {
+    while (it1 != wordDB.end())
+    {
         is_remained = true;
         it2 = it1 + 1;
-        while (it2 != wordDB.end() && is_remained) {
-            if ((*it1).cat == (*it2).cat && (*it1).internal == (*it2).internal
-                    && (*it1).external.size() > (*it2).external.size()) {
+        while (it2 != wordDB.end() && is_remained)
+        {
+            if ((*it1).cat == (*it2).cat && (*it1).internal == (*it2).internal && (*it1).external.size() > (*it2).external.size())
+            {
                 is_remained = false;
             }
             it2++;
         }
 
-        if (is_remained) {
+        if (is_remained)
+        {
             buf.push_back(*it1);
-        } else {
-            if (LOGGING_FLAG) {
+        }
+        else
+        {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("OBLITERATE->" + (*it1).to_s());
             }
         }
@@ -892,26 +991,30 @@ KnowledgeBase::obliterate(void) {
 
     //文規則削除
     it1 = sentenceDB.begin();
-    while (it1 != sentenceDB.end()) {
+    while (it1 != sentenceDB.end())
+    {
         is_remained = true;
         it2 = it1 + 1;
-        while (is_remained && it2 != sentenceDB.end()) {
+        while (is_remained && it2 != sentenceDB.end())
+        {
             bool same_in = true;
             { //internal equality check
                 std::vector<Element>::iterator elem_it1, elem_it2;
                 elem_it1 = (*it1).internal.begin();
                 elem_it2 = (*it2).internal.begin();
 
-                while (same_in && elem_it1 != (*it1).internal.end()
-                        && elem_it2 != (*it2).internal.end()) {
-                    if ((*elem_it1).is_ind() && (*elem_it2).is_ind()
-                            && *elem_it1 == *elem_it2) {
+                while (same_in && elem_it1 != (*it1).internal.end() && elem_it2 != (*it2).internal.end())
+                {
+                    if ((*elem_it1).is_ind() && (*elem_it2).is_ind() && *elem_it1 == *elem_it2)
+                    {
                         same_in &= true;
-                    } else if ((*elem_it1).is_var() && (*elem_it2).is_var()
-                            && (*elem_it1).obj == (*elem_it2).obj
-                            && (*elem_it1).cat == (*elem_it2).cat) {
+                    }
+                    else if ((*elem_it1).is_var() && (*elem_it2).is_var() && (*elem_it1).obj == (*elem_it2).obj && (*elem_it1).cat == (*elem_it2).cat)
+                    {
                         same_in &= true;
-                    } else {
+                    }
+                    else
+                    {
                         same_in &= false;
                     }
                     elem_it1++;
@@ -919,15 +1022,19 @@ KnowledgeBase::obliterate(void) {
                 }
             }
 
-            if (same_in && (*it1).external.size() >= (*it2).external.size()) {
+            if (same_in && (*it1).external.size() >= (*it2).external.size())
+            {
                 is_remained = false;
             }
             it2++;
         }
 
-        if (is_remained) {
+        if (is_remained)
+        {
             buf.push_back(*it1);
-        } else {
+        }
+        else
+        {
             if (LOGGING_FLAG)
                 LogBox::push_log("OBLITERATE->" + (*it1).to_s());
         }
@@ -938,8 +1045,8 @@ KnowledgeBase::obliterate(void) {
     return false;
 }
 
-void
-KnowledgeBase::build_word_index(void) {
+void KnowledgeBase::build_word_index(void)
+{
     if (DIC_BLD)
         return;
 
@@ -947,11 +1054,15 @@ KnowledgeBase::build_word_index(void) {
     RuleDBType::iterator it;
 
     it = wordDB.begin();
-    while (it != wordDB.end()) {
-        if (word_dic.find((*it).cat) != word_dic.end()) {
+    while (it != wordDB.end())
+    {
+        if (word_dic.find((*it).cat) != word_dic.end())
+        {
             word_dic[(*it).cat].insert(
-                    ItemType::value_type((*it).internal.front().obj, *it));
-        } else {
+                ItemType::value_type((*it).internal.front().obj, *it));
+        }
+        else
+        {
             ItemType temp;
             temp.insert(ItemType::value_type((*it).internal.front().obj, *it));
             word_dic.insert(std::map<int, ItemType>::value_type((*it).cat, temp));
@@ -963,11 +1074,11 @@ KnowledgeBase::build_word_index(void) {
     DIC_BLD = true;
 }
 
-Rule
-KnowledgeBase::fabricate(Rule& src1) {
+Rule KnowledgeBase::fabricate(Rule &src1)
+{
 
     std::vector<PatternType> groundable_patterns;
-    std::map<PATTERN_TYPE, std::vector<PatternType> > all_patterns;
+    std::map<PATTERN_TYPE, std::vector<PatternType>> all_patterns;
     Rule src;
     int rand_index;
     src = src1;
@@ -977,52 +1088,62 @@ KnowledgeBase::fabricate(Rule& src1) {
 
     all_patterns = construct_grounding_patterns(src);
 
-    if (LOGGING_FLAG) {
+    if (LOGGING_FLAG)
+    {
         LogBox::push_log("\n-->>FABRICATE1:");
     }
-    
-    if (all_patterns[COMPLETE].size() != 0) {
+
+    if (all_patterns[COMPLETE].size() != 0)
+    {
         std::vector<PatternType> sorted_patterns;
         std::vector<PatternType>::iterator sort_it;
         int pattern_length = 0;
 
         //合成度が高いルールを優先
-        if (CONTROLS & ANTECEDE_COMPOSITION) {
+        if (CONTROLS & ANTECEDE_COMPOSITION)
+        {
             std::sort(all_patterns[COMPLETE].begin(), all_patterns[COMPLETE].end(),
-                    VectorSizeSort());
+                      VectorSizeSort());
             pattern_length = all_patterns[COMPLETE].front().size();
             sort_it = all_patterns[COMPLETE].begin();
             for (;
-                    sort_it != all_patterns[COMPLETE].end()
-                    && (*sort_it).size() == pattern_length; sort_it++) {
+                 sort_it != all_patterns[COMPLETE].end() && (*sort_it).size() == pattern_length; sort_it++)
+            {
                 sorted_patterns.push_back(*sort_it);
             }
             all_patterns[COMPLETE].swap(sorted_patterns);
         }
         rand_index = MT19937::irand() % all_patterns[COMPLETE].size();
 
-        if (clipping_fl) {
+        if (clipping_fl)
+        {
             clipped = clipping(src, (all_patterns[COMPLETE])[rand_index], target_pattern);
-        } else {
+        }
+        else
+        {
             target_pattern = (all_patterns[COMPLETE])[rand_index];
         }
 
-        if (LOGGING_FLAG) {
+        if (LOGGING_FLAG)
+        {
             std::vector<Rule>::iterator deb_it;
 
             LogBox::push_log("**CONSTRUCT");
             LogBox::push_log("***->>USED_RULES");
             deb_it = (all_patterns[COMPLETE])[rand_index].begin();
-            while (deb_it != (all_patterns[COMPLETE])[rand_index].end()) {
+            while (deb_it != (all_patterns[COMPLETE])[rand_index].end())
+            {
                 LogBox::push_log((*deb_it).to_s());
                 deb_it++;
             }
             LogBox::push_log("***<<-USED_RULES");
-            if (clipped) {
+            if (clipped)
+            {
                 //clippingを使った時のlogを残す
                 LogBox::push_log("***->>CLIPPING_RULES");
                 deb_it = target_pattern.begin();
-                while (deb_it != target_pattern.end()) {
+                while (deb_it != target_pattern.end())
+                {
                     LogBox::push_log((*deb_it).to_s());
                     deb_it++;
                 }
@@ -1031,9 +1152,12 @@ KnowledgeBase::fabricate(Rule& src1) {
         }
 
         ground_with_pattern(src, target_pattern);
-    } else if (all_patterns[ABSOLUTE].size() != 0) {
-//        std::cerr << "DDDDDDDDDDDD2" << std::endl;
-        if (LOGGING_FLAG) {
+    }
+    else if (all_patterns[ABSOLUTE].size() != 0)
+    {
+        //        std::cerr << "DDDDDDDDDDDD2" << std::endl;
+        if (LOGGING_FLAG)
+        {
             LogBox::push_log("**ABSOLUTE");
         }
 
@@ -1041,34 +1165,39 @@ KnowledgeBase::fabricate(Rule& src1) {
         //ABSOLUTEにはclippingしない
 
         src = (all_patterns[ABSOLUTE])[rand_index].front();
-    } else if (all_patterns[SEMICOMPLETE].size() != 0) {
-//        std::cerr << "DDDDDDDDDDDD3" << std::endl;
+    }
+    else if (all_patterns[SEMICOMPLETE].size() != 0)
+    {
+        //        std::cerr << "DDDDDDDDDDDD3" << std::endl;
         std::vector<PatternType> sorted_patterns;
         std::vector<PatternType>::iterator sort_it;
         int pattern_length = 0;
 
         //合成度が高いルールを優先
-        if (CONTROLS & ANTECEDE_COMPOSITION) {
+        if (CONTROLS & ANTECEDE_COMPOSITION)
+        {
             std::sort(all_patterns[SEMICOMPLETE].begin(),
-                    all_patterns[SEMICOMPLETE].end(), VectorSizeSort());
+                      all_patterns[SEMICOMPLETE].end(), VectorSizeSort());
             pattern_length = all_patterns[SEMICOMPLETE].front().size();
             sort_it = all_patterns[SEMICOMPLETE].begin();
             for (;
-                    sort_it != all_patterns[SEMICOMPLETE].end()
-                    && (*sort_it).size() == pattern_length; sort_it++) {
+                 sort_it != all_patterns[SEMICOMPLETE].end() && (*sort_it).size() == pattern_length; sort_it++)
+            {
                 sorted_patterns.push_back(*sort_it);
             }
             all_patterns[SEMICOMPLETE].swap(sorted_patterns);
         }
         rand_index = MT19937::irand() % all_patterns[SEMICOMPLETE].size();
 
-        if (LOGGING_FLAG) {
+        if (LOGGING_FLAG)
+        {
             std::vector<Rule>::iterator deb_it;
 
             LogBox::push_log("**SEMI CONSTRUCT");
             LogBox::push_log("***->>USED_RULES");
             deb_it = (all_patterns[SEMICOMPLETE])[rand_index].begin();
-            while (deb_it != (all_patterns[SEMICOMPLETE])[rand_index].end()) {
+            while (deb_it != (all_patterns[SEMICOMPLETE])[rand_index].end())
+            {
                 LogBox::push_log((*deb_it).to_s());
                 deb_it++;
             }
@@ -1079,24 +1208,30 @@ KnowledgeBase::fabricate(Rule& src1) {
         PatternType::iterator it;
 
         use_pattern = (all_patterns[SEMICOMPLETE])[rand_index];
-        for (it = use_pattern.begin(); it != use_pattern.end(); it++) {
-            if ((*it).is_noun() && (*it).external.size() == 0) {
+        for (it = use_pattern.begin(); it != use_pattern.end(); it++)
+        {
+            if ((*it).is_noun() && (*it).external.size() == 0)
+            {
                 ExType buzz;
                 buzz = construct_buzz_word();
                 (*it).external = buzz;
 
-                if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD) {
+                if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD)
+                {
                     Rule keep_word;
                     int index;
-                    for (int i = 0; i < use_pattern.front().internal.size(); i++) {
-                        if ((*it).internal.front() == use_pattern.front().internal[i]) {
+                    for (int i = 0; i < use_pattern.front().internal.size(); i++)
+                    {
+                        if ((*it).internal.front() == use_pattern.front().internal[i])
+                        {
                             index = i;
                             break;
                         }
                     }
                     keep_word.set_noun((*it).cat, src.internal[index], buzz);
                     send_db(keep_word);
-                    if (LOGGING_FLAG) {
+                    if (LOGGING_FLAG)
+                    {
                         LogBox::push_log("***->>KEPT THE COMP_RULE");
                         LogBox::push_log(keep_word.to_s());
                         LogBox::push_log("***<<-KEPT THE COMP_RULE");
@@ -1105,25 +1240,32 @@ KnowledgeBase::fabricate(Rule& src1) {
                     word_dic.clear();
                     build_word_index();
                 }
-                if (LOGGING_FLAG) {
+                if (LOGGING_FLAG)
+                {
                     LogBox::push_log("***->>COMP_RULE");
                     LogBox::push_log((*it).to_s());
                     LogBox::push_log("***<<-COMP_RULE");
                 }
             }
         }
-        if (clipping_fl) {
+        if (clipping_fl)
+        {
             clipped = clipping(src, use_pattern, target_pattern);
-        } else {
+        }
+        else
+        {
             target_pattern = use_pattern;
         }
-        if (LOGGING_FLAG) {
-            if (clipped) {
+        if (LOGGING_FLAG)
+        {
+            if (clipped)
+            {
                 //clippingを使った時のlogを残す
                 std::vector<Rule>::iterator deb_it;
                 LogBox::push_log("***->>CLIPPING_RULES");
                 deb_it = target_pattern.begin();
-                while (deb_it != target_pattern.end()) {
+                while (deb_it != target_pattern.end())
+                {
                     LogBox::push_log((*deb_it).to_s());
                     deb_it++;
                 }
@@ -1132,8 +1274,11 @@ KnowledgeBase::fabricate(Rule& src1) {
         }
 
         ground_with_pattern(src, target_pattern);
-    } else {
-        if (LOGGING_FLAG) {
+    }
+    else
+    {
+        if (LOGGING_FLAG)
+        {
             LogBox::push_log("**RANDOM");
         }
 
@@ -1141,15 +1286,18 @@ KnowledgeBase::fabricate(Rule& src1) {
         ex = construct_buzz_word();
         src.external.swap(ex);
 
-        if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD) {
+        if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD)
+        {
             send_db(src);
-            if (LOGGING_FLAG) {
+            if (LOGGING_FLAG)
+            {
                 LogBox::push_log("**KEPT THE RULE");
             }
         }
     }
 
-    if (LOGGING_FLAG) {
+    if (LOGGING_FLAG)
+    {
         LogBox::push_log("**OUTPUT");
         LogBox::push_log(src.to_s());
         LogBox::push_log("<<--FABRICATE");
@@ -1158,11 +1306,11 @@ KnowledgeBase::fabricate(Rule& src1) {
     return src;
 }
 
-Rule
-KnowledgeBase::fabricate_for_complementing(Rule& src1) {
+Rule KnowledgeBase::fabricate_for_complementing(Rule &src1)
+{
 
     std::vector<PatternType> groundable_patterns;
-    std::map<PATTERN_TYPE, std::vector<PatternType> > all_patterns, all_patterns2;
+    std::map<PATTERN_TYPE, std::vector<PatternType>> all_patterns, all_patterns2;
     Rule src;
     int rand_index;
     src = src1;
@@ -1170,20 +1318,22 @@ KnowledgeBase::fabricate_for_complementing(Rule& src1) {
 
     all_patterns = construct_grounding_patterns(src);
 
-    if (all_patterns[SEMICOMPLETE].size() != 0) {
+    if (all_patterns[SEMICOMPLETE].size() != 0)
+    {
         std::vector<PatternType> sorted_patterns;
         std::vector<PatternType>::iterator sort_it;
         int pattern_length = 0;
 
         //合成度が高いルールを優先
-        if (CONTROLS & ANTECEDE_COMPOSITION) {
+        if (CONTROLS & ANTECEDE_COMPOSITION)
+        {
             std::sort(all_patterns[SEMICOMPLETE].begin(),
-                    all_patterns[SEMICOMPLETE].end(), VectorSizeSort());
+                      all_patterns[SEMICOMPLETE].end(), VectorSizeSort());
             pattern_length = all_patterns[SEMICOMPLETE].front().size();
             sort_it = all_patterns[SEMICOMPLETE].begin();
             for (;
-                    sort_it != all_patterns[SEMICOMPLETE].end()
-                    && (*sort_it).size() == pattern_length; sort_it++) {
+                 sort_it != all_patterns[SEMICOMPLETE].end() && (*sort_it).size() == pattern_length; sort_it++)
+            {
                 sorted_patterns.push_back(*sort_it);
             }
             all_patterns[SEMICOMPLETE].swap(sorted_patterns);
@@ -1195,17 +1345,22 @@ KnowledgeBase::fabricate_for_complementing(Rule& src1) {
         PatternType::iterator it;
 
         use_pattern = (all_patterns[SEMICOMPLETE])[rand_index];
-        for (it = use_pattern.begin(); it != use_pattern.end(); it++) {
-            if ((*it).is_noun() && (*it).external.size() == 0) {
+        for (it = use_pattern.begin(); it != use_pattern.end(); it++)
+        {
+            if ((*it).is_noun() && (*it).external.size() == 0)
+            {
                 ExType buzz;
                 buzz = construct_buzz_word();
                 (*it).external = buzz;
 
-                if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD) {
+                if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD)
+                {
                     Rule keep_word;
                     int index;
-                    for (int i = 0; i < use_pattern.front().internal.size(); i++) {
-                        if ((*it).internal.front() == use_pattern.front().internal[i]) {
+                    for (int i = 0; i < use_pattern.front().internal.size(); i++)
+                    {
+                        if ((*it).internal.front() == use_pattern.front().internal[i])
+                        {
                             index = i;
                             break;
                         }
@@ -1217,7 +1372,9 @@ KnowledgeBase::fabricate_for_complementing(Rule& src1) {
         }
 
         ground_with_pattern(src, use_pattern);
-    } else {
+    }
+    else
+    {
         ExType ex;
         ex = construct_buzz_word();
         src.external.swap(ex);
@@ -1231,7 +1388,8 @@ KnowledgeBase::fabricate_for_complementing(Rule& src1) {
 }
 
 KnowledgeBase::ExType
-KnowledgeBase::construct_buzz_word(void) {
+KnowledgeBase::construct_buzz_word(void)
+{
     //ランダム生成
     int length;
     int sym_id;
@@ -1239,22 +1397,24 @@ KnowledgeBase::construct_buzz_word(void) {
     std::vector<Element> sym_buf;
 
     length = (MT19937::irand() % buzz_length) + 1;
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++)
+    {
         Element sym_buf;
         sym_id = MT19937::irand() % Dictionary::symbol.size();
         sym_buf.set_sym(sym_id);
         ex.push_back(sym_buf);
     }
 
-    if (ex.size() == 0) {
+    if (ex.size() == 0)
+    {
         std::cout << "Failed making random" << std::endl;
         throw "make random external error";
     }
     return ex;
 }
 
-void
-KnowledgeBase::ground_with_pattern(Rule& src, PatternType& pattern) {
+void KnowledgeBase::ground_with_pattern(Rule &src, PatternType &pattern)
+{
     ExType::iterator sent_ex_it;
     PatternType::iterator pattern_it;
     Rule base_rule;
@@ -1266,21 +1426,28 @@ KnowledgeBase::ground_with_pattern(Rule& src, PatternType& pattern) {
     sent_ex_it = base_rule.external.begin();
     src.external.clear();
 
-    while (sent_ex_it != base_rule.external.end()) {
-        if ((*sent_ex_it).is_sym()) {
+    while (sent_ex_it != base_rule.external.end())
+    {
+        if ((*sent_ex_it).is_sym())
+        {
             src.external.push_back(*sent_ex_it);
-        } else if ((*sent_ex_it).is_cat()) {
+        }
+        else if ((*sent_ex_it).is_cat())
+        {
             pattern_it = tmp_ptn.begin();
-            while (pattern_it != tmp_ptn.end()) {
-                if ((*pattern_it).internal.front().obj == (*sent_ex_it).obj
-                        && (*pattern_it).cat == (*sent_ex_it).cat) {
+            while (pattern_it != tmp_ptn.end())
+            {
+                if ((*pattern_it).internal.front().obj == (*sent_ex_it).obj && (*pattern_it).cat == (*sent_ex_it).cat)
+                {
                     src.external.insert(src.external.end(),
-                            (*pattern_it).external.begin(), (*pattern_it).external.end());
+                                        (*pattern_it).external.begin(), (*pattern_it).external.end());
                     break;
                 }
                 pattern_it++;
             }
-        } else {
+        }
+        else
+        {
             std::cerr << "fabricate error" << std::endl;
             throw "fabricate error";
         }
@@ -1288,10 +1455,12 @@ KnowledgeBase::ground_with_pattern(Rule& src, PatternType& pattern) {
     }
 }
 
-std::map<KnowledgeBase::PATTERN_TYPE, std::vector<KnowledgeBase::PatternType> >
-KnowledgeBase::construct_grounding_patterns(Rule& src) {
+std::map<KnowledgeBase::PATTERN_TYPE, std::vector<KnowledgeBase::PatternType>>
+KnowledgeBase::construct_grounding_patterns(Rule &src)
+{
     typedef std::pair<std::multimap<int, Rule>::iterator,
-            std::multimap<int, Rule>::iterator> DictionaryRange;
+                      std::multimap<int, Rule>::iterator>
+        DictionaryRange;
 
     /*
      * Srcに対して、それぞれの文規則がグラウンド可能か検査する
@@ -1305,7 +1474,7 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
     bool filted;
     int ungrounded_variable_num;
     bool is_applied, is_absorute, is_complete, is_semicomplete;
-    std::map<PATTERN_TYPE, std::vector<KnowledgeBase::PatternType> > ret;
+    std::map<PATTERN_TYPE, std::vector<KnowledgeBase::PatternType>> ret;
     //グラウンドパターンの格納庫とそのイテレータ
     std::vector<PatternType> patternDB;
     std::vector<PatternType>::iterator patternDB_it;
@@ -1313,13 +1482,15 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
     PatternType pattern;
 
     sent_it = sentenceDB.begin();
-    while (sent_it != sentenceDB.end()) {
+    while (sent_it != sentenceDB.end())
+    {
 
         ungrounded_variable_num = 0;
 
         //拡張用:内部言語列長の同一性検査
         // 将来的に内部言語列長が異なるものがデータベースに入るかも知れないので
-        if ((*sent_it).internal.size() != src.internal.size()) {
+        if ((*sent_it).internal.size() != src.internal.size())
+        {
             sent_it++;
             continue;
         }
@@ -1327,17 +1498,18 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
         //高速化枝狩り
         //対象が1カ所でも一致していないものは使えない
         filted = true;
-        for (int index = 0; index < src.internal.size() && filted; index++) {
-            if ((*sent_it).internal[index].is_ind()
-                    && src.internal[index] != (*sent_it).internal[index]) {
+        for (int index = 0; index < src.internal.size() && filted; index++)
+        {
+            if ((*sent_it).internal[index].is_ind() && src.internal[index] != (*sent_it).internal[index])
+            {
                 filted = false;
             }
         }
-        if (!filted) {
+        if (!filted)
+        {
             sent_it++;
             continue;
         }
-
 
         //グラウンドパターンの格納庫とそのイテレータ
         patternDB.clear();
@@ -1354,19 +1526,22 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
 
         is_applied = is_absorute = is_complete = is_semicomplete = true;
         for (int in_idx = 0; is_applied && in_idx < (*sent_it).internal.size();
-                in_idx++) {
+             in_idx++)
+        {
             grnd_elm = (*sent_it).internal[in_idx]; //検査するインターナル要素
-            mean_elm = src.internal[in_idx]; //基準のインターナル要素
+            mean_elm = src.internal[in_idx];        //基準のインターナル要素
 
-            if (grnd_elm == mean_elm) { //単語がそのまま一致する場合
+            if (grnd_elm == mean_elm)
+            { //単語がそのまま一致する場合
                 is_absorute &= true;
                 continue;
-            } else if (//変数の場合で、グラウンド可能な場合
-                    grnd_elm.is_var() && //変数で
-                    word_dic.find(grnd_elm.cat) != word_dic.end() && //変数のカテゴリが辞書に有り
-                    word_dic[grnd_elm.cat].find(mean_elm.obj)
-                    != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
-                    ) {
+            }
+            else if (                                                                     //変数の場合で、グラウンド可能な場合
+                grnd_elm.is_var() &&                                                      //変数で
+                word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
+                word_dic[grnd_elm.cat].find(mean_elm.obj) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+            )
+            {
                 DictionaryRange item_range;
                 std::vector<PatternType> patternDB_buffer;
 
@@ -1375,9 +1550,11 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
 
                 //すでに作られてる単語組に対し組み合わせの直積の生成
                 patternDB_it = patternDB.begin();
-                while (patternDB_it != patternDB.end()) {
+                while (patternDB_it != patternDB.end())
+                {
                     //検索した適用可能な単語規則列
-                    while (item_range.first != item_range.second) {
+                    while (item_range.first != item_range.second)
+                    {
                         Rule word_item;
                         PatternType sub_pattern;
 
@@ -1406,18 +1583,25 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
 
                 is_complete &= true;
                 is_absorute &= false;
-            } else { //適合不可能文規則
+            }
+            else
+            { //適合不可能文規則
                 ungrounded_variable_num++;
 
-                if (ungrounded_variable_num > ABSENT_LIMIT) {
+                if (ungrounded_variable_num > ABSENT_LIMIT)
+                {
                     is_applied &= false;
-                } else {
-                    if (grnd_elm.is_var()) {
+                }
+                else
+                {
+                    if (grnd_elm.is_var())
+                    {
                         std::vector<PatternType> patternDB_buffer;
 
                         //すでに作られてる単語組に対し組み合わせの直積の生成
                         patternDB_it = patternDB.begin();
-                        while (patternDB_it != patternDB.end()) {
+                        while (patternDB_it != patternDB.end())
+                        {
                             //検索した適用可能な単語規則列
                             PatternType sub_pattern;
                             Rule empty_word;
@@ -1440,7 +1624,9 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
                         }
                         //変更された単語規則組の列で元の単語規則組の列を置き換える
                         patternDB.swap(patternDB_buffer);
-                    } else {
+                    }
+                    else
+                    {
                         std::cerr << "pattern error" << std::endl;
                         throw;
                     }
@@ -1453,16 +1639,22 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
         } //内部言語のグラウンドループ
 
         //ある文規則に対して取得できたグラウンドパターンを保存
-        if (is_applied) {
-            if (is_absorute) {
+        if (is_applied)
+        {
+            if (is_absorute)
+            {
                 ret[ABSOLUTE].insert(ret[ABSOLUTE].end(), patternDB.begin(),
-                        patternDB.end());
-            } else if (is_complete) {
+                                     patternDB.end());
+            }
+            else if (is_complete)
+            {
                 ret[COMPLETE].insert(ret[COMPLETE].end(), patternDB.begin(),
-                        patternDB.end());
-            } else if (is_semicomplete) {
+                                     patternDB.end());
+            }
+            else if (is_semicomplete)
+            {
                 ret[SEMICOMPLETE].insert(ret[SEMICOMPLETE].end(), patternDB.begin(),
-                        patternDB.end());
+                                         patternDB.end());
             }
         }
 
@@ -1692,10 +1884,11 @@ KnowledgeBase::construct_grounding_patterns(Rule& src) {
 //    return ret;
 //}
 
-bool
-KnowledgeBase::acceptable(Rule& src) {
+bool KnowledgeBase::acceptable(Rule &src)
+{
     typedef std::pair<std::multimap<int, Rule>::iterator,
-            std::multimap<int, Rule>::iterator> DictionaryRange;
+                      std::multimap<int, Rule>::iterator>
+        DictionaryRange;
 
     build_word_index();
 
@@ -1705,11 +1898,13 @@ KnowledgeBase::acceptable(Rule& src) {
     bool is_applied = false;
 
     sent_it = sentenceDB.begin();
-    while (!is_applied && sent_it != sentenceDB.end()) {
+    while (!is_applied && sent_it != sentenceDB.end())
+    {
 
         //拡張用:内部言語列長の同一性検査
         // 将来的に内部言語列長が異なるものがデータベースに入るかも知れないので
-        if ((*sent_it).internal.size() != src.internal.size()) {
+        if ((*sent_it).internal.size() != src.internal.size())
+        {
             sent_it++;
             continue;
         }
@@ -1717,13 +1912,15 @@ KnowledgeBase::acceptable(Rule& src) {
         //高速化枝狩り
         //対象が1カ所でも一致していないものは使えない
         filted = true;
-        for (int index = 0; index < src.internal.size() && filted; index++) {
-            if ((*sent_it).internal[index].is_ind()
-                    && src.internal[index] != (*sent_it).internal[index]) {
+        for (int index = 0; index < src.internal.size() && filted; index++)
+        {
+            if ((*sent_it).internal[index].is_ind() && src.internal[index] != (*sent_it).internal[index])
+            {
                 filted = false;
             }
         }
-        if (!filted) {
+        if (!filted)
+        {
             sent_it++;
             continue;
         }
@@ -1733,20 +1930,25 @@ KnowledgeBase::acceptable(Rule& src) {
 
         is_applied = true;
         for (int in_idx = 0; is_applied && in_idx < (*sent_it).internal.size();
-                in_idx++) {
+             in_idx++)
+        {
             grnd_elm = (*sent_it).internal[in_idx]; //検査するインターナル要素
-            mean_elm = src.internal[in_idx]; //基準のインターナル要素
+            mean_elm = src.internal[in_idx];        //基準のインターナル要素
 
-            if (grnd_elm == mean_elm) { //単語がそのまま一致する場合
+            if (grnd_elm == mean_elm)
+            { //単語がそのまま一致する場合
                 continue;
-            } else if (//変数の場合で、グラウンド可能な場合
-                    grnd_elm.is_var() && //変数で
-                    word_dic.find(grnd_elm.cat) != word_dic.end() && //変数のカテゴリが辞書に有り
-                    word_dic[grnd_elm.cat].find(mean_elm.obj)
-                    != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
-                    ) {
+            }
+            else if (                                                                     //変数の場合で、グラウンド可能な場合
+                grnd_elm.is_var() &&                                                      //変数で
+                word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
+                word_dic[grnd_elm.cat].find(mean_elm.obj) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+            )
+            {
                 continue;
-            } else { //構成不可能文規則
+            }
+            else
+            { //構成不可能文規則
                 is_applied = false;
             }
         } //内部言語のグラウンドループ
@@ -1758,29 +1960,34 @@ KnowledgeBase::acceptable(Rule& src) {
 }
 
 std::vector<Rule>
-KnowledgeBase::grounded_rules(Rule src) {
+KnowledgeBase::grounded_rules(Rule src)
+{
     RuleDBType grounded_rules;
-    std::map<PATTERN_TYPE, std::vector<PatternType> > patterns, patterns2;
+    std::map<PATTERN_TYPE, std::vector<PatternType>> patterns, patterns2;
 
     patterns = construct_grounding_patterns(src);
 
     if (patterns[ABSOLUTE].size() == 0 && patterns[COMPLETE].size() == 0)
         return grounded_rules;
 
-    if (patterns[ABSOLUTE].size() != 0) {
+    if (patterns[ABSOLUTE].size() != 0)
+    {
         std::vector<PatternType>::iterator it;
         it = patterns[ABSOLUTE].begin();
-        while (it != patterns[ABSOLUTE].end()) {
+        while (it != patterns[ABSOLUTE].end())
+        {
             grounded_rules.push_back((*it).front());
             it++;
         }
     }
 
-    if (patterns[COMPLETE].size() != 0) {
+    if (patterns[COMPLETE].size() != 0)
+    {
         std::vector<PatternType>::iterator pat_it;
         pat_it = patterns[COMPLETE].begin();
 
-        while (pat_it != patterns[COMPLETE].end()) {
+        while (pat_it != patterns[COMPLETE].end())
+        {
             Rule grounded_rule;
             grounded_rule = src;
             ground_with_pattern(grounded_rule, (*pat_it));
@@ -1836,7 +2043,8 @@ KnowledgeBase::grounded_rules(Rule src) {
 //}
 
 std::vector<Rule>
-KnowledgeBase::groundable_rules(Rule& src) {
+KnowledgeBase::groundable_rules(Rule &src)
+{
     build_word_index();
 
     std::vector<Rule> ret;
@@ -1847,10 +2055,12 @@ KnowledgeBase::groundable_rules(Rule& src) {
     bool is_applied = false;
 
     sent_it = sentenceDB.begin();
-    while (sent_it != sentenceDB.end()) {
+    while (sent_it != sentenceDB.end())
+    {
         //拡張用:内部言語列長の同一性検査
         // 将来的に内部言語列長が異なるものがデータベースに入るかも知れないので
-        if ((*sent_it).internal.size() != src.internal.size()) {
+        if ((*sent_it).internal.size() != src.internal.size())
+        {
             sent_it++;
             continue;
         }
@@ -1858,13 +2068,15 @@ KnowledgeBase::groundable_rules(Rule& src) {
         //高速化枝狩り
         //対象が1カ所でも一致していないものは使えない
         filted = true;
-        for (int index = 0; index < src.internal.size() && filted; index++) {
-            if ((*sent_it).internal[index].is_ind()
-                    && src.internal[index] != (*sent_it).internal[index]) {
+        for (int index = 0; index < src.internal.size() && filted; index++)
+        {
+            if ((*sent_it).internal[index].is_ind() && src.internal[index] != (*sent_it).internal[index])
+            {
                 filted = false;
             }
         }
-        if (!filted) {
+        if (!filted)
+        {
             sent_it++;
             continue;
         }
@@ -1874,25 +2086,31 @@ KnowledgeBase::groundable_rules(Rule& src) {
 
         is_applied = true;
         for (int in_idx = 0; is_applied && in_idx < (*sent_it).internal.size();
-                in_idx++) {
+             in_idx++)
+        {
             grnd_elm = (*sent_it).internal[in_idx]; //検査するインターナル要素
-            mean_elm = src.internal[in_idx]; //基準のインターナル要素
+            mean_elm = src.internal[in_idx];        //基準のインターナル要素
 
-            if (grnd_elm == mean_elm) { //単語がそのまま一致する場合
+            if (grnd_elm == mean_elm)
+            { //単語がそのまま一致する場合
                 continue;
-            } else if (//変数の場合で、グラウンド可能な場合
-                    grnd_elm.is_var() && //変数で
-                    word_dic.find(grnd_elm.cat) != word_dic.end() && //変数のカテゴリが辞書に有り
-                    word_dic[grnd_elm.cat].find(mean_elm.obj)
-                    != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
-                    ) {
+            }
+            else if (                                                                     //変数の場合で、グラウンド可能な場合
+                grnd_elm.is_var() &&                                                      //変数で
+                word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
+                word_dic[grnd_elm.cat].find(mean_elm.obj) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+            )
+            {
                 continue;
-            } else { //構成不可能文規則
+            }
+            else
+            { //構成不可能文規則
                 is_applied = false;
             }
         } //内部言語のグラウンドループ
 
-        if (is_applied) {
+        if (is_applied)
+        {
             ret.push_back(*sent_it);
         }
 
@@ -1903,7 +2121,8 @@ KnowledgeBase::groundable_rules(Rule& src) {
 }
 
 std::string
-KnowledgeBase::to_s(void) {
+KnowledgeBase::to_s(void)
+{
     std::vector<Rule> rule_buf;
     std::vector<std::string> buf;
     std::vector<Rule>::iterator it;
@@ -1915,7 +2134,8 @@ KnowledgeBase::to_s(void) {
     rule_buf = sentence_box;
     //	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
     it = rule_buf.begin();
-    while (it != rule_buf.end()) {
+    while (it != rule_buf.end())
+    {
         buf.push_back((*it).to_s());
         it++;
     }
@@ -1926,7 +2146,8 @@ KnowledgeBase::to_s(void) {
     rule_buf = sbox_buffer;
     //	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
     it = rule_buf.begin();
-    while (it != rule_buf.end()) {
+    while (it != rule_buf.end())
+    {
         buf.push_back((*it).to_s());
         it++;
     }
@@ -1937,7 +2158,8 @@ KnowledgeBase::to_s(void) {
     rule_buf = word_box;
     //	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
     it = rule_buf.begin();
-    while (it != rule_buf.end()) {
+    while (it != rule_buf.end())
+    {
         buf.push_back((*it).to_s());
         it++;
     }
@@ -1948,7 +2170,8 @@ KnowledgeBase::to_s(void) {
     rule_buf = sentenceDB;
     //	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
     it = rule_buf.begin();
-    while (it != rule_buf.end()) {
+    while (it != rule_buf.end())
+    {
         buf.push_back((*it).to_s());
         it++;
     }
@@ -1959,7 +2182,8 @@ KnowledgeBase::to_s(void) {
     rule_buf = wordDB;
     //	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
     it = rule_buf.begin();
-    while (it != rule_buf.end()) {
+    while (it != rule_buf.end())
+    {
         buf.push_back((*it).to_s());
         it++;
     }
@@ -1967,51 +2191,57 @@ KnowledgeBase::to_s(void) {
     return string_join(buf, "\n");
 }
 
-void
-KnowledgeBase::logging_on(void) {
+void KnowledgeBase::logging_on(void)
+{
     LOGGING_FLAG = true;
 }
 
-void
-KnowledgeBase::logging_off(void) {
+void KnowledgeBase::logging_off(void)
+{
     LOGGING_FLAG = false;
 }
 
-void
-KnowledgeBase::omission_on(void) {
+void KnowledgeBase::omission_on(void)
+{
     OMISSION_FLAG = true;
 }
 
-void
-KnowledgeBase::omission_off(void) {
+void KnowledgeBase::omission_off(void)
+{
     OMISSION_FLAG = false;
 }
-void
-KnowledgeBase::set_control(uint32_t FLAGS) {
+void KnowledgeBase::set_control(uint32_t FLAGS)
+{
     CONTROLS |= FLAGS;
 }
 
 std::vector<Rule>
-KnowledgeBase::utterances(void) {
+KnowledgeBase::utterances(void)
+{
     std::vector<Rule> kb_all, kb_pat;
     std::vector<Rule>::iterator mean_it, kb_pat_it;
     mean_it = KnowledgeBase::MEANING_SPACE.begin();
-    for (; mean_it != KnowledgeBase::MEANING_SPACE.end(); mean_it++) {
+    for (; mean_it != KnowledgeBase::MEANING_SPACE.end(); mean_it++)
+    {
         kb_pat = grounded_rules(*mean_it);
-        if (kb_pat.size() != 0) {
+        if (kb_pat.size() != 0)
+        {
             kb_pat_it = kb_pat.begin();
-            for (; kb_pat_it != kb_pat.end(); kb_pat_it++) {
+            for (; kb_pat_it != kb_pat.end(); kb_pat_it++)
+            {
                 kb_all.push_back((*kb_pat_it));
             }
-        } else {
+        }
+        else
+        {
             //組み立てられない場合（inventionするか否か）
         }
     }
     return kb_all;
 }
 
-bool
-KnowledgeBase::clipping(Rule& mean, KnowledgeBase::PatternType& ptn, KnowledgeBase::PatternType& res) {
+bool KnowledgeBase::clipping(Rule &mean, KnowledgeBase::PatternType &ptn, KnowledgeBase::PatternType &res)
+{
     KnowledgeBase::PatternType src;
     Rule new_rule, tmp_rule, base_rule;
     bool changed = false, clipped, replaceable, sym_flag;
@@ -2021,17 +2251,20 @@ KnowledgeBase::clipping(Rule& mean, KnowledgeBase::PatternType& ptn, KnowledgeBa
     std::vector<Rule>::iterator kb_it;
     std::vector<Element> tmp_string, clipped_string, buf;
     std::vector<Element>::iterator term_it;
-    std::vector<std::vector<Element> > term_strings;
-    std::vector<std::vector<Element> >::iterator term_strings_it;
+    std::vector<std::vector<Element>> term_strings;
+    std::vector<std::vector<Element>>::iterator term_strings_it;
     kb_rules = rules();
-    src=ptn;
+    src = ptn;
 
     //単語の省略
-    if (ptn_size > 1) { //単語ルールがあれば
-        for (count = 0; count < (ptn_size - 1); count++) {
+    if (ptn_size > 1)
+    { //単語ルールがあれば
+        for (count = 0; count < (ptn_size - 1); count++)
+        {
 
             ptn_index = count + 1;
-            if (src[ptn_index].external.size() > 1) {
+            if (src[ptn_index].external.size() > 1)
+            {
                 clipped = false;
                 new_rule = src[ptn_index];
                 base_rule = src[ptn_index];
@@ -2039,56 +2272,72 @@ KnowledgeBase::clipping(Rule& mean, KnowledgeBase::PatternType& ptn, KnowledgeBa
 
                 //src[ptn_index]の単語ルールが意味のどれを表現する役割を担うのか探る
                 work = 0;
-                for (mean_index = ptn_index - 1; mean_index < mean.internal.size(); mean_index++) {
-                    if (src[0].internal[mean_index].is_var()) {
+                for (mean_index = ptn_index - 1; mean_index < mean.internal.size(); mean_index++)
+                {
+                    if (src[0].internal[mean_index].is_var())
+                    {
                         work++;
-                        if (ptn_index == work) {
+                        if (ptn_index == work)
+                        {
                             break;
                         }
                     }
                 }
-                do {
+                do
+                {
                     tmp_rule.external.erase(tmp_rule.external.end() - 1); //最後の文字を消す
                     replaceable = false;
                     kb_it = kb_rules.begin();
-                    while (kb_it != kb_rules.end()) {
+                    while (kb_it != kb_rules.end())
+                    {
                         //ガード
-                        if ((*kb_it).external.size() < tmp_rule.external.size()) {
+                        if ((*kb_it).external.size() < tmp_rule.external.size())
+                        {
                             kb_it++;
                             continue; //while
                         }
-                        if ((*kb_it).is_noun() && base_rule.external == (*kb_it).external && (*kb_it).internal[0] == mean.internal[mean_index]) {
+                        if ((*kb_it).is_noun() && base_rule.external == (*kb_it).external && (*kb_it).internal[0] == mean.internal[mean_index])
+                        {
                             kb_it++;
                             continue; //while
                         }
                         work = (*kb_it).external.size() - tmp_rule.external.size();
                         replaceable = false;
-                        for (int i = 0; (!replaceable) && i <= work; i++) {
+                        for (int i = 0; (!replaceable) && i <= work; i++)
+                        {
                             if (std::equal((*kb_it).external.begin() + i,
-                                    (*kb_it).external.begin() + i + tmp_rule.external.size(),
-                                    tmp_rule.external.begin())) {
+                                           (*kb_it).external.begin() + i + tmp_rule.external.size(),
+                                           tmp_rule.external.begin()))
+                            {
                                 replaceable = true;
                                 break;
                             }
                         }
 
-
-                        if (!replaceable) { //外部言語列に一致部分無し
+                        if (!replaceable)
+                        { //外部言語列に一致部分無し
                             kb_it++;
                             continue; // while
-                        } else {
+                        }
+                        else
+                        {
                             break;
                         }
                     }
-                    if (!replaceable) {
-                        if (!clipped) {
+                    if (!replaceable)
+                    {
+                        if (!clipped)
+                        {
                             clipped = true;
-                            if (!changed) {
+                            if (!changed)
+                            {
                                 changed = true;
                             }
                         }
                         new_rule = tmp_rule;
-                    } else {
+                    }
+                    else
+                    {
                         break;
                     }
                 } while ((!replaceable) && new_rule.external.size() > 1);
@@ -2101,54 +2350,69 @@ KnowledgeBase::clipping(Rule& mean, KnowledgeBase::PatternType& ptn, KnowledgeBa
     //文の省略
     term_strings = recognize_terminal_strings(src[0]);
     term_strings_it = term_strings.begin();
-    for (; term_strings_it != term_strings.end(); term_strings_it++) {
-        if ((*term_strings_it).size() > 1) {
+    for (; term_strings_it != term_strings.end(); term_strings_it++)
+    {
+        if ((*term_strings_it).size() > 1)
+        {
             clipped_string = *term_strings_it;
             tmp_string = clipped_string;
             clipped = false;
 
-            do {
+            do
+            {
                 tmp_string.erase(tmp_string.end() - 1); //最後の文字を消す
                 replaceable = false;
                 kb_it = kb_rules.begin();
-                while (kb_it != kb_rules.end()) {
+                while (kb_it != kb_rules.end())
+                {
                     //ガード
-                    if ((*kb_it).external.size() < tmp_string.size()) {
+                    if ((*kb_it).external.size() < tmp_string.size())
+                    {
                         kb_it++;
                         continue; //while
                     }
-                    if (src[0] == (*kb_it)) {
+                    if (src[0] == (*kb_it))
+                    {
                         kb_it++;
                         continue; //while
                     }
                     work = (*kb_it).external.size() - tmp_string.size();
                     replaceable = false;
-                    for (int i = 0; !replaceable && i <= work; i++) {
+                    for (int i = 0; !replaceable && i <= work; i++)
+                    {
                         if (std::equal((*kb_it).external.begin() + i,
-                                (*kb_it).external.begin() + i + tmp_string.size(),
-                                tmp_string.begin())) {
+                                       (*kb_it).external.begin() + i + tmp_string.size(),
+                                       tmp_string.begin()))
+                        {
                             replaceable = true;
                             break;
                         }
                     }
 
-
-                    if (!replaceable) { //外部言語列に一致部分無し
+                    if (!replaceable)
+                    { //外部言語列に一致部分無し
                         kb_it++;
                         continue; // while
-                    } else {
+                    }
+                    else
+                    {
                         break;
                     }
                 }
-                if (!replaceable) {
-                    if (!clipped) {
+                if (!replaceable)
+                {
+                    if (!clipped)
+                    {
                         clipped = true;
-                        if (!changed) {
+                        if (!changed)
+                        {
                             changed = true;
                         }
                     }
                     clipped_string = tmp_string;
-                } else {
+                }
+                else
+                {
                     break;
                 }
             } while ((!replaceable) && clipped_string.size() > 1);
@@ -2161,19 +2425,22 @@ KnowledgeBase::clipping(Rule& mean, KnowledgeBase::PatternType& ptn, KnowledgeBa
     term_strings_it = term_strings.begin();
     sym_flag = false;
     term_it = src[0].external.begin();
-    for (; term_it != src[0].external.end(); term_it++) {
-        switch ((*term_it).type) {
-            case ELEM_TYPE::SYM_TYPE:
-                if (!sym_flag) {
-                    sym_flag = true;
-                    buf.insert(buf.end(), (*term_strings_it).begin(), (*term_strings_it).end());
-                    term_strings_it++;
-                }
-                break;
-            case ELEM_TYPE::CAT_TYPE:
-                sym_flag = false;
-                buf.push_back(*term_it);
-                break;
+    for (; term_it != src[0].external.end(); term_it++)
+    {
+        switch ((*term_it).type)
+        {
+        case ELEM_TYPE::SYM_TYPE:
+            if (!sym_flag)
+            {
+                sym_flag = true;
+                buf.insert(buf.end(), (*term_strings_it).begin(), (*term_strings_it).end());
+                term_strings_it++;
+            }
+            break;
+        case ELEM_TYPE::CAT_TYPE:
+            sym_flag = false;
+            buf.push_back(*term_it);
+            break;
         }
     }
     src[0].external = buf;
@@ -2182,44 +2449,52 @@ KnowledgeBase::clipping(Rule& mean, KnowledgeBase::PatternType& ptn, KnowledgeBa
 }
 
 std::vector<Rule>
-KnowledgeBase::rules(void) {
+KnowledgeBase::rules(void)
+{
     std::vector<Rule> kb_all;
     std::vector<Rule>::iterator sentenceDB_it, wordDB_it;
     sentenceDB_it = sentenceDB.begin();
-    for (; sentenceDB_it != sentenceDB.end(); sentenceDB_it++) {
+    for (; sentenceDB_it != sentenceDB.end(); sentenceDB_it++)
+    {
         kb_all.push_back(*sentenceDB_it);
     }
     wordDB_it = wordDB.begin();
-    for (; wordDB_it != wordDB.end(); wordDB_it++) {
+    for (; wordDB_it != wordDB.end(); wordDB_it++)
+    {
         kb_all.push_back(*wordDB_it);
     }
 
     return kb_all;
 }
 
-std::vector<std::vector<Element> >
-KnowledgeBase::recognize_terminal_strings(Rule& target) {
+std::vector<std::vector<Element>>
+KnowledgeBase::recognize_terminal_strings(Rule &target)
+{
     std::vector<Element>::iterator it;
-    std::vector<std::vector<Element> > terminal_strings;
+    std::vector<std::vector<Element>> terminal_strings;
     std::vector<Element> buf;
 
     it = target.external.begin();
-    for (; it != target.external.end(); it++) {
-        switch ((*it).type) {
-            case ELEM_TYPE::SYM_TYPE:
-                buf.push_back(*it);
-                break;
-            case ELEM_TYPE::CAT_TYPE:
-                if (buf.size() != 0) {
-                    std::vector<Element> new_buf;
-                    terminal_strings.push_back(new_buf);
-                    terminal_strings[terminal_strings.size() - 1] = buf;
-                    buf.clear();
-                }
-                break;
+    for (; it != target.external.end(); it++)
+    {
+        switch ((*it).type)
+        {
+        case ELEM_TYPE::SYM_TYPE:
+            buf.push_back(*it);
+            break;
+        case ELEM_TYPE::CAT_TYPE:
+            if (buf.size() != 0)
+            {
+                std::vector<Element> new_buf;
+                terminal_strings.push_back(new_buf);
+                terminal_strings[terminal_strings.size() - 1] = buf;
+                buf.clear();
+            }
+            break;
         }
     }
-    if (buf.size() != 0) {
+    if (buf.size() != 0)
+    {
         std::vector<Element> new_buf;
         terminal_strings.push_back(new_buf);
         terminal_strings[terminal_strings.size() - 1] = buf;
@@ -2229,20 +2504,22 @@ KnowledgeBase::recognize_terminal_strings(Rule& target) {
 }
 
 std::string
-KnowledgeBase::string_join(const std::vector<std::string> & str_v, const std::string & delim){
+KnowledgeBase::string_join(const std::vector<std::string> &str_v, const std::string &delim)
+{
     std::ostringstream os;
     std::copy(str_v.begin(), str_v.end(), std::ostream_iterator<std::string>(os, delim.c_str()));
     std::string str = os.str();
-    str.erase(str.end()-delim.size(),str.end());
+    str.erase(str.end() - delim.size(), str.end());
     return str;
 }
 
 #ifdef DEBUG_KB
 
-int main(int arg, char **argv) {
+int main(int arg, char **argv)
+{
     using namespace std;
 
-    Element::load_dictionary((char*) "data.dic");
+    Element::load_dictionary((char *)"data.dic");
     Rule buf;
     KnowledgeBase kb;
     std::vector<Rule> vec;
@@ -2302,15 +2579,17 @@ int main(int arg, char **argv) {
 
     //build index test
     std::cout << "\n****************build index test" << std::endl;
-    std::map<unsigned int, std::multimap<unsigned int, Rule> >::iterator dit;
+    std::map<unsigned int, std::multimap<unsigned int, Rule>>::iterator dit;
     std::multimap<unsigned int, Rule>::iterator item_it;
     kb.build_word_index();
 
     dit = kb.word_dic.begin();
-    while (dit != kb.word_dic.end()) {
+    while (dit != kb.word_dic.end())
+    {
         std::cout << "\nNOW... C:" << (*dit).first << std::endl;
         item_it = (*dit).second.begin();
-        while (item_it != (*dit).second.end()) {
+        while (item_it != (*dit).second.end())
+        {
             std::cout << "ind: " << Element::dic.individual[(*item_it).first] << std::endl;
             std::cout << "rule: " << (*item_it).second.to_s() << std::endl;
             item_it++;
@@ -2322,11 +2601,14 @@ int main(int arg, char **argv) {
     std::cout << "\n****************fabricate test" << std::endl;
     KnowledgeBase kb2;
     Rule input1, input2;
-    try {
+    try
+    {
         //kb2.set_seed(11111111);
         MT19937::set_seed(11111111);
         input1 = Rule(std::string("S hoge hoge hoge -> d"));
-    } catch (const char* msg) {
+    }
+    catch (const char *msg)
+    {
         std::cout << "ERR:" << msg << std::endl;
         throw;
     }
