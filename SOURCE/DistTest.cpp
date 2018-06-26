@@ -19,7 +19,7 @@ int main(void)
 		Distance::levenstein(a, c) == 0.2 &&
 		Distance::levenstein(a, d) == 0.4 &&
 		Distance::levenstein(a, e) == 0.5 &&
-		Distance::hamming(a, b) == 5 &&
+		Distance::hamming(a, b) == 4 &&
 		Distance::hamming(a, c) == 1)
 	{
 		return 0;
