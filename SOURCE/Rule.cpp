@@ -120,8 +120,8 @@ Rule::Rule(std::string str) {
     }
   }
   auto r_it = std::begin(r);
-  for(; r_it != std::end(r); symbol_it++){
-    if(std::string{*symbol_it} == Prefices::CAT){
+  for(; r_it != std::end(r); r_it++){
+    if(std::string{*r_it} == Prefices::CAT){
       int var_num, cat_num;
       std::sregex_token_iterator it6(r_it, std::end(r), nums, {1,2});
       for(i = 0; it6 != it; it6++, i++){
@@ -144,7 +144,7 @@ Rule::Rule(std::string str) {
     }else{
       Element sym;
       std::map<std::string, int>::iterator dic_it;
-      dic_it = dictionary.conv_symbol.find(*symbol_it);
+      dic_it = dictionary.conv_symbol.find(*r_it);
       if (dic_it != dictionary.conv_symbol.end()) {
         sym.set_sym((*dic_it).second);
       }else{
