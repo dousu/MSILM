@@ -23,13 +23,8 @@ MSILMParameters::MSILMParameters()
 	UC_SYMMETRY = false;
 	OMISSION = false;
 	ACC_MEA = false;
-	// SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
-	RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
-	// RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
-	LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
 	DICTIONARY_FILE = "./SOURCE/data.dic";
 	PER_UTTERANCES = 0.5;	 //意味空間の数の半分
-	BASE_PATH = "../RESULT/"; //result用フォルダを初期値に設定
 	time_t now;
 	struct tm *stm = localtime(&now);
 	char s[100];
@@ -41,26 +36,18 @@ MSILMParameters::MSILMParameters()
 	PER_UTTERANCES = 0.5;
 	RANDOM_SEED = 101010;
 	UNIQUE_UTTERANCE = false;
-	// SAVE_FORMAT = BIN;
 	ANALYZE = false;
-	DICTIONARY_FILE = "data.dic";
 	buzz_length = 3;
 
 	LOGGING = false;
 	// PROGRESS = false;
-	// RESUME = false;
-	// SAVE_LAST_STATE = false;
-	// SAVE_ALL_STATE = false;
 	OMISSION = false;
 	DATE_STR = date_str;
-	STATE_EXT = ".st";
 	RESULT_EXT = ".rst";
 	LOG_EXT = ".log";
 
 	BASE_PATH = "../RESULT/";
-	// SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
 	RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
-	// RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
 	LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
 
 	CONTROLS = 0x0;
@@ -77,19 +64,11 @@ MSILMParameters::~MSILMParameters()
 void MSILMParameters::set_option(ProgramOption &po)
 {
 	spo = po;
-	//Files
-	// if (po.count("format")) {
-	//   if (po.get<std::string>("format") == "xml")
-	//     SAVE_FORMAT = XML;
-	// }
 
 	if (po.count("prefix"))
 	{
 		FILE_PREFIX = po.get<std::string>("prefix");
-
-		// SAVE_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
 		RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
-		// RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
 		LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
 	}
 
@@ -160,25 +139,6 @@ void MSILMParameters::set_option(ProgramOption &po)
 		LOGGING = po.get<bool>("logging");
 	}
 
-	// if (po.count("resume")) {
-	//   std::vector<std::string> args;
-	//   args = po["resume"].as<std::vector<std::string> >();
-
-	//   if (args.size() > 0) {
-	//     RESUME_FILE = args.front();
-	//   }
-
-	//   RESUME = true;
-	// }
-
-	// if (po.count("last-save")) {
-	//   SAVE_LAST_STATE = true;
-	// }
-
-	// if (po.count("all-save")) {
-	//   SAVE_ALL_STATE = true;
-	// }
-
 	// if (po.count("progress")) {
 	//   PROGRESS = po.get<bool>("progress");
 	// }
@@ -237,9 +197,7 @@ void MSILMParameters::set_option(ProgramOption &po)
 		ACC_MEA = po.get<bool>("accuracy-meaning");
 	}
 	//必ずprefixの変更後に行うこと
-	// SAVE_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
 	RESULT_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + RESULT_EXT);
-	// RESUME_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + STATE_EXT);
 	LOG_FILE = (FILE_PREFIX + DATE_STR + "_" + std::to_string(RANDOM_SEED) + LOG_EXT);
 }
 
@@ -248,15 +206,6 @@ MSILMParameters::to_s(void)
 {
 	std::string param1, param2;
 	std::vector<std::string> bag;
-
-	//Files
-	// if (spo.count("format")) {
-	//  	bag.push_back("--format ");
-	//  	if (spo.get<std::string>("format") == "xml")
-	//    		bag.push_back("xml");
-	//  	else if (spo.get<std::string>("format") == "bin")
-	//    		bag.push_back("bin");
-	// }
 
 	if (spo.count("prefix"))
 	{
@@ -347,14 +296,6 @@ MSILMParameters::to_s(void)
 			std::to_string(spo.get<bool>("logging")));
 	}
 
-	// if (spo.count("last-save")) {
-	//  	bag.push_back("--last-save");
-	// }
-
-	// if (spo.count("all-save")) {
-	//  	bag.push_back("--all-save");
-	// }
-
 	// if (spo.count("progress")) {
 	//  	bag.push_back("--progress");
 	//  	bag.push_back(
@@ -424,6 +365,74 @@ MSILMParameters::to_s(void)
 	}
 
 	return string_join(bag, " ");
+}
+std::string
+MSILMParameters::to_all_s(void){
+	std::stringstream ss;
+ //  int MAX_GENERATIONS;
+	ss << "MAX_GENERATIONS = " << MAX_GENERATIONS << std::endl; 
+ //  double PER_UTTERANCES; //
+	ss << "PER_UTTERANCES = " << PER_UTTERANCES << std::endl;
+ //  int RANDOM_SEED;       //
+	ss << "RANDOM_SEED = " << RANDOM_SEED << std::endl;
+ //  bool UNIQUE_UTTERANCE; //
+	ss << "UNIQUE_UTTERANCE = " << UNIQUE_UTTERANCE << std::endl;
+ //  uint32_t CONTROLS;
+	ss << "CONTROLS = " << CONTROLS << std::endl;
+ //  int buzz_length;
+	ss << "buzz_length = " << buzz_length << std::endl;
+ //  int UTTERANCES;
+	ss << "UTTERANCES = " << UTTERANCES << std::endl;
+ //  uint32_t Generation_Counter; //
+	ss << "Generation_Counter = " << Generation_Counter << std::endl;
+ //  bool LOGGING;
+	ss << "LOGGING = " << LOGGING << std::endl;
+ //  bool PROGRESS;
+	// ss << "PROGRESS = " << PROGRESS << std::endl;
+ //  bool ANALYZE;
+	ss << "ANALYZE = " << ANALYZE << std::endl;
+ //  std::string DICTIONARY_FILE;
+	ss << "DICTIONARY_FILE = " << DICTIONARY_FILE << std::endl;
+ //  std::string FILE_PREFIX;
+	ss << "FILE_PREFIX = " << FILE_PREFIX << std::endl;
+ //  std::string DATE_STR;
+	ss << "DATE_STR = " << DATE_STR << std::endl;
+ //  std::string RESULT_EXT;
+	ss << "RESULT_EXT = " << RESULT_EXT << std::endl;
+ //  std::string LOG_EXT;
+	ss << "LOG_EXT = " << LOG_EXT << std::endl;
+ //  std::string BASE_PATH;
+	ss << "BASE_PATH = " << BASE_PATH << std::endl;
+ //  std::string LOG_FILE;
+	ss << "LOG_FILE = " << LOG_FILE << std::endl;
+ //  std::string RESULT_FILE;
+	ss << "RESULT_FILE = " << RESULT_FILE << std::endl;
+ //  bool INTER_ANALYSIS;
+	ss << "INTER_ANALYSIS = " << INTER_ANALYSIS << std::endl;
+ //  int SPACE_ANALYSIS;
+	ss << "SPACE_ANALYSIS = " << SPACE_ANALYSIS << std::endl;
+ //  bool INTER_LOG;
+	ss << "INTER_LOG = " << INTER_LOG << std::endl;
+ //  int SPACE_LOG;
+	ss << "SPACE_LOG = " << SPACE_LOG << std::endl;
+ //  int MULTIPLE_MEANINGS;
+	ss << "MULTIPLE_MEANINGS = " << MULTIPLE_MEANINGS << std::endl;
+ //  double PER_TERM;
+	ss << "PER_TERM = " << PER_TERM << std::endl;
+ //  int TERMS;
+	ss << "TERMS = " << TERMS << std::endl;
+ //  int WINDOW;
+	ss << "WINDOW = " << WINDOW << std::endl;
+ //  bool SYMMETRY;
+	ss << "SYMMETRY = " << SYMMETRY << std::endl;
+ //  bool UC_SYMMETRY;
+	ss << "UC_SYMMETRY = " << UC_SYMMETRY << std::endl;
+ //  bool OMISSION;
+	ss << "OMISSION = " << OMISSION << std::endl;
+ //  bool ACC_MEA;
+	ss << "ACC_MEA = " << ACC_MEA << std::endl;
+
+	return ss.str();
 }
 
 std::string

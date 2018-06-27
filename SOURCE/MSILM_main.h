@@ -21,21 +21,6 @@
 
 #include <stdio.h>
 
-//#include <boost/program_options.hpp>
-//#include <boost/algorithm/string.hpp>
-//#include <boost/algorithm/string/trim.hpp>
-// #include <boost/progress.hpp>
-/*#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/serialization/string.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/serialization/export.hpp>*/
-//#include <boost/lexical_cast.hpp>
-
 #include "MSILMAgent.h"
 #include "Rule.h"
 #include "Element.h"
@@ -80,27 +65,5 @@ double limit_time;
 void logging_off(MSILMParameters &param);
 
 void logging_on(MSILMParameters &param);
-
-/*template<typename _IFS>
-void resume_agent(
-	_IFS&,
-	MSILMParameters&,
-	unsigned long long int&,
-	unsigned long long int&,
-	Dictionary&,
-	std::vector<Rule>&,
-	MSILMAgent&
-);
-
-template<typename _OFS>
-void save_agent(
-	_OFS&,
-	MSILMParameters&,
-	unsigned long long int&,
-	unsigned long long int&,
-	Dictionary&,
-	std::vector<Rule>&,
-	MSILMAgent&
-);*/
 
 #endif /* MSILM_MAIN_H */

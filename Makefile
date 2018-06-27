@@ -19,6 +19,7 @@ test: ms
 	${CXX} ${OPT} ${SOURCEDIR}/DistTest.cpp -o ${SOURCEDIR}/disttest.exe
 	${SOURCEDIR}/disttest.exe
 	${CXX} ${OPT} ${SOURCEDIR}/KnwTest.cpp ${OBJS} -o ${SOURCEDIR}/knwtest.exe
+	${CXX} ${OPT} ${SOURCEDIR}/PrmTest.cpp ${OBJS} -o ${SOURCEDIR}/prmtest.exe
 
 $(SOURCEDIR)/MSILM_main.cpp: ${OBJS} MSILM_main.h
 $(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h

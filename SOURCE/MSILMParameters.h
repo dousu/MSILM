@@ -311,11 +311,6 @@ public:
 class MSILMParameters
 {
 public:
-  //type definition
-  // enum FORMAT {
-  //   BIN, XML
-  // };
-
   //experiment parameters
   int MAX_GENERATIONS;
   double PER_UTTERANCES; //
@@ -331,12 +326,8 @@ public:
 
   //system parameters
   bool LOGGING;
-  bool PROGRESS;
-  // bool RESUME;
-  // bool SAVE_LAST_STATE;
-  // bool SAVE_ALL_STATE;
+  // bool PROGRESS;
   bool ANALYZE;
-  // FORMAT SAVE_FORMAT;
 
   std::string DICTIONARY_FILE;
 
@@ -355,8 +346,6 @@ public:
 
   //file
   std::string LOG_FILE;
-  // std::string RESUME_FILE;
-  // std::string SAVE_FILE;
   std::string RESULT_FILE;
 
   ProgramOption spo;
@@ -381,6 +370,7 @@ public:
 
   void set_option(ProgramOption &po);
   std::string to_s(void);
+  std::string to_all_s(void);
 
 private:
   std::string string_join(const std::vector<std::string> &str_v, const std::string &delim);
