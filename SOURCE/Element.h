@@ -10,10 +10,7 @@
 #include <iostream>
 #include <map>
 #include <string>
-
-//#include <boost/lexical_cast.hpp>
-//#include <boost/serialization/serialization.hpp>
-//#include <boost/serialization/nvp.hpp>
+#include <variant>
 
 #include "Dictionary.h"
 #include "Prefices.h"
@@ -23,14 +20,16 @@
  */
 namespace ELEM_TYPE
 {
-//!カテゴリ付き変数:外部言語の非終端記号
-const int CAT_TYPE = 0;
-//!シンボル:外部言語の終端記号
-const int SYM_TYPE = 1;
-//!変数:内部言語の非終端記号
-const int VAR_TYPE = 2;
-//!対象:内部言語の終端記号
-const int MEAN_TYPE = 3;
+	enum Type{
+		//!意味:internal
+		MEAN_TYPE = 0;
+		//!変数:internal
+		VAR_TYPE = 1;
+		//!シンボル:external
+		SYM_TYPE = 2;
+		//!カテゴリ付き変数:external
+		CAT_TYPE = 3;		
+	}
 }
 
 //型
@@ -41,7 +40,7 @@ const int MEAN_TYPE = 3;
  *
  * なお、boost%:%:serializationに対応しています。
  */
-class Element
+/*class Element
 {
 
   public:
@@ -53,7 +52,7 @@ class Element
 	int cat;
 
 	//! Elementのタイプを格納しています。タイプはELEM_TYPEに示されるとおりです。
-	int type;
+	ELEM_TYPE::Type type;
 
 	static Dictionary dictionary;
 
@@ -97,15 +96,114 @@ class Element
 	//! インスタンスの文字列表現をstringで返します。（例:インスタンスが、カテゴリインデックス1で、変数インデックス2なら、"C1/x2"が返ってきます。）
 	std::string to_s(void);
 
-	/*private:
-    // serialize
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive &ar, const unsigned int ){
-    	ar & BOOST_SERIALIZATION_NVP(type);
-    	ar & BOOST_SERIALIZATION_NVP(obj);
-    	ar & BOOST_SERIALIZATION_NVP(cat);
-    }*/
+};*/
+
+class Mean{
+	int obj;
+public:
+	Mean(int num) : obj(num) {};
+	bool operator==(const Mean &dst) const {
+		return obj == dst.obj;
+	};
+	//!等号の否定です
+	bool operator!=(const Mean &dst) const {
+		return !(*this == dst);
+	};
+	bool operator<(const Mean &dst) const{
+		return obj < dst.obj;
+	};
+};
+
+class Variable{
+	int obj;
+public:
+	Variable(int num) : obj(num) {};
+	bool operator==(const Variable &dst) const {
+		return obj == dst.obj;
+	};
+	//!等号の否定です
+	bool operator!=(const Variable &dst) const {
+		return !(*this == dst);
+	};
+	bool operator<(const Variable &dst) const{
+		return obj < dst.obj;
+	};
+};
+
+class Symbol{
+	int obj;
+public:
+	Symbol(int num) : obj(num) {};
+	bool operator==(const Symbol &dst) const {
+		return obj == dst.obj;
+	};
+	//!等号の否定です
+	bool operator!=(const Symbol &dst) const {
+		return !(*this == dst);
+	};
+	bool operator<(const Symbol &dst) const{
+		return obj < dst.obj;
+	};
+};
+
+class Nonterminal{
+	int cat;
+	int obj;
+public:
+	Nonterminal(int cat_num, int obj_num) : cat(cat_num), obj(obj_num) {};
+	bool operator==(const Variable &dst) const {
+		return cat == dst.cat && obj == dst.obj;
+	};
+	//!等号の否定です
+	bool operator!=(const Variable &dst) const {
+		return !(*this == dst);
+	};
+	bool operator<(const Variable &dst) const{
+		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
+	};
+};
+
+class newElement{
+	ELEM_TYPE::Type type;
+	std::variant<Mean, Variable, Symbol, Nonterminal> element;
+public:
+	Element() : element() {};
+	Element(const Element & other){
+		switch(other.type){
+			case ELEM_TYPE::CAT_TYPE :
+				element = std::get<Nonterminal>(other.element);
+				break;
+			case ELEM_TYPE::SYM_TYPE :
+				element = std::get<Symbol>(other.element);
+				break;
+			case ELEM_TYPE::VAR_TYPE :
+				element = std::get<Variable>(other.element);
+				break;
+			case ELEM_TYPE::MEAN_TYPE :
+				element = std::get<Mean>(other.element);
+				break;
+			default :
+				std::cerr << "Element Substitution Error" << std::endl;
+				exit(1);
+		}
+		return *this;
+	};
+
+	template <typename T>
+	T get() {return std::get<T>(element)};
+
+	//operator
+	//!等号。型が異なると偽を返します。型が等しい場合はインデックスが等しいか比べます。
+	bool operator==(const Element &dst) const {
+		return type == dst.type && element == dst.element;
+	};
+	//!等号の否定です
+	bool operator!=(const Element &dst) const {
+		return !(*this == dst);
+	};
+	bool operator<(const Element &dst) const{
+		return type < dst.type || (type == dst.type && element < dst.element);
+	};
 };
 
 #endif /* ELEMENT_H_ */
