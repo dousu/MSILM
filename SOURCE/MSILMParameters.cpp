@@ -27,7 +27,7 @@ MSILMParameters::MSILMParameters()
 	RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
 	// RESUME_FILE = (FILE_PREFIX + DATE_STR + STATE_EXT);
 	LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
-	DICTIONARY_FILE = "./data.dic";
+	DICTIONARY_FILE = "./SOURCE/data.dic";
 	PER_UTTERANCES = 0.5;	 //意味空間の数の半分
 	BASE_PATH = "../RESULT/"; //result用フォルダを初期値に設定
 	time_t now;

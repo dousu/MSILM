@@ -2,15 +2,15 @@
 
 int main(int arg, char **argv)
 {
-    Element::load_dictionary((char *)"data.dic");
+    Element::load_dictionary((char *)"./SOURCE/data.dic");
     Rule buf;
     KnowledgeBase kb;
     std::vector<Rule> vec;
 
     //chunk1 test
     std::cout << "\n****************chunk1 test" << std::endl;
-    vec.push_back(Rule(std::string("S hoge hoge foo -> a b c")));
-    vec.push_back(Rule(std::string("S hoge hoge hoge -> a d c")));
+    vec.push_back(Rule(std::string("S/like(mary,john)->abc")));
+    vec.push_back(Rule(std::string("S/like(mary,mary)->adc")));
 
     kb.send_box(vec);
     std::cout << kb.to_s() << std::endl;
@@ -21,7 +21,7 @@ int main(int arg, char **argv)
     //chunk2 test
     std::cout << "\n****************chunk2 test" << std::endl;
     vec.clear();
-    vec.push_back(Rule(std::string("S hoge hoge foo -> a g c")));
+    vec.push_back(Rule(std::string("S/like(mary,heather)->agc")));
     kb.send_box(vec);
     kb.chunk();
     std::cout << kb.to_s() << std::endl;
@@ -30,7 +30,7 @@ int main(int arg, char **argv)
     std::cout << "\n****************merge test" << std::endl;
     std::cout << "\n%%% previoud" << std::endl;
     std::cout << kb.to_s() << std::endl;
-    buf = Rule(std::string("C:2 hoge -> d"));
+    buf = Rule(std::string("C3/mary->d"));
     kb.word_box.insert(kb.word_box.begin(), buf);
     kb.merge();
     std::cout << "\n%%% after" << std::endl;
@@ -40,7 +40,7 @@ int main(int arg, char **argv)
     std::cout << "\n****************replace test" << std::endl;
     std::cout << "\n%%% previoud" << std::endl;
     std::cout << kb.to_s() << std::endl;
-    buf = Rule(std::string("C:3 hoge -> c"));
+    buf = Rule(std::string("C4/mary->c"));
     kb.word_box.insert(kb.word_box.begin(), buf);
     kb.replace();
     std::cout << "\n%%% after" << std::endl;
@@ -48,10 +48,12 @@ int main(int arg, char **argv)
 
     //consolidate test
     std::cout << "\n****************consolidate test" << std::endl;
-    vec.push_back(Rule(std::string("S hoge hoge foo -> a b c")));
-    vec.push_back(Rule(std::string("S hoge hoge hoge -> a d c")));
-    vec.push_back(Rule(std::string("C:2 hoge -> d")));
-    vec.push_back(Rule(std::string("C:4 hoge -> c")));
+    kb.clear();
+    vec.push_back(Rule(std::string("S/like(mary,heather)->abc")));
+    vec.push_back(Rule(std::string("S/like(mary,john)->adc")));
+    vec.push_back(Rule(std::string("S/like(john,john)->add")));
+    vec.push_back(Rule(std::string("C2/john -> d")));
+    vec.push_back(Rule(std::string("C4/mary -> c")));
     kb.send_box(vec);
 
     std::cout << "\n%%% previoud" << std::endl;
@@ -73,8 +75,8 @@ int main(int arg, char **argv)
         item_it = (*dit).second.begin();
         while (item_it != (*dit).second.end())
         {
-            std::cout << "ind: " << Element::dic.individual[(*item_it).first] << std::endl;
-            std::cout << "rule: " << (*item_it).second.to_s() << std::endl;
+            std::cout << "\tind: " << Element::dic.individual[(*item_it).first] << std::endl;
+            std::cout << "\trule: " << (*item_it).second.to_s() << std::endl;
             item_it++;
         }
         dit++;
@@ -82,31 +84,11 @@ int main(int arg, char **argv)
 
     //fabricate test
     std::cout << "\n****************fabricate test" << std::endl;
-    KnowledgeBase kb2;
-    Rule input1, input2;
-    try
-    {
-        //kb2.set_seed(11111111);
-        MT19937::set_seed(11111111);
-        input1 = Rule(std::string("S hoge hoge hoge -> d"));
-    }
-    catch (const char *msg)
-    {
-        std::cout << "ERR:" << msg << std::endl;
-        throw;
-    }
-    std::cout << "prev: " << input1.to_s() << std::endl;
-
-    kb2.fabricate(input1);
-    std::cout << "fabr: " << input1.to_s() << std::endl;
-
-    input2 = Rule(std::string("S hoge hoge hoge -> d"));
-    input2.external.clear();
-    kb.fabricate(input2);
-    std::cout << "fabr: " << input2.to_s() << std::endl;
+    Rule input = Rule(std::string("S hoge hoge hoge -> d")), output;
+    input.external.clear();
+    output = kb.fabricate(input1);
+    std::cout << "fabr: " << output.to_s() << std::endl;
     std::cout << "\n****************end" << std::endl;
-
-    //parse test
 
     return 0;
 }
