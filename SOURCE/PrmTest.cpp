@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	/*
 	 * Utterance times
 	 */
-	param.UTTERANCES = (int)round(param.PER_UTTERANCES * meaning_space.size());
+	param.UTTERANCES = (int)round(param.PER_UTTERANCES * static_cast<std::size_t>(100));
 	param.TERMS = (int)round(param.PER_TERM * param.UTTERANCES);
 
 	//Parameter Output
