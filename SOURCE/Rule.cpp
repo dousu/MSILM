@@ -61,7 +61,7 @@ Rule::Rule(std::string str) {
   int cnum;
   std::sregex_token_iterator it3(std::begin(mean), std::end(mean), pas, -1);
   std::copy(it3, it, std::back_inserter(meanings));
-  if(cat_alp.size() > 2){
+  if(cat_alp.size() >= 2){
     std::sregex_token_iterator it4(std::begin(cat_alp), std::end(cat_alp), num, {-1,0});
     for(i = 0; it4 != it; it4++, i++){
       if(i == 2){
@@ -107,6 +107,7 @@ Rule::Rule(std::string str) {
           if (dic_it != dictionary.conv_individual.end()) {
             el.set_ind((*dic_it).second);
           }else{
+	    std::cout << "meaning \"" << *it5 << "\"" << std::endl;
             std::cerr << "no candidate in dictionary" << std::endl;
             exit(1);
           }

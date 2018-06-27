@@ -63,6 +63,19 @@ int main(int arg, char **argv)
     KnowledgeBase kb;
     std::vector<Rule> vec;
 
+    //dictionary check
+    std::cout << "Dictionary" << std::endl;
+    std::cout << "meaning" << std::endl;
+    auto it1 = std::begin(dic.conv_individual);
+    for(;it1 != std::end(dic.conv_individual);it1++){
+    	std::cout << "\tstring: " << (*it1).first << "\tnumber: " << (*it1).second << std::endl;
+    }
+    std::cout << "symbols" << std::endl;
+    auto it2 = std::begin(dic.conv_symbol);
+    for(;it2 != std::end(dic.conv_symbol);it2++){
+    	std::cout << "\tstring: " << (*it2).first << "\tnumber: " << (*it2).second << std::endl;
+    }
+
     //chunk1 test
     std::cout << "\n****************chunk1 test" << std::endl;
     vec.push_back(Rule(std::string("S/like(mary,john)->abc")));
@@ -84,7 +97,7 @@ int main(int arg, char **argv)
 
     //merge test
     std::cout << "\n****************merge test" << std::endl;
-    std::cout << "\n%%% previoud" << std::endl;
+    std::cout << "\n%%% previous" << std::endl;
     std::cout << kb.to_s() << std::endl;
     buf = Rule(std::string("C3/mary->d"));
     kb.word_box.insert(kb.word_box.begin(), buf);
@@ -104,12 +117,12 @@ int main(int arg, char **argv)
 
     //consolidate test
     std::cout << "\n****************consolidate test" << std::endl;
-    kb.clear();
+    kb.clear();vec.clear();
     vec.push_back(Rule(std::string("S/like(mary,heather)->abc")));
     vec.push_back(Rule(std::string("S/like(mary,john)->adc")));
     vec.push_back(Rule(std::string("S/like(john,john)->add")));
-    vec.push_back(Rule(std::string("C2/john -> d")));
-    vec.push_back(Rule(std::string("C4/mary -> c")));
+    vec.push_back(Rule(std::string("C2/john->d")));
+    vec.push_back(Rule(std::string("C4/mary->c")));
     kb.send_box(vec);
 
     std::cout << "\n%%% previoud" << std::endl;
@@ -118,29 +131,12 @@ int main(int arg, char **argv)
     std::cout << "\n%%% after" << std::endl;
     std::cout << kb.to_s() << std::endl;
 
-    //build index test
-    std::cout << "\n****************build index test" << std::endl;
-    auto dit = kb.word_dic.begin();
-    kb.build_word_index();
-    while (dit != kb.word_dic.end())
-    {
-        std::cout << "\nNOW... C:" << (*dit).first << std::endl;
-        auto item_it = (*dit).second.begin();
-        while (item_it != (*dit).second.end())
-        {
-            std::cout << "\tind: " << Element::dictionary.individual[(*item_it).first] << std::endl;
-            std::cout << "\trule: " << (*item_it).second.to_s() << std::endl;
-            item_it++;
-        }
-        dit++;
-    }
-
     //fabricate test
     std::cout << "\n****************fabricate test" << std::endl;
     Rule input = Rule(std::string("S/like(heather,heather)->z")), output;
     input.external.clear();
     output = kb.fabricate(input);
-    std::cout << "fabr: " << output.to_s() << std::endl;
+    std::cout << "fabricated: " << output.to_s() << std::endl;
     std::cout << "\n****************end" << std::endl;
 
     return 0;
