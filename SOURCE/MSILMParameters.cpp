@@ -25,7 +25,7 @@ MSILMParameters::MSILMParameters()
 	ACC_MEA = false;
 	DICTIONARY_FILE = "./SOURCE/data.dic";
 	PER_UTTERANCES = 0.5;	 //意味空間の数の半分
-	time_t now;
+	time_t now = std::time(nullptr);
 	struct tm *stm = localtime(&now);
 	char s[100];
 	strftime(s, 100, "%Yy%mm%dd%Hh%Mm%Ss", stm);
