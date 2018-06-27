@@ -56,7 +56,7 @@ int main(int arg, char **argv)
     std::vector<Rule> meanings;
     std::vector<Element> symbols;
     Dictionary dic;
-    dic.load("./SOURCE/data.dic");
+    dic.load(std::string("./SOURCE/data.dic"));
     construct_meanings(meanings);
     construct_individuals(symbols, dic);
     Rule buf;
@@ -120,15 +120,12 @@ int main(int arg, char **argv)
 
     //build index test
     std::cout << "\n****************build index test" << std::endl;
-    Dictionary::DictionaryType::iterator dit;
-    auto item_it;
+    auto dit = kb.word_dic.begin();
     kb.build_word_index();
-
-    dit = kb.word_dic.begin();
     while (dit != kb.word_dic.end())
     {
         std::cout << "\nNOW... C:" << (*dit).first << std::endl;
-        item_it = (*dit).second.begin();
+        auto item_it = (*dit).second.begin();
         while (item_it != (*dit).second.end())
         {
             std::cout << "\tind: " << Element::dictionary.individual[(*item_it).first] << std::endl;
