@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 	param.TERMS = (int)round(param.PER_TERM * param.UTTERANCES);
 
 	//Parameter Output
-	std::cout << param.to_all_s() << std::endl;
+	std::cout << std::endl << "Display all values which MSILMParameters has." << param.to_all_s() << std::endl;
 
 	return 0;
 }
