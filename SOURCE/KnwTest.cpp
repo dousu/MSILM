@@ -75,7 +75,7 @@ int main(int arg, char **argv)
         item_it = (*dit).second.begin();
         while (item_it != (*dit).second.end())
         {
-            std::cout << "\tind: " << Element::dic.individual[(*item_it).first] << std::endl;
+            std::cout << "\tind: " << Element::dictionary.individual[(*item_it).first] << std::endl;
             std::cout << "\trule: " << (*item_it).second.to_s() << std::endl;
             item_it++;
         }
@@ -84,9 +84,9 @@ int main(int arg, char **argv)
 
     //fabricate test
     std::cout << "\n****************fabricate test" << std::endl;
-    Rule input = Rule(std::string("S hoge hoge hoge -> d")), output;
+    Rule input = Rule(std::string("S/like(heather,heather)->z")), output;
     input.external.clear();
-    output = kb.fabricate(input1);
+    output = kb.fabricate(input);
     std::cout << "fabr: " << output.to_s() << std::endl;
     std::cout << "\n****************end" << std::endl;
 
