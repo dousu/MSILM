@@ -19,6 +19,7 @@
 #include <type_traits>
 #include <map>
 #include <iterator>
+#include <set>
 
 #include "LogBox.h"
 #include "IndexFactory.h"
