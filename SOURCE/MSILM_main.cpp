@@ -412,7 +412,6 @@ int main(int argc, char *argv[])
 	 **************************************************/
 	ProgramOption opt;
 	opt.add_option()("help", "Description")
-		//experiment parameters
 		/*ランダムシード*/
 		("random-seed", ProgramOption::value<int>(), "Random seed (101010)")
 
@@ -433,7 +432,7 @@ int main(int argc, char *argv[])
 		/*言葉の省略*/
 		("omission", "Omission")
 		/*ロギング*/
-		("logging,l", "Logging")
+		("logging", "Logging")
 		/*分析*/
 		("analyze", "Analyze each agent for expression and a number of rules")
 		/*生成文字列最大長*/
@@ -446,21 +445,18 @@ int main(int argc, char *argv[])
 		("accuracy-meaning", "Output logging whether parent and child selected same meaning")
 		/*辞書ファイル*/
 		("dictionary", ProgramOption::value<std::string>(), "Dictionary file name for meaning space(\"./data.dic\")")
-
 		/*生成規則再利用*/
 		("keep-random-rule", "Keep created rules with a random word into parent knowledge-base")
 		/*規則削除使用*/
 		("delete-redundant-rules", "Delete redundant rules")
 		/*補完発話*/
-		("invention-utterance", "Uttering with invention")
+		("invention", "Uttering with invention")
 		/*非重複発話*/
 		("unique-utterance", "Do not use the same meaning on utterance process")
 		/*FILE PREFIX*/
 		("prefix", ProgramOption::value<std::string>(), "Set file prefix (\"MSILM\")")
-
 		/*BASE PATH*/
 		("path", ProgramOption::value<std::string>(), "Set folder for output files (\"../RESULT/\")")
-
 		///*プログレスバー*/
 		//("progress,p", "Show progress bar")
 		;
