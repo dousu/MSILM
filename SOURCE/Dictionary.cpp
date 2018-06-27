@@ -12,7 +12,7 @@ std::map<int, std::string> Dictionary::symbol;
 std::map<std::string, int> Dictionary::conv_individual;
 std::map<std::string, int> Dictionary::conv_symbol;
 
-void Dictionary::load(std::string &file_path)
+void Dictionary::load(std::string file_path)
 {
   std::string line;
   std::ifstream source(file_path.c_str());
