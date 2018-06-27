@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 	opt.parse(argc, argv);
 	std::cout << "Complete parsing argv." << std::endl;
 	param.set_option(opt);
-	std::cout << "Read program options on command line."
+	std::cout << "Read program options on command line." << std::endl;
 
 	/*
 	 * Utterance times
