@@ -690,8 +690,8 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				if (param.PROGRESS)
-					// ++show_progress;
+				//if (param.PROGRESS)
+				//	 ++show_progress;
 
 					utterance_counter++;
 			}
