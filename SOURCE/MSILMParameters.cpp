@@ -67,6 +67,7 @@ void MSILMParameters::set_option(ProgramOption &po)
 
 	if (po.count("prefix"))
 	{
+		std::cout << "prefix" << std::endl;
 		FILE_PREFIX = po.get<std::string>("prefix");
 		RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
 		LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);

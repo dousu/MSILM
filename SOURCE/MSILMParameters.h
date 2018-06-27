@@ -138,7 +138,7 @@ private:
   std::set<int> exist;
 
 public:
-  ProgramOption() : idx(), id(), val_list(), desc_list(), type_inf(){};
+  ProgramOption() : idx(), id(), val_list(), desc_list(), type_inf(), exist(){};
   ProgramOption(const ProgramOption &po)
   {
     idx = po.idx;
@@ -146,15 +146,17 @@ public:
     val_list = po.val_list;
     desc_list = po.desc_list;
     type_inf = po.type_inf;
+    exist = po.exist;
   }
 
-  ProgramOption &operator=(const ProgramOption &po)
+  ProgramOption & operator=(const ProgramOption &po)
   {
     idx = po.idx;
     id = po.id;
     val_list = po.val_list;
     desc_list = po.desc_list;
     type_inf = po.type_inf;
+    exist = po.exist;
     return *this;
   }
 
