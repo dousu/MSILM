@@ -1,8 +1,64 @@
 #include "KnowledgeBase.h"
 
+void construct_meanings(std::vector<Rule> &meanings)
+{
+    int VERB_INDEX_BEGIN = 0;
+    int VERB_INDEX_END = 4;
+    int NOUN_INDEX_BEGIN = 5;
+    int NOUN_INDEX_END = 9;
+
+    //construct means
+    for (int i = VERB_INDEX_BEGIN; i <= VERB_INDEX_END; i++)
+    {
+        Element verb;
+        verb.set_ind(i);
+
+        for (int j = NOUN_INDEX_BEGIN; j <= NOUN_INDEX_END; j++)
+        {
+            Element ind1;
+            ind1.set_ind(j);
+            for (int k = NOUN_INDEX_BEGIN; k <= NOUN_INDEX_END; k++)
+            {
+                if (j != k)
+                {
+                    Element ind2;
+                    std::vector<Element> internal, external;
+                    Rule mean;
+
+                    ind2.set_ind(k);
+
+                    internal.push_back(verb);
+                    internal.push_back(ind1);
+                    internal.push_back(ind2);
+
+                    mean.set_sentence(internal, external);
+                    meanings.push_back(mean);
+                }
+            }
+        }
+    }
+}
+
+void construct_individuals(std::vector<Element> &inds, Dictionary &dic)
+{
+    Dictionary::DictionaryType::iterator dic_it;
+    dic_it = dic.individual.begin();
+    for (; dic_it != dic.individual.end(); dic_it++)
+    {
+        Element elem;
+        elem.set_ind((*dic_it).first);
+        inds.push_back(elem);
+    }
+}
+
 int main(int arg, char **argv)
 {
-    Element::load_dictionary((char *)"./SOURCE/data.dic");
+    std::vector<Rule> meanings;
+    std::vector<Element> symbols;
+    Dictionary dic;
+    dic.load("./SOURCE/data.dic");
+    construct_meanings(meanings);
+    construct_individuals(symbols, dic);
     Rule buf;
     KnowledgeBase kb;
     std::vector<Rule> vec;
@@ -64,8 +120,8 @@ int main(int arg, char **argv)
 
     //build index test
     std::cout << "\n****************build index test" << std::endl;
-    std::map<unsigned int, std::multimap<unsigned int, Rule>>::iterator dit;
-    std::multimap<unsigned int, Rule>::iterator item_it;
+    Dictionary::DictionaryType::iterator dit;
+    auto item_it;
     kb.build_word_index();
 
     dit = kb.word_dic.begin();
