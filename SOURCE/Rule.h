@@ -14,6 +14,7 @@
 #include <iterator>
 #include <algorithm>
 #include <cstdlib>
+#include <sstream>
 #include <iostream>
 #include <variant>
 
