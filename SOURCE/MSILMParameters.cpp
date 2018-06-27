@@ -67,7 +67,6 @@ void MSILMParameters::set_option(ProgramOption &po)
 
 	if (po.count("prefix"))
 	{
-		std::cout << "prefix" << std::endl;
 		FILE_PREFIX = po.get<std::string>("prefix");
 		RESULT_FILE = (FILE_PREFIX + DATE_STR + RESULT_EXT);
 		LOG_FILE = (FILE_PREFIX + DATE_STR + LOG_EXT);
@@ -387,11 +386,11 @@ MSILMParameters::to_all_s(void){
  //  uint32_t Generation_Counter; //
 	ss << "Generation_Counter = " << Generation_Counter << std::endl;
  //  bool LOGGING;
-	ss << "LOGGING = " << LOGGING << std::endl;
+	ss << "LOGGING = " << std::boolalpha << LOGGING << std::noboolalpha << std::endl;
  //  bool PROGRESS;
 	// ss << "PROGRESS = " << PROGRESS << std::endl;
  //  bool ANALYZE;
-	ss << "ANALYZE = " << ANALYZE << std::endl;
+	ss << "ANALYZE = " << std::boolalpha << ANALYZE << std::noboolalpha << std::endl;
  //  std::string DICTIONARY_FILE;
 	ss << "DICTIONARY_FILE = " << DICTIONARY_FILE << std::endl;
  //  std::string FILE_PREFIX;
@@ -409,11 +408,11 @@ MSILMParameters::to_all_s(void){
  //  std::string RESULT_FILE;
 	ss << "RESULT_FILE = " << RESULT_FILE << std::endl;
  //  bool INTER_ANALYSIS;
-	ss << "INTER_ANALYSIS = " << INTER_ANALYSIS << std::endl;
+	ss << "INTER_ANALYSIS = " << std::boolalpha << INTER_ANALYSIS << std::noboolalpha << std::endl;
  //  int SPACE_ANALYSIS;
 	ss << "SPACE_ANALYSIS = " << SPACE_ANALYSIS << std::endl;
  //  bool INTER_LOG;
-	ss << "INTER_LOG = " << INTER_LOG << std::endl;
+	ss << "INTER_LOG = " << std::boolalpha << INTER_LOG << std::noboolalpha << std::endl;
  //  int SPACE_LOG;
 	ss << "SPACE_LOG = " << SPACE_LOG << std::endl;
  //  int MULTIPLE_MEANINGS;
@@ -425,13 +424,13 @@ MSILMParameters::to_all_s(void){
  //  int WINDOW;
 	ss << "WINDOW = " << WINDOW << std::endl;
  //  bool SYMMETRY;
-	ss << "SYMMETRY = " << SYMMETRY << std::endl;
+	ss << "SYMMETRY = " << std::boolalpha << SYMMETRY << std::noboolalpha << std::endl;
  //  bool UC_SYMMETRY;
-	ss << "UC_SYMMETRY = " << UC_SYMMETRY << std::endl;
+	ss << "UC_SYMMETRY = " << std::boolalpha << UC_SYMMETRY << std::noboolalpha << std::endl;
  //  bool OMISSION;
-	ss << "OMISSION = " << OMISSION << std::endl;
+	ss << "OMISSION = " << std::boolalpha << OMISSION << std::noboolalpha << std::endl;
  //  bool ACC_MEA;
-	ss << "ACC_MEA = " << ACC_MEA << std::endl;
+	ss << "ACC_MEA = " << std::boolalpha << ACC_MEA << std::noboolalpha << std::endl;
 
 	return ss.str();
 }
