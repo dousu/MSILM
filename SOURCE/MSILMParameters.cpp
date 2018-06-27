@@ -158,7 +158,7 @@ void MSILMParameters::set_option(ProgramOption &po)
 	{
 		LOGGING = true;
 		INTER_LOG = true;
-		SPACE_LOG = po.get<bool>("interspace-logging");
+		SPACE_LOG = po.get<int>("interspace-logging");
 		ACC_MEA = true;
 	}
 
@@ -376,7 +376,7 @@ MSILMParameters::to_all_s(void){
  //  int RANDOM_SEED;       //
 	ss << "RANDOM_SEED = " << RANDOM_SEED << std::endl;
  //  bool UNIQUE_UTTERANCE; //
-	ss << "UNIQUE_UTTERANCE = " << UNIQUE_UTTERANCE << std::endl;
+	ss << "UNIQUE_UTTERANCE = " << std::boolalpha << UNIQUE_UTTERANCE << std::noboolalpha << std::endl;
  //  uint32_t CONTROLS;
 	ss << "CONTROLS = " << CONTROLS << std::endl;
  //  int buzz_length;

@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		/*規則削除使用*/
 		("delete-redundant-rules", "Delete redundant rules")
 		/*補完発話*/
-		("invention-utterance", "Uttering with invention")
+		("invention", "Uttering with invention")
 		/*非重複発話*/
 		("unique-utterance", "Do not use the same meaning on utterance process")
 		/*FILE PREFIX*/
