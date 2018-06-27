@@ -19,135 +19,153 @@ Rule::~Rule()
 {
 }
 
-// Rule::Rule(char* cstr) {
-//   Rule(std::string(cstr));
-// }
+Rule::Rule(char* cstr) {
+  Rule(std::string(cstr));
+}
 
-// Rule::Rule(std::string str) {
-//   std::vector<std::string> buf, inbuf, exbuf;
-//   std::vector<std::string>::iterator it;
+Rule::Rule(std::string str) {
+  internal.clear();
+  external.clear();
+  std::regex arrow(Prefices::ARW),
+    slash(Prefices::DEL),
+    pas(std::string("[") + Prefices::LPRN + Prefices::RPRN + Prefices::CNM + std::string("]")),
+    num("[1-9][0-9]*"),
+    nums(".([1-9][0-9]*)\\/.([1-9][0-9]*)");
+  std::string l, r, cat_alp, mean, category;
+  std::vector<std::string> meanings;
 
-//   boost::algorithm::split(buf, str,
-//       boost::algorithm::is_any_of(Prefices::ARW.c_str()),
-//       boost::algorithm::token_compress_on);
-
-//   //Left
-//   buf[0] = boost::algorithm::trim_copy(buf[0]);
-//   boost::algorithm::split(inbuf, buf[0], boost::algorithm::is_any_of(" "),
-//       boost::algorithm::token_compress_on);
-
-//   //Rule type
-//   if (inbuf[0] == Prefices::SEN) {
-//     type = RULE_TYPE::SENTENCE;
-//     cat = 0;
-//   }
-//   else if (inbuf[0].find(Prefices::CLN.c_str()) != std::string::npos) {
-//     std::vector<std::string> cbuf;
-//     boost::algorithm::split(cbuf, inbuf[0],
-//         boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-//         boost::algorithm::token_compress_on);
-//     type = RULE_TYPE::NOUN;
-//     cat = std::stoi(cbuf[1]);
-//   }
-//   else {
-//     throw "Illegal String";
-//   }
-
-//   /*
-//    * internal
-//    */
-//   it = inbuf.begin() + 1;
-//   while (it != inbuf.end()) {
-//     if ((*it).find(Prefices::DEL) != std::string::npos) {
-//       std::vector<std::string> tbuf, cbuf, vbuf;
-//       boost::algorithm::split(tbuf, *it,
-//           boost::algorithm::is_any_of(Prefices::DEL.c_str()),
-//           boost::algorithm::token_compress_on);
-//       if (tbuf.size() != 2)
-//         throw "error";
-
-//       boost::algorithm::split(cbuf, tbuf[0],
-//           boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-//           boost::algorithm::token_compress_on);
-//       if (cbuf.size() != 2)
-//         throw "error";
-
-//       boost::algorithm::split(vbuf, tbuf[1],
-//           boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-//           boost::algorithm::token_compress_on);
-//       if (vbuf.size() != 2)
-//         throw "error";
-
-//       Element var;
-//       unsigned int icat, ivar;
-//       icat = std::stoi(cbuf[1]);
-//       ivar = std::stoi(vbuf[1]);
-//       var.set_var(ivar, icat);
-//       internal.push_back(var);
-//     }
-//     else {
-//       Element ind;
-//       std::map<std::string, int>::iterator dic_it;
-//       dic_it = dictionary.conv_individual.find(*it);
-//       if (dic_it != dictionary.conv_individual.end()) {
-//         ind.set_ind((*dic_it).second);
-//         internal.push_back(ind);
-//       }
-//       else {
-//         throw "error";
-//       }
-//     }
-//     it++;
-//   }
-
-//   if (buf.size() == 2) {
-//     //Right
-//     buf[1] = boost::algorithm::trim_copy(buf[1]);
-//     boost::algorithm::split(exbuf, buf[1], boost::algorithm::is_any_of(" "),
-//         boost::algorithm::token_compress_on);
-
-//     it = exbuf.begin();
-//     while (it != exbuf.end()) {
-//       if ((*it).find(Prefices::DEL) != std::string::npos) {
-//         //CAT
-//         std::vector<std::string> tbuf, cbuf, vbuf;
-//         boost::algorithm::split(tbuf, *it,
-//             boost::algorithm::is_any_of(Prefices::DEL.c_str()),
-//             boost::algorithm::token_compress_on);
-//         if (tbuf.size() != 2)
-//           throw "error";
-
-//         boost::algorithm::split(cbuf, tbuf[0],
-//             boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-//             boost::algorithm::token_compress_on);
-
-//         boost::algorithm::split(vbuf, tbuf[1],
-//             boost::algorithm::is_any_of(Prefices::CLN.c_str()),
-//             boost::algorithm::token_compress_on);
-
-//         Element excat;
-//         unsigned int icat, ivar;
-//         icat = std::stoi(cbuf[1]);
-//         ivar = std::stoi(vbuf[1]);
-//         excat.set_cat(ivar, icat);
-//         external.push_back(excat);
-//       }
-//       else {
-//         Element sym;
-//         std::map<std::string, int>::iterator dic_it;
-//         dic_it = dictionary.conv_symbol.find(*it);
-//         if (dic_it != dictionary.conv_symbol.end()) {
-//           sym.set_sym((*dic_it).second);
-//           external.push_back(sym);
-//         }
-//         else {
-//           throw "error";
-//         }
-//       }
-//       it++;
-//     }
-//   }
-// }
+  std::sregex_token_iterator it = std::sregex_token_iterator();
+  std::sregex_token_iterator it1(std::begin(str), std::end(str), arrow, -1);
+  int i = 0;
+  for(; it1 != it; it1++, i++){
+    if(i == 2){
+      std::cerr << "too many right arrow" << std::endl;
+      exit(1);
+    }else if(i == 0){
+      l = *it1;
+    }else{
+      r = *it1;
+    }
+  }
+  std::sregex_token_iterator it2(std::begin(l), std::end(l), slash, -1);
+  for(i = 0; it2 != it; it2++, i++){
+    if(i == 2){
+      std::cerr << "too many slash" << std::endl;
+      exit(1);
+    }else if(i == 0){
+      cat_alp = *it2;
+    }else{
+      mean = *it2;
+    }
+  }
+  int cnum;
+  std::sregex_token_iterator it3(std::begin(mean), std::end(mean), pas, -1);
+  std::copy(it3, it, std::back_inserter(meanings));
+  if(cat_alp.size() >= 2){
+    std::sregex_token_iterator it4(std::begin(cat_alp), std::end(cat_alp), num, {-1,0});
+    for(i = 0; it4 != it; it4++, i++){
+      if(i == 2){
+        std::cerr << "A category name can't include numbers." << std::endl;
+        exit(1);
+      }else if(i == 0){
+        category = *it4;
+      }else{
+        cnum = std::stoi(*it4);
+      }
+    }
+    if(category != Prefices::CAT){
+      std::cerr << category << " is not category charactor." << std::endl;
+      exit(1);
+    }else{
+      type = RULE_TYPE::NOUN;
+      cat = cnum;
+    }
+  }else{
+    category = cat_alp;
+    cnum = 0;
+    if(category == Prefices::SEN) {
+      type = RULE_TYPE::SENTENCE;
+      cat = 0;
+    }else{
+      std::cerr << category << " is not start symbol." << std::endl;
+      exit(1);
+    }
+  }
+  std::map<int,int> var_cat;
+  std::vector<std::variant<int,Element>> in_list;
+  for(auto meaning : meanings){
+    std::sregex_token_iterator it5(std::begin(meaning), std::end(meaning), num, {-1,0});
+    for(i = 0; it5 != it; it5++, i++){
+      if(i == 2){
+        std::cerr << "A category name can't include numbers." << std::endl;
+        exit(1);
+      }else if(i == 0){
+        if(std::string(*it5) != Prefices::VAR){
+          Element el;
+          std::map<std::string, int>::iterator dic_it;
+          dic_it = dictionary.conv_individual.find(std::string(*it5));
+          if (dic_it != dictionary.conv_individual.end()) {
+            el.set_ind((*dic_it).second);
+          }else{
+	    std::cout << "meaning \"" << *it5 << "\"" << std::endl;
+            std::cerr << "no candidate in dictionary" << std::endl;
+            exit(1);
+          }
+          in_list.push_back(el);
+        }
+      }else{
+        int ivar = std::stoi(*it5);
+        in_list.push_back(ivar);
+        var_cat[ivar] = int();
+      }
+    }
+  }
+  auto r_it = std::begin(r);
+  for(; r_it != std::end(r); r_it++){
+    if(std::string{*r_it} == Prefices::CAT){
+      int var_num, cat_num;
+      std::sregex_token_iterator it6(r_it, std::end(r), nums, {1,2});
+      for(i = 0; it6 != it; it6++, i++){
+        if(i == 2){
+          break;
+        }else if(i == 1){
+          var_num = std::stoi(*it6);
+          r_it += std::string(*it6).size();
+        }else{
+          cat_num = std::stoi(*it6);
+          r_it += std::string(*it6).size();
+        }
+      }
+      var_cat[var_num] = cat_num;
+      Element ex_cat;
+      ex_cat.set_cat(var_num, cat_num);
+      external.push_back(ex_cat);
+      r_it ++;// for slash
+      r_it ++;// for variable symbol
+    }else{
+      Element sym;
+      std::map<std::string, int>::iterator dic_it;
+      dic_it = dictionary.conv_symbol.find(std::string{*r_it});
+      if (dic_it != dictionary.conv_symbol.end()) {
+        sym.set_sym((*dic_it).second);
+      }else{
+        std::cerr << "no candidate in dictionary" << std::endl;
+        exit(1);
+      }
+      external.push_back(sym);
+    }
+  }
+  for(auto il : in_list){
+    if(std::holds_alternative<int>(il)){
+      int var_num = std::get<int>(il), cat_num = var_cat[var_num];
+      Element mean;
+      mean.set_var(var_num, cat_num);
+      internal.push_back(mean);
+    }else if(std::holds_alternative<Element>(il)){
+      internal.push_back(std::get<Element>(il));
+    }
+  }
+}
 
 /*
  *

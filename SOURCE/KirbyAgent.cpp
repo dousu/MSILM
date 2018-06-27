@@ -11,13 +11,11 @@ bool KirbyAgent::LOGGING_FLAG = false;
 
 KirbyAgent::KirbyAgent()
 {
-    // TODO Auto-generated constructor stub
     generation_index = 0;
 }
 
 KirbyAgent::~KirbyAgent()
 {
-    // TODO Auto-generated destructor stub
 }
 
 KirbyAgent &
@@ -33,7 +31,6 @@ Rule KirbyAgent::say(Rule &internal)
 {
     try
     {
-        //return kb.fabricate2(internal);
         return kb.fabricate(internal);
     }
     catch (...)

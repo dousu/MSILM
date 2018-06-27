@@ -12,16 +12,7 @@ std::map<int, std::string> Dictionary::symbol;
 std::map<std::string, int> Dictionary::conv_individual;
 std::map<std::string, int> Dictionary::conv_symbol;
 
-//Dictionary::Dictionary() {
-//	// TODO Auto-generated constructor stub
-//
-//}
-//
-//Dictionary::~Dictionary() {
-//	// TODO Auto-generated destructor stub
-//}
-
-void Dictionary::load(std::string &file_path)
+void Dictionary::load(std::string file_path)
 {
   std::string line;
   std::ifstream source(file_path.c_str());
@@ -38,43 +29,17 @@ void Dictionary::load(std::string &file_path)
   std::vector<std::string> symbol_buffer;
   while (std::getline(source, line))
   {
-    //  std::string::size_type p = line.find("=");
-    //  std::string key = line.substr(0, p);
-    //  std::string value = line.substr(p + 1);
-
-    //  boost::algorithm::trim_if(key, boost::algorithm::is_any_of("\r\n "));
-    //  boost::algorithm::trim_if(value, boost::algorithm::is_any_of("\r\n "));
-
-    //  if (key == "IND") {
-    //    boost::algorithm::split(individual_buffer, value,
-    //        boost::algorithm::is_any_of(","),
-    //        boost::algorithm::token_compress_on);
-    //  }
-    //  else if (key == "SYM") {
-    //    boost::algorithm::split(symbol_buffer, value,
-    //        boost::algorithm::is_any_of(","),
-    //        boost::algorithm::token_compress_on);
-    //  }
-    //  else {
-    // throw "unknown key";
-    //  }
     const std::regex re("[,=]");
     std::sregex_token_iterator it(std::begin(line), std::end(line), re, -1), it_end;
     if (*it == "IND")
     {
       it++;
       std::copy(it, it_end, std::back_inserter(individual_buffer));
-      // for(;it!=it_end;it++){
-      //   individual_buffer.push_back(*it);
-      // }
     }
     else if (*it == "SYM")
     {
       it++;
       std::copy(it, it_end, std::back_inserter(symbol_buffer));
-      // for(;it!=it_end;it++){
-      //   symbol_buffer.push_back(*it);
-      // }
     }
     else
     {
@@ -135,32 +100,3 @@ Dictionary::copy(void)
 {
   return Dictionary();
 }
-
-#ifdef DEBUG_DIC
-#include <iostream>
-
-int main(int arg, char **argv)
-{
-  Dictionary dic;
-  int i = 0;
-
-  dic.load(argv[1]);
-
-  std::cout << "individual : " << std::endl;
-
-  while (i < dic.individual.size())
-  {
-    std::cout << "item:ind[" << i << "] = " << dic.individual[i] << std::endl;
-    i++;
-  }
-
-  i = 0;
-  while (i < dic.symbol.size())
-  {
-    std::cout << "item:sym[" << i << "] = " << dic.symbol[i] << std::endl;
-    i++;
-  }
-
-  return 0;
-}
-#endif

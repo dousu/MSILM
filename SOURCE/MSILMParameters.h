@@ -12,7 +12,6 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-//#include <boost/program_options.hpp>
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
@@ -20,6 +19,7 @@
 #include <type_traits>
 #include <map>
 #include <iterator>
+#include <set>
 
 #include "LogBox.h"
 #include "IndexFactory.h"
@@ -135,9 +135,10 @@ private:
     btype
   };
   std::map<int, type_id> type_inf;
+  std::set<int> exist;
 
 public:
-  ProgramOption() : idx(), id(), val_list(), desc_list(), type_inf(){};
+  ProgramOption() : idx(), id(), val_list(), desc_list(), type_inf(), exist(){};
   ProgramOption(const ProgramOption &po)
   {
     idx = po.idx;
@@ -145,15 +146,17 @@ public:
     val_list = po.val_list;
     desc_list = po.desc_list;
     type_inf = po.type_inf;
+    exist = po.exist;
   }
 
-  ProgramOption &operator=(const ProgramOption &po)
+  ProgramOption & operator=(const ProgramOption &po)
   {
     idx = po.idx;
     id = po.id;
     val_list = po.val_list;
     desc_list = po.desc_list;
     type_inf = po.type_inf;
+    exist = po.exist;
     return *this;
   }
 
@@ -165,7 +168,7 @@ public:
 
   int count(std::string str)
   {
-    return id.count(str);
+    return exist.count(id[str]);
   }
 
   ProgramOption &add_option() { return *this; }
@@ -238,32 +241,38 @@ public:
       {
         if (id.count(key) == 0)
         {
-          std::cerr << "incorrect number of options" << std::endl;
+          std::cerr << "unknown option key" << std::endl;
           exit(1);
         }
         else
         {
+          exist.insert(id[key]);
           type_id ti = type_inf[id[key]];
           bool b;
-          switch (ti)
-          {
-          case itype:
-            val_list[id[key]] = std::stoi(str);
-            break;
-          case dtype:
-            val_list[id[key]] = std::stod(str);
-            break;
-          case stype:
-            val_list[id[key]] = str;
-            break;
-          case btype:
-            ss << std::boolalpha << str;
-            ss >> b;
-            ss << std::noboolalpha;
-            val_list[id[key]] = b;
-            break;
-          default:
-            std::cerr << "unknown type_id" << std::endl;
+          try{
+            switch (ti)
+            {
+            case itype:
+              val_list[id[key]] = std::stoi(str);
+              break;
+            case dtype:
+              val_list[id[key]] = std::stod(str);
+              break;
+            case stype:
+              val_list[id[key]] = str;
+              break;
+            case btype:
+              ss << std::boolalpha << str;
+              ss >> b;
+              ss << std::noboolalpha;
+              val_list[id[key]] = b;
+              break;
+            default:
+              std::cerr << "unknown type_id" << std::endl;
+              exit(1);
+            }
+          }catch(...){
+            std::cerr << "Error in ProgramOption::parse . substitution of type[" << ti << "]" << std::endl;
             exit(1);
           }
         }
@@ -273,7 +282,13 @@ public:
       }
       if (key != "")
       {
-        val_list[id[key]] = true;
+        exist.insert(id[key]);
+        try{
+          val_list[id[key]] = true;
+        }catch(...){
+          std::cerr << "Error in ProgramOption::parse . substitution of bool type" << std::endl;
+          exit(1);
+        }
       }
       if (str.find("--") == 0)
       {
@@ -300,6 +315,7 @@ public:
     }
     if (key != "")
     {
+      exist.insert(id[key]);
       val_list[id[key]] = true;
     }
   }
@@ -311,11 +327,6 @@ public:
 class MSILMParameters
 {
 public:
-  //type definition
-  // enum FORMAT {
-  //   BIN, XML
-  // };
-
   //experiment parameters
   int MAX_GENERATIONS;
   double PER_UTTERANCES; //
@@ -331,12 +342,8 @@ public:
 
   //system parameters
   bool LOGGING;
-  bool PROGRESS;
-  // bool RESUME;
-  // bool SAVE_LAST_STATE;
-  // bool SAVE_ALL_STATE;
+  // bool PROGRESS;
   bool ANALYZE;
-  // FORMAT SAVE_FORMAT;
 
   std::string DICTIONARY_FILE;
 
@@ -355,8 +362,6 @@ public:
 
   //file
   std::string LOG_FILE;
-  // std::string RESUME_FILE;
-  // std::string SAVE_FILE;
   std::string RESULT_FILE;
 
   ProgramOption spo;
@@ -381,6 +386,7 @@ public:
 
   void set_option(ProgramOption &po);
   std::string to_s(void);
+  std::string to_all_s(void);
 
 private:
   std::string string_join(const std::vector<std::string> &str_v, const std::string &delim);

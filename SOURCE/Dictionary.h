@@ -63,7 +63,7 @@ class Dictionary
 	 \endcode
 	 */
 	//static void load(boost::filesystem::path file_path);
-	static void load(std::string &);
+	static void load(std::string);
 
 	static Dictionary copy(void);
 

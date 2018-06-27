@@ -7,48 +7,6 @@
 
 #include "MSILM_main.h"
 
-/*template<typename _OFS>
-void save_agent(
-	_OFS& ofs,
-	MSILMParameters& param,
-	unsigned long long int& icount,
-	unsigned long long int& rcount,
-	Dictionary& dic,
-	std::vector<Rule>& meanings,
-	MSILMAgent& agent
-) {
-	ofs << boost::serialization::make_nvp("CTL", param.CONTROLS);
-	ofs << boost::serialization::make_nvp("UUF", param.UNIQUE_UTTERANCE);
-	ofs << boost::serialization::make_nvp("RS", param.RANDOM_SEED);
-	ofs << boost::serialization::make_nvp("UC", param.UC_SYMMETRY);
-	ofs << boost::serialization::make_nvp("IRC", icount);
-	ofs << boost::serialization::make_nvp("RRC", rcount);
-	ofs << boost::serialization::make_nvp("MS", meanings);
-	ofs << boost::serialization::make_nvp("DC", dic);
-	ofs << boost::serialization::make_nvp("MS", agent);
-}
-
-template<typename _IFS>
-void resume_agent(
-	_IFS& ifs,
-	MSILMParameters& param,
-	unsigned long long int& icount,
-	unsigned long long int& rcount,
-	Dictionary& dic,
-	std::vector<Rule>& meanings,
-	MSILMAgent& agent
-) {
-	ifs >> boost::serialization::make_nvp("CTL", param.CONTROLS);
-	ifs >> boost::serialization::make_nvp("UUF", param.UNIQUE_UTTERANCE);
-	ifs >> boost::serialization::make_nvp("RS", param.RANDOM_SEED);
-	ifs >> boost::serialization::make_nvp("UC", param.UC_SYMMETRY);
-	ifs >> boost::serialization::make_nvp("IRC", icount);
-	ifs >> boost::serialization::make_nvp("RRC", rcount);
-	ifs >> boost::serialization::make_nvp("MS", meanings);
-	ifs >> boost::serialization::make_nvp("DC", dic);
-	ifs >> boost::serialization::make_nvp("MS", agent);
-}*/
-
 void construct_meanings(std::vector<Rule> &meanings)
 {
 	int VERB_INDEX_BEGIN = 0;
@@ -502,14 +460,6 @@ int main(int argc, char *argv[])
 
 		/*BASE PATH*/
 		("path", ProgramOption::value<std::string>(), "Set folder for output files (\"../RESULT/\")")
-		///*再開*/
-		//("resume", ProgramOption::value<std::vector<std::string> >(), "Resume an experiment from saved file name. Then used path/resume_file")
-		///*保存*/
-		//("last-save", "Save the last state of the experiment into the file")
-		///*全保存*/
-		//("all-save", "Save the all state of the experiment into the file with the prefix")
-		///*保存形式*/
-		//("format", ProgramOption::value<std::string>(), "Set saving format (bin/[xml])")
 
 		///*プログレスバー*/
 		//("progress,p", "Show progress bar")
@@ -519,46 +469,13 @@ int main(int argc, char *argv[])
 
 	param.set_option(opt);
 
-	// //resume
-	// if (param.RESUME) {
-	// 	try {
-	// 		std::ifstream ifs((param.BASE_PATH + param.RESUME_FILE).c_str());
-
-	// 		switch (param.SAVE_FORMAT) {
-	// 		case MSILMParameters::BIN:
-	// 		{
-	// 			//exception of boost
-	// 			//boost::archive::binary_iarchive ia(ifs);
-	// 			//resume_agent(ia, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
-	// 		}
-	// 		break;
-
-	// 		case MSILMParameters::XML:
-	// 		{
-	// 			//exception of boost
-	// 			//boost::archive::xml_iarchive ia(ifs);
-	// 			//resume_agent(ia, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
-	// 		}
-	// 		break;
-
-	// 		default:
-	// 			return 0;
-	// 		}
-	// 	}
-	// 	catch (...) {
-	// 		std::cerr << "State file Error" << std::endl;
-	// 		return 0;
-	// 	}
-	// }
-	// else {
 	//initialize
 	/*
-		* Meaning Space
-		*/
+	 * Meaning Space
+	 */
 	dic.load(param.DICTIONARY_FILE);
 	construct_meanings(meaning_space);
 	construct_individuals(individuals, dic);
-	// }
 
 	MT19937::set_seed(param.RANDOM_SEED);
 	MT19937::waste();
@@ -669,10 +586,6 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		// #ifdef DEBUG
-		// 		std::cerr << "Start Generation:" << generation_counter << std::endl;
-		// #endif
-
 		if (param.LOGGING)
 		{
 			LogBox::push_log("\nGENERATION: " + std::to_string(generation_counter + Base_Counter));
@@ -681,9 +594,6 @@ int main(int argc, char *argv[])
 			LogBox::push_log(parent_agent.to_s());
 			LogBox::push_log("\n-->>EDUCATION");
 		}
-		// #ifdef DEBUG
-		// 		std::cerr << "Say & learn" << std::endl;
-		// #endif
 
 		cognition_task_init(cognition_task_flag, param);
 
@@ -746,10 +656,6 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				// #ifdef DEBUG
-				// 				std::cerr << "Say";
-				// #endif
-
 				history_meanings.push_back(meanings);
 
 				if (param.UNIQUE_UTTERANCE)
@@ -784,8 +690,8 @@ int main(int argc, char *argv[])
 					}
 				}
 
-				if (param.PROGRESS)
-					// ++show_progress;
+				//if (param.PROGRESS)
+				//	 ++show_progress;
 
 					utterance_counter++;
 			}
@@ -808,10 +714,6 @@ int main(int argc, char *argv[])
 				}
 			}
 
-			// #ifdef DEBUG
-			// 			std::cerr << " -> learn" << std::endl;
-			// #endif
-
 			child_agent.learn();
 		}
 
@@ -826,16 +728,6 @@ int main(int argc, char *argv[])
 
 		child_agent = child_agent.grow(meaning_space);
 
-		// #ifdef DEBUG
-		// 		std::cerr << "Save State" << std::endl;
-		// #endif
-
-		// if (param.SAVE_ALL_STATE)
-		// 	all_generations.push_back(child_agent);
-
-		// #ifdef DEBUG
-		// 		std::cerr << "Analyze" << std::endl;
-		// #endif
 		if (param.ANALYZE)
 		{
 			analyze_and_output(param, meaning_space,
@@ -849,10 +741,6 @@ int main(int argc, char *argv[])
 			LogBox::refresh_log();
 		}
 
-		// #ifdef DEBUG
-		// 		std::cerr << "Change Generation" << std::endl;
-		// #endif
-
 		parent_agent = child_agent;
 		child_agent = parent_agent.make_child();
 		generation_counter++;
@@ -863,75 +751,6 @@ int main(int argc, char *argv[])
 		mea_file = param.FILE_PREFIX + "_" + param.DATE_STR + "_" + std::to_string(param.RANDOM_SEED) + ".mea.acc";
 		accuracy_meaning_output(param, mea_file, cognittion_correct_data);
 	}
-
-	// //saving proc
-	// if (param.SAVE_LAST_STATE) {
-	// 	std::ofstream ofs((param.BASE_PATH + param.SAVE_FILE).c_str());
-	// 	switch (param.SAVE_FORMAT) {
-	// 	case MSILMParameters::BIN:
-	// 	{
-	// 		//exception of boost
-	// 		//boost::archive::binary_oarchive oa(ofs);
-	// 		//int counter;
-	// 		//counter = Base_Counter + param.MAX_GENERATIONS;
-	// 		//save_agent<boost::archive::binary_oarchive>
-	// 		//	(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
-	// 	}
-	// 	break;
-
-	// 	case MSILMParameters::XML:
-	// 	{
-	// 		//exception of boost
-	// 		//boost::archive::xml_oarchive oa(ofs);
-	// 		//int counter;
-	// 		//counter = Base_Counter + param.MAX_GENERATIONS;
-	// 		//save_agent<boost::archive::xml_oarchive>
-	// 		//	(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, parent_agent);
-	// 	}
-	// 	break;
-
-	// 	default:
-	// 		std::cerr << "UNKNOWN FORMAT" << std::endl;
-	// 		return 0;
-	// 	}
-
-	// }
-	// if (param.SAVE_ALL_STATE) {
-	// 	std::vector<MSILMAgent>::iterator a_it;
-	// 	int index = 0;
-	// 	a_it = all_generations.begin();
-	// 	while (a_it != all_generations.end()) {
-	// 		std::string index_str;
-	// 		index_str = std::to_string(index + Base_Counter);
-	// 		std::string stf((param.FILE_PREFIX + "_Gen_" + index_str + ".st").c_str());
-	// 		std::ofstream ofs((param.BASE_PATH + stf).c_str());
-
-	// 		switch (param.SAVE_FORMAT) {
-	// 		case MSILMParameters::BIN:
-	// 		{
-	// 			//exception of boost
-	// 			//boost::archive::binary_oarchive oa(ofs);
-	// 			//save_agent(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, *a_it);
-	// 		}
-	// 		break;
-
-	// 		case MSILMParameters::XML:
-	// 		{
-	// 			//exception of boost
-	// 			//boost::archive::xml_oarchive oa(ofs);
-	// 			//save_agent(oa, param, MT19937::icount, MT19937::rcount, dic, meaning_space, *a_it);
-	// 		}
-	// 		break;
-
-	// 		default:
-	// 			std::cerr << "UNKNOWN FORMAT" << std::endl;
-	// 			return 0;
-	// 		}
-
-	// 		index++;
-	// 		a_it++;
-	// 	}
-	// }
 
 	//delete
 	//delete show_progress;
