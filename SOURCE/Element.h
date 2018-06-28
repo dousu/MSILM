@@ -142,9 +142,7 @@ class Element{
 	ElementType element;
 public:
 	Element() : element() {};
-	Element(const Element & other){
-		element(other.element);
-	};
+	Element(const Element & other) : element(other.element){};
 	constexpr std::size_t type() const{
 		return element.index();
 	};
@@ -154,24 +152,24 @@ public:
 
 	template <int I>
 	std::variant_alternative_t<I, ElementType> & get() {return std::get<I>(element);};
-	Element & operator=(const Element &dst){
-		element = dst.element;
+	Element & operator=(const Element & dst){
+		element = ElementType(dst.element);
 		return *this;
 	};
 	Element & operator=(const Mean & dst){
-		element = dst;		
+		element = dst;
 		return *this;
 	};
 	Element & operator=(const Variable & dst){
-		element = dst;		
+		element = dst;
 		return *this;
 	};
 	Element & operator=(const Symbol & dst){
-		element = dst;		
+		element = dst;
 		return *this;
 	};
 	Element & operator=(const Nonterminal & dst){
-		element = dst;		
+		element = dst;
 		return *this;
 	};
 	bool operator==(const Element & dst) const {
