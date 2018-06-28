@@ -538,7 +538,7 @@ KnowledgeBase::chunking(Rule &src, Rule &dst)
         {
             noun_ex.push_back(targ.external[i]);
         }
-        noun.set_noun(base.internal[idiff_index].cat, targ.internal[idiff_index],
+        noun.set_noun(Variable(base.internal[idiff_index].get<Variable>()).get_cat_id(), targ.internal[idiff_index],
                       noun_ex);
 
         buf.push_back(base);
@@ -709,7 +709,7 @@ KnowledgeBase::merge_sent_proc(Rule &base_word, RuleDBType &DB,
         //内部に被変更カテゴリの変数があるか調べ、合ったら書き換える
         for (int i = 0; i < temp.internal.size(); i++)
         {
-            if (temp.internal[i].type() == ELEM_TYPE::VAR_TYPE && unified_cat.find(temp.internal[i].cat) != unified_cat.end())
+            if (temp.internal[i].type() == ELEM_TYPE::VAR_TYPE && unified_cat.find(Variable(temp.internal[i].get<Variable>()).get_cat_id()) != unified_cat.end())
             {
                 if (LOGGING_FLAG)
                 {
@@ -1009,7 +1009,7 @@ bool KnowledgeBase::obliterate(void)
                     {
                         same_in &= true;
                     }
-                    else if ((*elem_it1).type() == ELEM_TYPE::VAR_TYPE && (*elem_it2).type() == ELEM_TYPE::VAR_TYPE && (*elem_it1).obj == (*elem_it2).obj && (*elem_it1).cat == (*elem_it2).cat)
+                    else if ((*elem_it1).type() == ELEM_TYPE::VAR_TYPE && (*elem_it2).type() == ELEM_TYPE::VAR_TYPE && (*elem_it1) == (*elem_it2) )
                     {
                         same_in &= true;
                     }
@@ -1059,12 +1059,12 @@ void KnowledgeBase::build_word_index(void)
         if (word_dic.find((*it).cat) != word_dic.end())
         {
             word_dic[(*it).cat].insert(
-                ItemType::value_type((*it).internal.front().obj, *it));
+                ItemType::value_type(Mean((*it).internal.front().get<Mean>()).get_obj_id(), *it));
         }
         else
         {
             ItemType temp;
-            temp.insert(ItemType::value_type((*it).internal.front().obj, *it));
+            temp.insert(ItemType::value_type(Mean((*it).internal.front().get<Mean>()).get_obj_id(), *it));
             word_dic.insert(std::map<int, ItemType>::value_type((*it).cat, temp));
         }
 
@@ -1437,7 +1437,7 @@ void KnowledgeBase::ground_with_pattern(Rule &src, PatternType &pattern)
             pattern_it = tmp_ptn.begin();
             while (pattern_it != tmp_ptn.end())
             {
-                if ((*pattern_it).internal.front().obj == (*sent_ex_it).obj && (*pattern_it).cat == (*sent_ex_it).cat)
+                if (Variable((*pattern_it).internal.front().get<Variable>()) == Nonterminal((*sent_ex_it).get<Nonterminal>()))
                 {
                     src.external.insert(src.external.end(),
                                         (*pattern_it).external.begin(), (*pattern_it).external.end());
@@ -1539,14 +1539,14 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
             else if (                                                                     //変数の場合で、グラウンド可能な場合
                 grnd_elm.type() == ELEM_TYPE::VAR_TYPE &&                                                      //変数で
                 word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
-                word_dic[grnd_elm.cat].find(mean_elm.obj) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+                word_dic[grnd_elm.cat].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
             )
             {
                 DictionaryRange item_range;
                 std::vector<PatternType> patternDB_buffer;
 
                 //変数に適用可能単語規則集合取得
-                item_range = word_dic[grnd_elm.cat].equal_range(mean_elm.obj);
+                item_range = word_dic[grnd_elm.cat].equal_range(Mean(mean_elm.get<Mean>()).get_obj_id());
 
                 //すでに作られてる単語組に対し組み合わせの直積の生成
                 patternDB_it = patternDB.begin();
@@ -1723,7 +1723,7 @@ bool KnowledgeBase::acceptable(Rule &src)
             else if (                                                                     //変数の場合で、グラウンド可能な場合
                 grnd_elm.type() == ELEM_TYPE::VAR_TYPE &&                                                      //変数で
                 word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
-                word_dic[grnd_elm.cat].find(mean_elm.obj) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+                word_dic[grnd_elm.cat].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
             )
             {
                 continue;
@@ -1836,7 +1836,7 @@ KnowledgeBase::groundable_rules(Rule &src)
             else if (                                                                     //変数の場合で、グラウンド可能な場合
                 grnd_elm.type() == ELEM_TYPE::VAR_TYPE &&                                                      //変数で
                 word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
-                word_dic[grnd_elm.cat].find(mean_elm.obj) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+                word_dic[grnd_elm.cat].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
             )
             {
                 continue;

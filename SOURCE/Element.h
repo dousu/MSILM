@@ -55,6 +55,9 @@ public:
 	bool operator<(const Mean & dst) const{
 		return obj < dst.obj;
 	};
+	int get_obj_id() const {
+		return obj;
+	}
 	std::string to_s() const{
 		if (Dictionary::individual.find(obj) == Dictionary::individual.end())
 		{
@@ -75,7 +78,7 @@ public:
 	Variable(int cat_num, int var_num) : cat(cat_num), obj(var_num) {};
 	Variable(const Variable & dst) : cat(dst.cat), obj(dst.obj) {};
 	bool operator==(const Variable & dst) const {
-		return obj == dst.obj;
+		return obj == dst.obj && cat == dst.cat;
 	};
 	bool operator!=(const Variable & dst) const {
 		return !(*this == dst);
@@ -85,6 +88,9 @@ public:
 	bool operator<(const Variable & dst) const{
 		return obj < dst.obj;
 	};
+	int get_cat_id() const {
+		return cat;
+	}
 	std::string to_s() const{
 		return Prefices::VAR + std::to_string(obj);
 	}
@@ -132,6 +138,9 @@ public:
 	bool operator<(const Nonterminal & dst) const{
 		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
 	};
+	int get_cat_id() const {
+		return cat;
+	}
 	std::string to_s() const{
 		return Prefices::CAT + std::to_string(cat) + Prefices::DEL + Prefices::VAR + std::to_string(obj);
 	}
@@ -142,8 +151,8 @@ class Element{
 	ElementType element;
 	//template <int I, typename T>
 	//std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
-	template <int I, typename T>
-	const std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
+	template <int I>
+	const decltype(auto) get() const {return std::get<I>(element);}
 public:
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
@@ -192,16 +201,16 @@ public:
 		std::string str("");
 		switch(type()){
 			case ELEM_TYPE::MEAN_TYPE :
-				str = Mean(get<ELEM_TYPE::MEAN_TYPE, ElementType>()).to_s();
+				str = Mean(get<ELEM_TYPE::MEAN_TYPE>()).to_s();
 				break;
 			case ELEM_TYPE::VAR_TYPE :
-				str = Variable(get<ELEM_TYPE::VAR_TYPE, ElementType>()).to_s();
+				str = Variable(get<ELEM_TYPE::VAR_TYPE>()).to_s();
 				break;
 			case ELEM_TYPE::SYM_TYPE :
-				str = Symbol(get<ELEM_TYPE::SYM_TYPE, ElementType>()).to_s();
+				str = Symbol(get<ELEM_TYPE::SYM_TYPE>()).to_s();
 				break;
 			case ELEM_TYPE::CAT_TYPE :
-				str = Nonterminal(get<ELEM_TYPE::CAT_TYPE, ElementType>()).to_s();
+				str = Nonterminal(get<ELEM_TYPE::CAT_TYPE>()).to_s();
 				break;
 			default:
 				str = "*";

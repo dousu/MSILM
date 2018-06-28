@@ -305,7 +305,7 @@ Rule::to_s(void)
 
 void Rule::set_noun(Element &dcat, Element &dind, std::vector<Element> &dex)
 {
-  set_noun(dcat.cat, dind, dex);
+  set_noun(Mean(dcat.get<Mean>()).get_cat_id(), dind, dex);
 }
 
 void Rule::set_noun(int dcat, Element &dind, std::vector<Element> &dex)
@@ -335,7 +335,7 @@ Rule::moph(void)
   it = external.begin();
   for (; it != external.end(); it++)
   {
-    switch ((*it).type)
+    switch ((*it).type())
     {
     case ELEM_TYPE::SYM_TYPE:
       buf.push_back(*it);
