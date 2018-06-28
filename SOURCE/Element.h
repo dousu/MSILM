@@ -111,7 +111,7 @@ public:
 	bool operator<(const Mean &dst) const{
 		return obj < dst.obj;
 	};
-	std::string to_s(){
+	std::string to_s() const{
 		if (Dictionary::individual.find(obj) == Dictionary::individual.end())
 		{
 			return "*";
@@ -140,7 +140,7 @@ public:
 	bool operator<(const Variable & dst) const{
 		return obj < dst.obj;
 	};
-	std::string to_s(){
+	std::string to_s() const{
 		return Prefices::VAR + std::to_string(obj);
 	}
 };
@@ -158,7 +158,7 @@ public:
 	bool operator<(const Symbol &dst) const{
 		return obj < dst.obj;
 	};
-	std::string to_s(){
+	std::string to_s() const{
 		if (Dictionary::symbol.find(obj) == Dictionary::symbol.end())
 		{
 			return "*";
@@ -185,7 +185,7 @@ public:
 	bool operator<(const Nonterminal & dst) const{
 		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
 	};
-	std::string to_s(){
+	std::string to_s() const{
 		return Prefices::CAT + std::to_string(cat) + Prefices::DEL + Prefices::VAR + std::to_string(obj);
 	}
 };
@@ -198,7 +198,7 @@ public:
 	Element(const Element & other){
 		element = other.element;
 	};
-	std::size_t type(){
+	const std::size_t type() const{
 		return element.index();
 	};
 
@@ -234,10 +234,10 @@ public:
 		return !(*this == dst);
 	};
 	bool operator<(const Element &dst) const{
-		return type() < dst.type() || (type == dst.type && element < dst.element);
+		return type() < dst.type() || (type() == dst.type() && element < dst.element);
 	};
-	std::string to_s(){
-		return std::get<element.index()>(element).to_s();
+	std::string to_s() const{
+		return (std::get<type()>(element)).to_s();
 	}
 };
 
