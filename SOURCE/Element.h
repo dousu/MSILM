@@ -142,6 +142,7 @@ class Element{
 	ElementType element;
 	template <int I, typename T>
 	std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
+	const std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
 public:
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
