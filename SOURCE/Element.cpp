@@ -12,11 +12,11 @@ bool Variable::operator==(const Nonterminal & dst) const {
 }
 bool Variable::operator!=(const Nonterminal & dst) const {
 	return !(*this == dst);
-};
+}
 
 bool Nonterminal::operator==(const Variable & dst) const {
 	return cat == dst.cat && obj == dst.obj;
-};
+}
 bool Nonterminal::operator!=(const Variable & dst) const {
 	return !(*this == dst);
-};
+}

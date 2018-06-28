@@ -124,6 +124,7 @@ public:
 class Nonterminal;
 
 class Variable{
+	friend class Nonterminal;
 	int cat;
 	int obj;
 public:
@@ -136,7 +137,6 @@ public:
 	};
 	bool operator==(const Nonterminal & dst) const;
 	bool operator!=(const Nonterminal & dst) const;
-	friend bool Nonterminal::operator==(const Variable & dst) const;
 	bool operator<(const Variable & dst) const{
 		return obj < dst.obj;
 	};
@@ -169,6 +169,7 @@ public:
 };
 
 class Nonterminal{
+	friend class Variable;
 	int cat;
 	int obj;
 public:
@@ -181,7 +182,6 @@ public:
 	};
 	bool operator==(const Variable & dst) const;
 	bool operator!=(const Variable & dst) const;
-	friend bool Variable::operator==(const Nonterminal & dst) const;
 	bool operator<(const Nonterminal & dst) const{
 		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
 	};
