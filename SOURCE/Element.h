@@ -22,13 +22,13 @@ namespace ELEM_TYPE
 {
 	enum Type{
 		//!意味:internal
-		MEAN_TYPE = 0,
+		MEAN_TYPE = 1,
 		//!変数:internal
-		VAR_TYPE = 1,
+		VAR_TYPE = 2,
 		//!シンボル:external
-		SYM_TYPE = 2,
+		SYM_TYPE = 3,
 		//!カテゴリ付き変数:external
-		CAT_TYPE = 3		
+		CAT_TYPE = 4		
 	};
 }
 
@@ -111,8 +111,8 @@ public:
 	bool operator<(const Mean &dst) const{
 		return obj < dst.obj;
 	};
-	std::string && to_s(){
-		if (Dictionary::individual.find(obj) == dictionary.individual.end())
+	std::string to_s(){
+		if (Dictionary::individual.find(obj) == Dictionary::individual.end())
 		{
 			return "*";
 		}else{
@@ -121,11 +121,13 @@ public:
 	}
 };
 
+class Nonterminal;
+
 class Variable{
 	int cat;
 	int obj;
 public:
-	Variable(int num) : obj(num) {};
+	Variable(int cat_num, int var_num) : cat(cat_num), obj(var_num) {};
 	bool operator==(const Variable & dst) const {
 		return obj == dst.obj;
 	};
@@ -138,11 +140,11 @@ public:
 	bool operator!=(const Nonterminal & dst) const {
 		return !(*this == dst);
 	};
-	friend Nonterminal::operator==(const Variable &);
+	friend bool Nonterminal::operator==(const Variable &);
 	bool operator<(const Variable & dst) const{
 		return obj < dst.obj;
 	};
-	std::string && to_s(){
+	std::string to_s(){
 		return Prefices::VAR + std::to_string(obj);
 	}
 };
@@ -160,8 +162,8 @@ public:
 	bool operator<(const Symbol &dst) const{
 		return obj < dst.obj;
 	};
-	std::string && to_s(){
-		if (Dictionary::symbol.find(obj) == dictionary.symbol.end())
+	std::string to_s(){
+		if (Dictionary::symbol.find(obj) == Dictionary::symbol.end())
 		{
 			return "*";
 		}else{
@@ -187,25 +189,24 @@ public:
 	bool operator!=(const Variable & dst) const {
 		return !(*this == dst);
 	};
-	friend Variable::operator==(const Nonterminal &);
+	friend bool Variable::operator==(const Nonterminal &);
 	bool operator<(const Nonterminal & dst) const{
 		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
 	};
-	std::string && to_s(){
+	std::string to_s(){
 		return Prefices::CAT + std::to_string(cat) + Prefices::DEL + Prefices::VAR + std::to_string(obj);
 	}
 };
 
 class Element{
-	using ElementType = std::variant<Mean, Variable, Symbol, Nonterminal>;
+	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
 	ElementType element;
 public:
 	Element() : element() {};
 	Element(const Element & other){
 		element = other.element;
-		return *this;
 	};
-	ELEM_TYPE::Type type(){
+	std::size_t type(){
 		return element.index();
 	};
 
@@ -243,7 +244,7 @@ public:
 	bool operator<(const Element &dst) const{
 		return type() < dst.type() || (type == dst.type && element < dst.element);
 	};
-	std::string && to_s(){
+	std::string to_s(){
 		return std::get<element.index()>(element).to_s();
 	}
 };
