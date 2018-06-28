@@ -105,7 +105,7 @@ Rule::Rule(std::string str) {
           std::map<std::string, int>::iterator dic_it;
           dic_it = dictionary.conv_individual.find(std::string(*it5));
           if (dic_it != dictionary.conv_individual.end()) {
-            el.set_ind((*dic_it).second);
+            el = Mean((*dic_it).second);
           }else{
 	    std::cout << "meaning \"" << *it5 << "\"" << std::endl;
             std::cerr << "no candidate in dictionary" << std::endl;
@@ -138,7 +138,7 @@ Rule::Rule(std::string str) {
       }
       var_cat[var_num] = cat_num;
       Element ex_cat;
-      ex_cat.set_cat(var_num, cat_num);
+      ex_cat=Category(cat_num, var_num);
       external.push_back(ex_cat);
       r_it ++;// for slash
       r_it ++;// for variable symbol
@@ -147,7 +147,7 @@ Rule::Rule(std::string str) {
       std::map<std::string, int>::iterator dic_it;
       dic_it = dictionary.conv_symbol.find(std::string{*r_it});
       if (dic_it != dictionary.conv_symbol.end()) {
-        sym.set_sym((*dic_it).second);
+        sym = Symbol((*dic_it).second);
       }else{
         std::cerr << "no candidate in dictionary" << std::endl;
         exit(1);
@@ -159,7 +159,7 @@ Rule::Rule(std::string str) {
     if(std::holds_alternative<int>(il)){
       int var_num = std::get<int>(il), cat_num = var_cat[var_num];
       Element mean;
-      mean.set_var(var_num, cat_num);
+      mean=Variable(cat_num, var_num);
       internal.push_back(mean);
     }else if(std::holds_alternative<Element>(il)){
       internal.push_back(std::get<Element>(il));
@@ -241,7 +241,7 @@ int Rule::composition(void) const
 
   for (it = internal.begin(); it != internal.end(); it++)
   {
-    if ((*it).is_var())
+    if ((*it).type() == ELEM_TYPE::VAR_TYPE)
       comp++;
   }
   return comp;
@@ -363,189 +363,3 @@ Rule::string_join(const std::vector<std::string> &str_v, const std::string &deli
   str.erase(str.end() - delim.size(), str.end());
   return str;
 }
-
-#ifdef DEBUG_RULE
-#include <vector>
-#include <iostream>
-
-int main(int arg, char **argv)
-{
-  Element::load_dictionary((char *)"data.dic");
-
-  int internal_size = 3;
-
-  std::vector<Element> cat, var, sym, ind;
-  int type = 0;
-
-  while (type <= 3)
-  {
-    Element elm;
-    switch (type)
-    {
-    case ELEM_TYPE::CAT_TYPE:
-      for (unsigned int i = 0; i < 3; i++)
-      {
-        elm.set_cat(i, i);
-        cat.push_back(elm);
-      }
-      break;
-    case ELEM_TYPE::MEAN_TYPE:
-      for (unsigned int i = 0; i < Element::dic.individual.size(); i++)
-      {
-        elm.set_ind(i);
-        ind.push_back(elm);
-      }
-      break;
-    case ELEM_TYPE::SYM_TYPE:
-      for (unsigned int i = 0; i < Element::dic.symbol.size(); i++)
-      {
-        elm.set_sym(i);
-        sym.push_back(elm);
-      }
-      break;
-    case ELEM_TYPE::VAR_TYPE:
-      for (unsigned int i = 0; i < internal_size; i++)
-      {
-        elm.set_var(i, i);
-        var.push_back(elm);
-      }
-      break;
-    }
-    type++;
-  }
-
-  Rule noun1, noun2, noun3, noun4;
-  Rule sent1, sent2, sent3, sent4;
-  std::vector<Element> ex1, ex2, ex3, ex4;
-  ex1.push_back(sym[0]);
-  ex1.push_back(sym[1]);
-  ex1.push_back(sym[2]);
-
-  ex2.push_back(sym[0]);
-  ex2.push_back(sym[1]);
-  ex2.push_back(sym[3]);
-
-  noun1.set_noun(cat[0].cat, ind[0], ex1);
-  noun2.set_noun(cat[0].cat, ind[0], ex1);
-  noun3.set_noun(cat[0].cat, ind[1], ex1);
-  noun4.set_noun(cat[0].cat, ind[0], ex2);
-
-  std::vector<Element> in1, in2, in3, in4;
-  in1.push_back(ind[0]);
-  in1.push_back(ind[0]);
-  in1.push_back(ind[0]);
-
-  in2.push_back(ind[0]);
-  in2.push_back(ind[1]);
-  in2.push_back(ind[2]);
-
-  in3.push_back(var[0]);
-  in3.push_back(ind[1]);
-  in3.push_back(ind[2]);
-
-  in4.push_back(ind[0]);
-  in4.push_back(ind[0]);
-  in4.push_back(ind[0]);
-
-  std::vector<Element> ex5, ex6, ex7, ex8;
-  ex5.push_back(sym[0]);
-  ex5.push_back(sym[1]);
-  ex5.push_back(sym[2]);
-
-  ex6.push_back(sym[0]);
-  ex6.push_back(sym[1]);
-  ex6.push_back(sym[3]);
-
-  ex7.push_back(sym[0]);
-  ex7.push_back(cat[0]);
-  ex7.push_back(sym[2]);
-
-  ex8.push_back(sym[0]);
-  ex8.push_back(sym[1]);
-  ex8.push_back(sym[3]);
-
-  sent1.set_sentence(in1, ex5);
-  sent2.set_sentence(in2, ex6);
-  sent3.set_sentence(in3, ex7);
-  sent4.set_sentence(in4, ex8);
-
-  //	std::cout << noun1.to_s() << std::endl;
-  std::cout << "*************************" << std::endl;
-  if (noun1 == noun2)
-  {
-    std::cout << noun1.to_s() << " = " << noun2.to_s() << std::endl;
-  }
-
-  Rule test;
-
-  test = noun1;
-  std::cout << "test" << std::endl
-            << sent3.to_s() << std::endl;
-
-  std::vector<Rule> sents1, sents2;
-  sents1.push_back(sent1);
-  sents1.push_back(sent2);
-  sents1.push_back(sent3);
-  sents1.push_back(sent4);
-
-  sents1 = sents2;
-
-  Rule temp(sent3.to_s());
-  std::cout << std::endl;
-  std::cout << std::endl;
-
-  std::cout << "sent3:" << std::endl;
-  std::cout << "type:" << sent3.type << std::endl;
-  std::cout << "cat:" << sent3.cat << std::endl;
-
-  std::vector<Element>::iterator it2;
-  std::cout << "internal: " << std::endl;
-  it2 = sent3.internal.begin();
-  while (it2 != sent3.internal.end())
-  {
-    std::cout << (*it2).to_s() + "+";
-    it2++;
-  }
-  std::cout << std::endl;
-
-  std::cout << "external: " << std::endl;
-  it2 = sent3.external.begin();
-  while (it2 != sent3.external.end())
-  {
-    std::cout << (*it2).to_s() + "+";
-    it2++;
-  }
-  std::cout << std::endl;
-  std::cout << std::endl;
-
-  std::cout << "temp:" << std::endl;
-  std::cout << "type:" << temp.type << std::endl;
-  std::cout << "cat:" << temp.cat << std::endl;
-
-  std::cout << "internal: " << std::endl;
-  it2 = temp.internal.begin();
-  while (it2 != temp.internal.end())
-  {
-    std::cout << (*it2).to_s() + "+";
-    it2++;
-  }
-  std::cout << std::endl;
-
-  std::cout << "external: " << std::endl;
-  it2 = temp.external.begin();
-  while (it2 != temp.external.end())
-  {
-    std::cout << (*it2).to_s() + "+";
-    it2++;
-  }
-  std::cout << std::endl;
-
-  if (temp == sent3)
-    std::cout << "true" << std::endl;
-  else
-    std::cout << "false" << std::endl;
-
-  std::cout << temp.to_s() << std::endl;
-  return 0;
-}
-#endif

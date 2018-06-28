@@ -1,6 +1,7 @@
 #include "Element.h"
 #include <vector>
 #include <iostream>
+
 int main(int arg, char **argv)
 {
 	Element::dictionary.load((char *)"data.dic");
@@ -16,29 +17,25 @@ int main(int arg, char **argv)
 		case ELEM_TYPE::CAT_TYPE:
 			for (unsigned int i = 0; i < 3; i++)
 			{
-				elm.set_cat(i, i);
-				elements.push_back(elm);
+				elements.push_back(Category(i,i));
 			}
 			break;
 		case ELEM_TYPE::MEAN_TYPE:
 			for (unsigned int i = 0; i < Element::dictionary.individual.size(); i++)
 			{
-				elm.set_ind(i);
-				elements.push_back(elm);
+				elements.push_back(Mean(i));
 			}
 			break;
 		case ELEM_TYPE::SYM_TYPE:
 			for (unsigned int i = 0; i < Element::dictionary.symbol.size(); i++)
 			{
-				elm.set_sym(i);
-				elements.push_back(elm);
+				elements.push_back(Symbol(i));
 			}
 			break;
 		case ELEM_TYPE::VAR_TYPE:
 			for (unsigned int i = 0; i < 3; i++)
 			{
-				elm.set_var(i, 0);
-				elements.push_back(elm);
+				elements.push_back(Variable(i,i+1));
 			}
 			break;
 		default:
@@ -46,15 +43,6 @@ int main(int arg, char **argv)
 			exit(1);
 		}
 	}
-
-	// std::vector<Element>::iterator it;
-	// it = elements.begin();
-	// int l = 0;
-	// while (it != elements.end())
-	// {
-	// 	std::cout << l++ << ": " << (*it).to_s() << std::endl;
-	// 	it++;
-	// }
 
 	std::vector<Element>::iterator it1, it2;
 	it1 = elements.begin();

@@ -164,7 +164,7 @@ public:
     rii = r.internal.begin();
     while (lii != l.internal.end() && rii != r.internal.end())
     {
-      if ((*lii).is_ind() && (*rii).is_ind())
+      if ((*lii).type() == ELEM_TYPE::MEAN_TYPE && (*rii).type() == ELEM_TYPE::MEAN_TYPE)
       {
         if ((*lii).obj < ((*rii).obj))
         {
@@ -176,7 +176,7 @@ public:
         }
       }
 
-      if ((*lii).is_var() && (*rii).is_var())
+      if ((*lii).type() == ELEM_TYPE::VAR_TYPE && (*rii).type() == ELEM_TYPE::VAR_TYPE)
       {
         if ((*lii).cat < ((*rii).cat))
         {
@@ -200,12 +200,12 @@ public:
         }
       }
 
-      if ((*lii).is_ind() && (*rii).is_var())
+      if ((*lii).type() == ELEM_TYPE::MEAN_TYPE && (*rii).type() == ELEM_TYPE::VAR_TYPE)
       {
         return true;
       }
 
-      if ((*lii).is_var() && (*rii).is_ind())
+      if ((*lii).type() == ELEM_TYPE::VAR_TYPE && (*rii).type() == ELEM_TYPE::MEAN_TYPE)
       {
         return false;
       }
@@ -219,7 +219,7 @@ public:
     rei = r.external.begin();
     while (lei != l.internal.end() && rei != r.internal.end())
     {
-      if ((*lei).is_sym() && (*rei).is_sym())
+      if ((*lei).type() == ELEM_TYPE::SYM_TYPE && (*rei).type() == ELEM_TYPE::SYM_TYPE)
       {
         if ((*lei).obj < ((*rei).obj))
         {
@@ -231,7 +231,7 @@ public:
         }
       }
 
-      if ((*lei).is_cat() && (*rei).is_cat())
+      if ((*lei).type() == ELEM_TYPE::CAT_TYPE && (*rei).type() == ELEM_TYPE::CAT_TYPE)
       {
         if ((*lei).cat < ((*rei).cat))
         {
@@ -255,12 +255,12 @@ public:
         }
       }
 
-      if ((*lei).is_sym() && (*rei).is_cat())
+      if ((*lei).type() == ELEM_TYPE::SYM_TYPE && (*rei).type() == ELEM_TYPE::CAT_TYPE)
       {
         return true;
       }
 
-      if ((*lei).is_cat() && (*rei).is_sym())
+      if ((*lei).type() == ELEM_TYPE::CAT_TYPE && (*rei).type() == ELEM_TYPE::SYM_TYPE)
       {
         return false;
       }

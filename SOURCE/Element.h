@@ -40,68 +40,12 @@ namespace ELEM_TYPE
  *
  * なお、boost%:%:serializationに対応しています。
  */
-/*class Element
-{
-
-  public:
-	//メンバ
-	//! 要素を区別するインデックスを格納しています。（例: これが「like」で、likeのインデックスが2、ならobj=2）
-	int obj;
-
-	//!Elementがカテゴリ付き変数または変数である場合、そのカテゴリのインデックスを格納します。（例: C1/x2なら、cat=1）
-	int cat;
-
-	//! Elementのタイプを格納しています。タイプはELEM_TYPEに示されるとおりです。
-	ELEM_TYPE::Type type;
-
-	static Dictionary dictionary;
-
-	//コンストラクタ
-	Element();
-
-	//デストラクタ
-	//virtual ~Element();
-
-	//operator
-	//!等号。型が異なると偽を返します。型が等しい場合はインデックスが等しいか比べます。
-	bool operator==(const Element &dst) const;
-	//!等号の否定です
-	bool operator!=(const Element &dst) const;
-	bool operator<(const Element &dst) const;
-
-	//!代入です
-	Element &operator=(const Element &dst);
-
-	//method
-	//! 変数インデックスと、カテゴリインデックスを取り、それを使ってインスタンスをカテゴリ付き変数に初期化します。
-	Element &set_cat(int var, int cat);
-	//! 変数インデックスと、カテゴリインデックスを取り、それを使ってインスタンスを変数に初期化します。内部言語の変数は、必ず外部言語でカテゴリ付き変数として出現するので、初期化にはそれと等しいカテゴリインデックスが必要です。
-	Element &set_var(int var, int cat);
-	//! 対象のインデックスを引数に取り、それを使ってインスタンスを内部言語の対象に初期化します。
-	Element &set_ind(int id);
-	//! 対象のインデックスを引数に取り、それを使ってインスタンスを外部言語の記号に初期化します。
-	Element &set_sym(int id);
-
-	//! インスタンスが変数ならtrueを、そうでなければfalseを返します。
-	bool is_var(void) const;
-	//! インスタンスがカテゴリ付き変数であればtrueを、そうでなければfalseを返します。
-	bool is_cat(void) const;
-	//! インスタンスが対象であればtrueを、そうでなければfalseを返します。
-	bool is_ind(void) const;
-	//! インスタンスが記号であればtrueを、そうでなければfalseを返します。
-	bool is_sym(void) const;
-
-	Element &set(int type_id, int obj_id, int sub_id);
-
-	//! インスタンスの文字列表現をstringで返します。（例:インスタンスが、カテゴリインデックス1で、変数インデックス2なら、"C1/x2"が返ってきます。）
-	std::string to_s(void);
-
-};*/
 
 class Mean{
-	int obj;
+	const int obj;
 public:
 	Mean(int num) : obj(num) {};
+	Mean(const Mean & dst) : obj(dst.obj) {};
 	bool operator==(const Mean &dst) const {
 		return obj == dst.obj;
 	};
@@ -129,6 +73,7 @@ class Variable{
 	int obj;
 public:
 	Variable(int cat_num, int var_num) : cat(cat_num), obj(var_num) {};
+	Variable(const Variable & dst) : cat(dst.cat), obj(dst.obj) {};
 	bool operator==(const Variable & dst) const {
 		return obj == dst.obj;
 	};
@@ -149,6 +94,7 @@ class Symbol{
 	int obj;
 public:
 	Symbol(int num) : obj(num) {};
+	Symbol(const Symbol & dst) : obj(dst.obj) {};
 	bool operator==(const Symbol &dst) const {
 		return obj == dst.obj;
 	};
@@ -174,6 +120,7 @@ class Nonterminal{
 	int obj;
 public:
 	Nonterminal(int cat_num, int obj_num) : cat(cat_num), obj(obj_num) {};
+	Nonterminal(const Nonterminal & dst) : cat(dst.cat), obj(dst.obj) {};
 	bool operator==(const Nonterminal & dst) const {
 		return cat == dst.cat;
 	};
@@ -238,27 +185,22 @@ public:
 	};
 	std::string to_s() const{
 		std::string str("");
-		/*Mean m; Variable v; Symbol s; Nonterminal n;
 		switch(type()){
 			case ELEM_TYPE::MEAN_TYPE :
-				m = get<type()>();
-				str = m.to_s();
+				str = Mean(get<type()>).to_s();
 				break;
 			case ELEM_TYPE::VAR_TYPE :
-				v = get<type()>();
-				str = v.to_s();
+				str = Variable(get<type()>).to_s();
 				break;
 			case ELEM_TYPE::SYM_TYPE :
-				s = get<type()>();
-				str = s.to_s();
+				str = Symbol(get<type()>).to_s();
 				break;
 			case ELEM_TYPE::CAT_TYPE :
-				n = get<type()>();
-				str = n.to_s();
+				str = Nonterminal(get<type()>).to_s();
 				break;
 			default:
 				str = "*";
-		}*/
+		}
 		return str;//(std::get<type(), ElementType>(element)).to_s();
 	}
 };
