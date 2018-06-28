@@ -198,7 +198,7 @@ public:
 	Element(const Element & other){
 		element = other.element;
 	};
-	const std::size_t type() const{
+	constexpr std::size_t type() const{
 		return element.index();
 	};
 
