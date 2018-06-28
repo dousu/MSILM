@@ -46,13 +46,13 @@ class Mean{
 public:
 	Mean(int num) : obj(num) {};
 	Mean(const Mean & dst) : obj(dst.obj) {};
-	bool operator==(const Mean &dst) const {
+	bool operator==(const Mean & dst) const {
 		return obj == dst.obj;
 	};
-	bool operator!=(const Mean &dst) const {
+	bool operator!=(const Mean & dst) const {
 		return !(*this == dst);
 	};
-	bool operator<(const Mean &dst) const{
+	bool operator<(const Mean & dst) const{
 		return obj < dst.obj;
 	};
 	std::string to_s() const{
@@ -95,13 +95,13 @@ class Symbol{
 public:
 	Symbol(int num) : obj(num) {};
 	Symbol(const Symbol & dst) : obj(dst.obj) {};
-	bool operator==(const Symbol &dst) const {
+	bool operator==(const Symbol & dst) const {
 		return obj == dst.obj;
 	};
-	bool operator!=(const Symbol &dst) const {
+	bool operator!=(const Symbol & dst) const {
 		return !(*this == dst);
 	};
-	bool operator<(const Symbol &dst) const{
+	bool operator<(const Symbol & dst) const{
 		return obj < dst.obj;
 	};
 	std::string to_s() const{
@@ -143,7 +143,7 @@ class Element{
 public:
 	Element() : element() {};
 	Element(const Element & other){
-		element = other.element;
+		element(other.element);
 	};
 	constexpr std::size_t type() const{
 		return element.index();
@@ -174,29 +174,29 @@ public:
 		element = dst;		
 		return *this;
 	};
-	bool operator==(const Element &dst) const {
+	bool operator==(const Element & dst) const {
 		return type() == dst.type() && element == dst.element;
 	};
-	bool operator!=(const Element &dst) const {
+	bool operator!=(const Element & dst) const {
 		return !(*this == dst);
 	};
-	bool operator<(const Element &dst) const{
+	bool operator<(const Element & dst) const{
 		return type() < dst.type() || (type() == dst.type() && element < dst.element);
 	};
 	std::string to_s() const{
 		std::string str("");
 		switch(type()){
 			case ELEM_TYPE::MEAN_TYPE :
-				str = Mean(get<type()>).to_s();
+				str = Mean(get<type()>()).to_s();
 				break;
 			case ELEM_TYPE::VAR_TYPE :
-				str = Variable(get<type()>).to_s();
+				str = Variable(get<type()>()).to_s();
 				break;
 			case ELEM_TYPE::SYM_TYPE :
-				str = Symbol(get<type()>).to_s();
+				str = Symbol(get<type()>()).to_s();
 				break;
 			case ELEM_TYPE::CAT_TYPE :
-				str = Nonterminal(get<type()>).to_s();
+				str = Nonterminal(get<type()>()).to_s();
 				break;
 			default:
 				str = "*";
