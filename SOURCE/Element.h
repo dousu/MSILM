@@ -141,7 +141,7 @@ class Element{
 	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
 	ElementType element;
 	template <int I, typename ... Types>
-	std::variant_alternative_t<I, std::variant<Types ...>> & get() {return std::get<I>(element);}
+	std::variant_alternative_t<I, std::variant<Types ...>> & get() const {return std::get<I>(element);}
 public:
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
@@ -150,7 +150,7 @@ public:
 	};
 
 	template <typename T>
-	T & get() {return std::get<T>(element);};
+	T & get() const {return std::get<T>(element);};
 	
 	template <typename T>
 	Element & operator=(T && dst){
