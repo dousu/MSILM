@@ -152,26 +152,32 @@ public:
 
 	template <int I>
 	std::variant_alternative_t<I, ElementType> & get() {return std::get<I>(element);};
-	Element & operator=(const Element & dst){
-		element = ElementType(dst.element);
+	
+	template <typename T>
+	Element & operator=(T && dst){
+		element = std::forward(dst);
+		return *this;
+	}
+	/*Element & operator=(Element && dst){
+		element = std::forward(dst.element);
 		return *this;
 	};
-	Element & operator=(const Mean & dst){
-		element = dst;
+	Element & operator=(Mean && dst){
+		element = std::forward(dst);
 		return *this;
 	};
-	Element & operator=(const Variable & dst){
-		element = dst;
+	Element & operator=(Variable && dst){
+		element = std::forward(dst);
 		return *this;
 	};
-	Element & operator=(const Symbol & dst){
-		element = dst;
+	Element & operator=(Symbol && dst){
+		element = std::forward(dst);
 		return *this;
 	};
-	Element & operator=(const Nonterminal & dst){
-		element = dst;
+	Element & operator=(Nonterminal && dst){
+		element = std::forward(dst);
 		return *this;
-	};
+	};*/
 	bool operator==(const Element & dst) const {
 		return type() == dst.type() && element == dst.element;
 	};
