@@ -206,7 +206,7 @@ public:
 	T & get() {return std::get<T>(element);};
 
 	template <int I>
-	std::variant_alternative_t<I, ElementType> & get() {return std::get<I>(element);};
+	std::variant_alternative_t<I, ElementType> & get() {return std::get<I, ElementType>(element);};
 	Element & operator=(const Element &dst){
 		element = dst.element;
 		return *this;
@@ -237,7 +237,7 @@ public:
 		return type() < dst.type() || (type() == dst.type() && element < dst.element);
 	};
 	std::string to_s() const{
-		return (std::get<type()>(element)).to_s();
+		return (std::get<type(), ElementType>(element)).to_s();
 	}
 };
 
