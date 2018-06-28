@@ -22,14 +22,14 @@ namespace ELEM_TYPE
 {
 	enum Type{
 		//!意味:internal
-		MEAN_TYPE = 0;
+		MEAN_TYPE = 0,
 		//!変数:internal
-		VAR_TYPE = 1;
+		VAR_TYPE = 1,
 		//!シンボル:external
-		SYM_TYPE = 2;
+		SYM_TYPE = 2,
 		//!カテゴリ付き変数:external
-		CAT_TYPE = 3;		
-	}
+		CAT_TYPE = 3		
+	};
 }
 
 //型
@@ -105,29 +105,46 @@ public:
 	bool operator==(const Mean &dst) const {
 		return obj == dst.obj;
 	};
-	//!等号の否定です
 	bool operator!=(const Mean &dst) const {
 		return !(*this == dst);
 	};
 	bool operator<(const Mean &dst) const{
 		return obj < dst.obj;
 	};
+	std::string && to_s(){
+		if (Dictionary::individual.find(obj) == dictionary.individual.end())
+		{
+			return "*";
+		}else{
+			return Dictionary::individual[obj];
+		}
+	}
 };
 
 class Variable{
+	int cat;
 	int obj;
 public:
 	Variable(int num) : obj(num) {};
-	bool operator==(const Variable &dst) const {
+	bool operator==(const Variable & dst) const {
 		return obj == dst.obj;
 	};
-	//!等号の否定です
-	bool operator!=(const Variable &dst) const {
+	bool operator!=(const Variable & dst) const {
 		return !(*this == dst);
 	};
-	bool operator<(const Variable &dst) const{
+	bool operator==(const Nonterminal & dst) const {
+		return cat == dst.cat && obj == dst.obj;
+	};
+	bool operator!=(const Nonterminal & dst) const {
+		return !(*this == dst);
+	};
+	friend Nonterminal::operator==(const Variable &);
+	bool operator<(const Variable & dst) const{
 		return obj < dst.obj;
 	};
+	std::string && to_s(){
+		return Prefices::VAR + std::to_string(obj);
+	}
 };
 
 class Symbol{
@@ -137,13 +154,20 @@ public:
 	bool operator==(const Symbol &dst) const {
 		return obj == dst.obj;
 	};
-	//!等号の否定です
 	bool operator!=(const Symbol &dst) const {
 		return !(*this == dst);
 	};
 	bool operator<(const Symbol &dst) const{
 		return obj < dst.obj;
 	};
+	std::string && to_s(){
+		if (Dictionary::symbol.find(obj) == dictionary.symbol.end())
+		{
+			return "*";
+		}else{
+			return Dictionary::symbol[obj];
+		}
+	}
 };
 
 class Nonterminal{
@@ -151,59 +175,77 @@ class Nonterminal{
 	int obj;
 public:
 	Nonterminal(int cat_num, int obj_num) : cat(cat_num), obj(obj_num) {};
-	bool operator==(const Variable &dst) const {
-		return cat == dst.cat && obj == dst.obj;
+	bool operator==(const Nonterminal & dst) const {
+		return cat == dst.cat;
 	};
-	//!等号の否定です
-	bool operator!=(const Variable &dst) const {
+	bool operator!=(const Nonterminal & dst) const {
 		return !(*this == dst);
 	};
-	bool operator<(const Variable &dst) const{
+	bool operator==(const Variable & dst) const {
+		return cat == dst.cat && obj == dst.obj;
+	};
+	bool operator!=(const Variable & dst) const {
+		return !(*this == dst);
+	};
+	friend Variable::operator==(const Nonterminal &);
+	bool operator<(const Nonterminal & dst) const{
 		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
 	};
+	std::string && to_s(){
+		return Prefices::CAT + std::to_string(cat) + Prefices::DEL + Prefices::VAR + std::to_string(obj);
+	}
 };
 
-class newElement{
-	ELEM_TYPE::Type type;
-	std::variant<Mean, Variable, Symbol, Nonterminal> element;
+class Element{
+	using ElementType = std::variant<Mean, Variable, Symbol, Nonterminal>;
+	ElementType element;
 public:
 	Element() : element() {};
 	Element(const Element & other){
-		switch(other.type){
-			case ELEM_TYPE::CAT_TYPE :
-				element = std::get<Nonterminal>(other.element);
-				break;
-			case ELEM_TYPE::SYM_TYPE :
-				element = std::get<Symbol>(other.element);
-				break;
-			case ELEM_TYPE::VAR_TYPE :
-				element = std::get<Variable>(other.element);
-				break;
-			case ELEM_TYPE::MEAN_TYPE :
-				element = std::get<Mean>(other.element);
-				break;
-			default :
-				std::cerr << "Element Substitution Error" << std::endl;
-				exit(1);
-		}
+		element = other.element;
 		return *this;
+	};
+	ELEM_TYPE::Type type(){
+		return element.index();
 	};
 
 	template <typename T>
-	T get() {return std::get<T>(element)};
+	T & get() {return std::get<T>(element);};
 
-	//operator
-	//!等号。型が異なると偽を返します。型が等しい場合はインデックスが等しいか比べます。
-	bool operator==(const Element &dst) const {
-		return type == dst.type && element == dst.element;
+	template <int I>
+	std::variant_alternative_t<I, ElementType> & get() {return std::get<I>(element);};
+	Element & operator=(const Element &dst){
+		element = dst.element;
+		return *this;
 	};
-	//!等号の否定です
+	Element & operator=(const Mean & dst){
+		element = dst;		
+		return *this;
+	};
+	Element & operator=(const Variable & dst){
+		element = dst;		
+		return *this;
+	};
+	Element & operator=(const Symbol & dst){
+		element = dst;		
+		return *this;
+	};
+	Element & operator=(const Nonterminal & dst){
+		element = dst;		
+		return *this;
+	};
+	bool operator==(const Element &dst) const {
+		return type() == dst.type() && element == dst.element;
+	};
 	bool operator!=(const Element &dst) const {
 		return !(*this == dst);
 	};
 	bool operator<(const Element &dst) const{
-		return type < dst.type || (type == dst.type && element < dst.element);
+		return type() < dst.type() || (type == dst.type && element < dst.element);
 	};
+	std::string && to_s(){
+		return std::get<element.index()>(element).to_s();
+	}
 };
 
 #endif /* ELEMENT_H_ */
