@@ -495,7 +495,7 @@ KnowledgeBase::chunking(Rule &src, Rule &dst)
 
         //sentence
         Element new_cat, new_var;
-        new_cat=Category(new_cat_id, idiff_index);
+        new_cat=Nonterminal(new_cat_id, idiff_index);
         new_var=Variable(new_cat_id, idiff_index);
 
         sent = base;
@@ -908,7 +908,7 @@ bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
             var = Variable(word.cat,imatchp);
 
             //外部言語置き換え用のカテゴリ
-            catvar = Category(word.cat, imatchp);
+            catvar = Nonterminal(word.cat, imatchp);
 
             if (LOGGING_FLAG)
             {

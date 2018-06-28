@@ -138,7 +138,7 @@ Rule::Rule(std::string str) {
       }
       var_cat[var_num] = cat_num;
       Element ex_cat;
-      ex_cat=Category(cat_num, var_num);
+      ex_cat=Nonterminal(cat_num, var_num);
       external.push_back(ex_cat);
       r_it ++;// for slash
       r_it ++;// for variable symbol

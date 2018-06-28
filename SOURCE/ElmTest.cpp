@@ -17,7 +17,7 @@ int main(int arg, char **argv)
 		case ELEM_TYPE::CAT_TYPE:
 			for (unsigned int i = 0; i < 3; i++)
 			{
-				elements.push_back(Category(i,i));
+				elements.push_back(Nonterminal(i,i));
 			}
 			break;
 		case ELEM_TYPE::MEAN_TYPE:
