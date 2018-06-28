@@ -134,13 +134,9 @@ public:
 	bool operator!=(const Variable & dst) const {
 		return !(*this == dst);
 	};
-	bool operator==(const Nonterminal & dst) const {
-		return cat == dst.cat && obj == dst.obj;
-	};
-	bool operator!=(const Nonterminal & dst) const {
-		return !(*this == dst);
-	};
-	friend bool Nonterminal::operator==(const Variable &);
+	bool operator==(const Nonterminal & dst) const;
+	bool operator!=(const Nonterminal & dst) const;
+	friend bool Nonterminal::operator==(const Variable & dst) const;
 	bool operator<(const Variable & dst) const{
 		return obj < dst.obj;
 	};
@@ -183,13 +179,9 @@ public:
 	bool operator!=(const Nonterminal & dst) const {
 		return !(*this == dst);
 	};
-	bool operator==(const Variable & dst) const {
-		return cat == dst.cat && obj == dst.obj;
-	};
-	bool operator!=(const Variable & dst) const {
-		return !(*this == dst);
-	};
-	friend bool Variable::operator==(const Nonterminal &);
+	bool operator==(const Variable & dst) const;
+	bool operator!=(const Variable & dst) const;
+	friend bool Variable::operator==(const Nonterminal & dst) const;
 	bool operator<(const Nonterminal & dst) const{
 		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
 	};
