@@ -238,7 +238,7 @@ public:
 	};
 	std::string to_s() const{
 		std::string str("");
-		Mean m; Variable v; Symbol s; Nonterminal n;
+		/*Mean m; Variable v; Symbol s; Nonterminal n;
 		switch(type()){
 			case ELEM_TYPE::MEAN_TYPE :
 				m = get<type()>();
@@ -258,7 +258,7 @@ public:
 				break;
 			default:
 				str = "*";
-		}
+		}*/
 		return str;//(std::get<type(), ElementType>(element)).to_s();
 	}
 };
