@@ -140,18 +140,17 @@ public:
 class Element{
 	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
 	ElementType element;
+	template <int I, typename T>
+	std::variant_alternative_t<I,T> & get() {return std::get<I>(element);}
 public:
-	Element() : element() {};
-	Element(const Element & other) : element(other.element){};
+	Element() : element() {}
+	Element(const Element & other) : element(other.element){}
 	constexpr std::size_t type() const{
 		return element.index();
 	};
 
 	template <typename T>
 	T & get() {return std::get<T>(element);};
-
-	template <int I>
-	std::variant_alternative_t<I, ElementType> & get() {return std::get<I>(element);};
 	
 	template <typename T>
 	Element & operator=(T && dst){
@@ -180,27 +179,27 @@ public:
 	};*/
 	bool operator==(const Element & dst) const {
 		return type() == dst.type() && element == dst.element;
-	};
+	}
 	bool operator!=(const Element & dst) const {
 		return !(*this == dst);
-	};
+	}
 	bool operator<(const Element & dst) const{
 		return type() < dst.type() || (type() == dst.type() && element < dst.element);
-	};
+	}
 	std::string to_s() const{
 		std::string str("");
 		switch(type()){
 			case ELEM_TYPE::MEAN_TYPE :
-				str = Mean(get<type()>()).to_s();
+				str = Mean(get<type(),ElementType>()).to_s();
 				break;
 			case ELEM_TYPE::VAR_TYPE :
-				str = Variable(get<type()>()).to_s();
+				str = Variable(get<type(),ElementType>()).to_s();
 				break;
 			case ELEM_TYPE::SYM_TYPE :
-				str = Symbol(get<type()>()).to_s();
+				str = Symbol(get<type(),ElementType>()).to_s();
 				break;
 			case ELEM_TYPE::CAT_TYPE :
-				str = Nonterminal(get<type()>()).to_s();
+				str = Nonterminal(get<type(),ElementType>()).to_s();
 				break;
 			default:
 				str = "*";
