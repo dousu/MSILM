@@ -237,7 +237,29 @@ public:
 		return type() < dst.type() || (type() == dst.type() && element < dst.element);
 	};
 	std::string to_s() const{
-		//return (std::get<type(), ElementType>(element)).to_s();
+		std::string str("");
+		Mean m; Variable v; Symbol s; Nonterminal n;
+		switch(type()){
+			case ELEM_TYPE::MEAN_TYPE :
+				m = get<type()>();
+				str = m.to_s();
+				break;
+			case ELEM_TYPE::VAR_TYPE :
+				v = get<type()>();
+				str = v.to_s();
+				break;
+			case ELEM_TYPE::SYM_TYPE :
+				s = get<type()>();
+				str = s.to_s();
+				break;
+			case ELEM_TYPE::CAT_TYPE :
+				n = get<type()>();
+				str = n.to_s();
+				break;
+			default:
+				str = "*";
+		}
+		return str;//(std::get<type(), ElementType>(element)).to_s();
 	}
 };
 
