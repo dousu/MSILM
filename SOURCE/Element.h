@@ -141,7 +141,7 @@ class Element{
 	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
 	ElementType element;
 	template <int I, typename ... Types>
-	std::variant_alternative_t<I, std::variant<Types ...>> & get() const {return std::get<I>(element);}
+	std::variant_alternative_t<I, Types ...> & get() const {return std::get<I>(element);}
 public:
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
