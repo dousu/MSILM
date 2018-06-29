@@ -7,8 +7,8 @@
 
 #ifndef INDEXFACTORY_H_
 #define INDEXFACTORY_H_
-//#include <boost/serialization/serialization.hpp>
-//#include <boost/serialization/nvp.hpp>
+
+#include <iostream>
 
 /*!
  * ユニークな番号を生成するクラスです。生成可能な範囲は、int型の範囲に依存します。
