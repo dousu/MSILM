@@ -151,12 +151,12 @@ public:
 
 class Element{
 	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
-	ElementType element;
 	//template <int I, typename T>
 	//std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
 	template <int I>
 	const decltype(auto) get() const {return std::get<I>(element);}
 public:
+	ElementType element;
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
 	constexpr std::size_t type() const{
