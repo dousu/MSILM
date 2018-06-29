@@ -174,22 +174,22 @@ public:
 	
 	Element & operator=(Mean && dst){
 		ElementType el = dst;
-		element = std::move(el);
+		element = std::forward(el);
 		return *this;
 	};
 	Element & operator=(Variable && dst){
 		ElementType el = dst;
-		element = std::move(el);
+		element = std::forward(el);
 		return *this;
 	};
 	Element & operator=(Symbol && dst){
 		ElementType el = dst;
-		element = std::move(el);
+		element = std::forward(el);
 		return *this;
 	};
 	Element & operator=(Nonterminal && dst){
 		ElementType el = dst;
-		element = std::move(el);
+		element = std::forward(el);
 		return *this;
 	};
 	bool operator==(const Element & dst) const {
