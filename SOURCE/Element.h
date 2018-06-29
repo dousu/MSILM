@@ -91,6 +91,9 @@ public:
 	int get_cat_id() const {
 		return cat;
 	}
+	int get_obj_id() const {
+		return obj;
+	}
 	std::string to_s() const{
 		return Prefices::VAR + std::to_string(obj);
 	}
@@ -168,7 +171,8 @@ public:
 		element = std::forward(dst);
 		return *this;
 	}
-	/*Element & operator=(Element && dst){
+	/*
+	Element & operator=(Element && dst){
 		element = std::forward(dst.element);
 		return *this;
 	};
@@ -187,7 +191,8 @@ public:
 	Element & operator=(Nonterminal && dst){
 		element = std::forward(dst);
 		return *this;
-	};*/
+	};
+	*/
 	bool operator==(const Element & dst) const {
 		return type() == dst.type() && element == dst.element;
 	}

@@ -80,7 +80,6 @@ public:
   operator!=(Rule &dst) const;
   Rule &
   operator=(const Rule &dst);
-  //bool operator<(Rule& dst) const;
 
   //method
   bool
@@ -92,173 +91,13 @@ public:
   std::string
   to_s(void);
   void
-  set_noun(Element &dcat, Element &dind, ExType &dex);
-  void
   set_noun(int dcat, Element &dind, ExType &dex);
   void
   set_sentence(InType &din, ExType &dex);
-
-  std::vector<std::vector<Element>>
-  moph(void);
 
 private:
   std::string
   string_join(const std::vector<std::string> &str_v, const std::string &delim);
 };
-
-// class RuleSort : public RuleTypeDef
-// {
-// public:
-//   bool
-//   operator()(const Rule &l, const Rule &r)
-//   {
-
-//     //metric: l is less than r
-//     if (l.is_sentence() && r.is_noun())
-//     {
-//       return false;
-//     }
-//     else if (l.is_noun() && r.is_sentence())
-//     {
-//       return true;
-//     }
-
-//     //guard
-//     if ((!(l.is_sentence()) && !(l.is_noun())) || (!(r.is_sentence()) && !(r.is_noun())))
-//     {
-//       std::cerr << "illegal rule type" << std::endl;
-
-//       throw "illegal rule type";
-//     }
-
-//     //through
-//     //l.is_sentence() && r.is_sentence()
-//     //l.is_noun() && r.is_noun()
-//     if (l.is_noun() && r.is_noun())
-//     {
-//       if (l.cat < r.cat)
-//       {
-//         return true;
-//       }
-//       else if (l.cat > r.cat)
-//       {
-//         return false;
-//       }
-//     }
-
-//     //l.is_sentence() && r.is_sentence()
-//     //l.is_noun() && r.is_noun() && l.cat == r.cat
-//     std::vector<Element>::const_iterator lii, rii, lei, rei;
-//     lii = l.internal.begin();
-//     rii = r.internal.begin();
-//     while (lii != l.internal.end() && rii != r.internal.end())
-//     {
-//       if ((*lii).type() == ELEM_TYPE::MEAN_TYPE && (*rii).type() == ELEM_TYPE::MEAN_TYPE)
-//       {
-//         if ((*lii).obj < ((*rii).obj))
-//         {
-//           return true;
-//         }
-//         else if ((*lii).obj > ((*rii).obj))
-//         {
-//           return false;
-//         }
-//       }
-
-//       if ((*lii).type() == ELEM_TYPE::VAR_TYPE && (*rii).type() == ELEM_TYPE::VAR_TYPE)
-//       {
-//         if ((*lii).cat < ((*rii).cat))
-//         {
-//           return true;
-//         }
-//         else if ((*lii).cat > ((*rii).cat))
-//         {
-//           return false;
-//         }
-
-//         if ((*lii).cat == ((*rii).cat))
-//         {
-//           if ((*lii).obj < ((*rii).obj))
-//           {
-//             return true;
-//           }
-//           else if ((*lii).obj > ((*rii).obj))
-//           {
-//             return false;
-//           }
-//         }
-//       }
-
-//       if ((*lii).type() == ELEM_TYPE::MEAN_TYPE && (*rii).type() == ELEM_TYPE::VAR_TYPE)
-//       {
-//         return true;
-//       }
-
-//       if ((*lii).type() == ELEM_TYPE::VAR_TYPE && (*rii).type() == ELEM_TYPE::MEAN_TYPE)
-//       {
-//         return false;
-//       }
-
-//       lii++;
-//       rii++;
-//     }
-
-//     //undecided order by internal
-//     lei = l.external.begin();
-//     rei = r.external.begin();
-//     while (lei != l.internal.end() && rei != r.internal.end())
-//     {
-//       if ((*lei).type() == ELEM_TYPE::SYM_TYPE && (*rei).type() == ELEM_TYPE::SYM_TYPE)
-//       {
-//         if ((*lei).obj < ((*rei).obj))
-//         {
-//           return true;
-//         }
-//         else if ((*lei).obj > ((*rei).obj))
-//         {
-//           return false;
-//         }
-//       }
-
-//       if ((*lei).type() == ELEM_TYPE::CAT_TYPE && (*rei).type() == ELEM_TYPE::CAT_TYPE)
-//       {
-//         if ((*lei).cat < ((*rei).cat))
-//         {
-//           return true;
-//         }
-//         else if ((*lei).cat > ((*rei).cat))
-//         {
-//           return false;
-//         }
-
-//         if ((*lei).cat == ((*rei).cat))
-//         {
-//           if ((*lei).obj < ((*rei).obj))
-//           {
-//             return true;
-//           }
-//           else if ((*lei).obj > ((*rei).obj))
-//           {
-//             return false;
-//           }
-//         }
-//       }
-
-//       if ((*lei).type() == ELEM_TYPE::SYM_TYPE && (*rei).type() == ELEM_TYPE::CAT_TYPE)
-//       {
-//         return true;
-//       }
-
-//       if ((*lei).type() == ELEM_TYPE::CAT_TYPE && (*rei).type() == ELEM_TYPE::SYM_TYPE)
-//       {
-//         return false;
-//       }
-
-//       lei++;
-//       rei++;
-//     }
-//     return false;
-//   }
-// };
 
 #endif /* RULE_H_ */

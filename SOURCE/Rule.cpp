@@ -303,11 +303,6 @@ Rule::to_s(void)
   return rule_type + " " + internal_str + " " + Prefices::ARW + " " + external_str;
 }
 
-void Rule::set_noun(Element &dcat, Element &dind, std::vector<Element> &dex)
-{
-  set_noun(Mean(dcat.get<Mean>()).get_cat_id(), dind, dex);
-}
-
 void Rule::set_noun(int dcat, Element &dind, std::vector<Element> &dex)
 {
   type = RULE_TYPE::NOUN;
@@ -323,35 +318,6 @@ void Rule::set_sentence(std::vector<Element> &din, std::vector<Element> &dex)
   cat = 0; //feature
   internal = din;
   external = dex;
-}
-
-std::vector<std::vector<Element>>
-Rule::moph(void)
-{
-  std::vector<Element>::iterator it;
-  std::vector<std::vector<Element>> moph;
-  std::vector<Element> buf;
-
-  it = external.begin();
-  for (; it != external.end(); it++)
-  {
-    switch ((*it).type())
-    {
-    case ELEM_TYPE::SYM_TYPE:
-      buf.push_back(*it);
-      break;
-    case ELEM_TYPE::VAR_TYPE:
-      if (buf.size() != 0)
-        moph.push_back(buf);
-      std::vector<Element> new_buf;
-      buf = new_buf;
-      break;
-    }
-  }
-  if (buf.size() != 0)
-    moph.push_back(buf);
-
-  return moph;
 }
 
 std::string

@@ -165,7 +165,8 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
      * -# 合成度の高いルールで、内部言語1要素だけが適合しない場合、その1要素についてランダムの文字列を当てて外部言語列を生成する
      * .
      *
-     */ Rule
+     */ 
+    Rule
     fabricate_for_complementing(Rule &src1);
 
     /*!
@@ -238,17 +239,11 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
      */
     std::map<PATTERN_TYPE, std::vector<PatternType>>
     construct_grounding_patterns(Rule &src);
-    /*   std::map<PATTERN_TYPE, std::vector<PatternType> >
-    natural_construct_grounding_patterns(Rule& src);*/
 
     void
     ground_with_pattern(Rule &src, PatternType &pattern);
     std::vector<Rule>
-    groundable_rules(Rule &src);
-    std::vector<Rule>
     grounded_rules(Rule src);
-    /*std::vector<Rule>
-    grounded_rules2(Rule src, std::vector<KnowledgeBase::PatternType>& all_patterns);*/
     bool
     clipping(Rule &mean, KnowledgeBase::PatternType &ptn, KnowledgeBase::PatternType &res);
     std::vector<Rule>

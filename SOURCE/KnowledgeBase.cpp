@@ -482,14 +482,6 @@ KnowledgeBase::chunking(Rule &src, Rule &dst)
             noun2_ex.push_back(targ.external[i]);
         }
 
-        //		ExType::iterator diff_bit, diff_eit;
-        //		diff_bit = base.external.begin() + fmatch_length;
-        //		diff_eit = base.external.begin() + (base.external.size() - rmatch_length);
-        //		noun1_ex.insert(noun1_ex.end(), diff_bit, diff_eit);
-        //		diff_bit = targ.external.begin() + fmatch_length;
-        //		diff_eit = targ.external.begin() + (targ.external.size() - rmatch_length);
-        //		noun2_ex.insert(noun2_ex.end(), diff_bit, diff_eit);
-
         noun1.set_noun(new_cat_id, base.internal[idiff_index], noun1_ex);
         noun2.set_noun(new_cat_id, targ.internal[idiff_index], noun2_ex);
 
@@ -657,7 +649,7 @@ void KnowledgeBase::collect_merge_cat(Rule &src, std::vector<Rule> &words,
     it = words.begin();
     while (it != words.end())
     {
-        if (src.cat != (*it).cat && //要らないけど一応
+        if (src.cat != (*it).cat &&
             src.internal == (*it).internal && src.external == (*it).external)
         {
             unified_cat.insert(std::map<int, bool>::value_type((*it).cat, true));
@@ -716,7 +708,8 @@ KnowledgeBase::merge_sent_proc(Rule &base_word, RuleDBType &DB,
                     LogBox::push_log("MERGE-> " + (*it).to_s());
                 }
 
-                temp.internal[i].cat = base_word.cat;
+                // temp.internal[i].cat = base_word.cat;
+                temp.internal[i] = Variable(base_word.cat, Variable(temp.internal[i].get<Variable>()).get_obj_id());
                 modified = true;
             }
         }
@@ -728,9 +721,9 @@ KnowledgeBase::merge_sent_proc(Rule &base_word, RuleDBType &DB,
             for (int j = 0; j < temp.external.size(); j++)
             {
                 if ( //find unified cat
-                    temp.external[j].type == ELEM_TYPE::CAT_TYPE && unified_cat.find(temp.external[j].cat) != unified_cat.end())
+                    temp.external[j].type == ELEM_TYPE::CAT_TYPE && unified_cat.find(Variable(temp.external[j].get<Variable>()).get_cat_id()) != unified_cat.end())
                 {
-                    temp.external[j].cat = base_word.cat;
+                    temp.external[j] = Nonterminal(base_word.cat, Variable(temp.external[j].get<Variable>()).get_obj_id());
                 }
             }
             if (LOGGING_FLAG)
@@ -899,7 +892,7 @@ bool KnowledgeBase::replacing(Rule &word, RuleDBType &checking_sents)
         }
 
         //文規則内部言語に一致箇所がある場合
-        if (imatched && ematched)
+        if (imatched && ematched)//不用
         {
             Element catvar, var;
             ExType::iterator eit;
@@ -1005,11 +998,7 @@ bool KnowledgeBase::obliterate(void)
 
                 while (same_in && elem_it1 != (*it1).internal.end() && elem_it2 != (*it2).internal.end())
                 {
-                    if ((*elem_it1).type() == ELEM_TYPE::MEAN_TYPE && (*elem_it2).type() == ELEM_TYPE::MEAN_TYPE && *elem_it1 == *elem_it2)
-                    {
-                        same_in &= true;
-                    }
-                    else if ((*elem_it1).type() == ELEM_TYPE::VAR_TYPE && (*elem_it2).type() == ELEM_TYPE::VAR_TYPE && (*elem_it1) == (*elem_it2) )
+                    if ( *elem_it1 == *elem_it2)
                     {
                         same_in &= true;
                     }
@@ -1022,7 +1011,7 @@ bool KnowledgeBase::obliterate(void)
                 }
             }
 
-            if (same_in && (*it1).external.size() >= (*it2).external.size())
+            if (same_in && (*it1).external.size() > (*it2).external.size())
             {
                 is_remained = false;
             }
@@ -1155,20 +1144,17 @@ Rule KnowledgeBase::fabricate(Rule &src1)
     }
     else if (all_patterns[ABSOLUTE].size() != 0)
     {
-        //        std::cerr << "DDDDDDDDDDDD2" << std::endl;
         if (LOGGING_FLAG)
         {
             LogBox::push_log("**ABSOLUTE");
         }
 
         rand_index = MT19937::irand() % all_patterns[ABSOLUTE].size();
-        //ABSOLUTEにはclippingしない
 
         src = (all_patterns[ABSOLUTE])[rand_index].front();
     }
     else if (all_patterns[SEMICOMPLETE].size() != 0)
     {
-        //        std::cerr << "DDDDDDDDDDDD3" << std::endl;
         std::vector<PatternType> sorted_patterns;
         std::vector<PatternType>::iterator sort_it;
         int pattern_length = 0;
@@ -1378,10 +1364,6 @@ Rule KnowledgeBase::fabricate_for_complementing(Rule &src1)
         ExType ex;
         ex = construct_buzz_word();
         src.external.swap(ex);
-
-        //if (CONTROLS & USE_ADDITION_OF_RANDOM_WORD) {
-        //    //send_db(src);
-        //}
     }
 
     return src;
@@ -1400,7 +1382,7 @@ KnowledgeBase::construct_buzz_word(void)
     for (int i = 0; i < length; i++)
     {
         Element sym_buf;
-        sym_id = MT19937::irand() % Dictionary::symbol.size();
+        sym_id = MT19937::irand(0, Dictionary::symbol.size());
         sym_buf=Symbol(sym_id);
         ex.push_back(sym_buf);
     }
@@ -1474,7 +1456,7 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
     bool filted;
     int ungrounded_variable_num;
     bool is_applied, is_absorute, is_complete, is_semicomplete;
-    std::map<PATTERN_TYPE, std::vector<KnowledgeBase::PatternType>> ret;
+    std::map<PATTERN_TYPE, std::vector<PatternType>> ret;
     //グラウンドパターンの格納庫とそのイテレータ
     std::vector<PatternType> patternDB;
     std::vector<PatternType>::iterator patternDB_it;
@@ -1500,7 +1482,7 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
         filted = true;
         for (int index = 0; index < src.internal.size() && filted; index++)
         {
-            if ((*sent_it).internal[index].type() == ELEM_TYPE::MEAN_TYPE && src.internal[index] != (*sent_it).internal[index])
+            if (src.internal[index] != (*sent_it).internal[index])
             {
                 filted = false;
             }
@@ -1536,10 +1518,10 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
                 is_absorute &= true;
                 continue;
             }
-            else if (                                                                     //変数の場合で、グラウンド可能な場合
-                grnd_elm.type() == ELEM_TYPE::VAR_TYPE &&                                                      //変数で
-                word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
-                word_dic[grnd_elm.cat].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+            else if (//変数の場合で、グラウンド可能な場合
+                grnd_elm.type() == ELEM_TYPE::VAR_TYPE &&
+                word_dic.find(Variable(grnd_elm.get<Variable>()).get_cat_id()) != word_dic.end() &&//変数のカテゴリが辞書に有り
+                word_dic[Variable(grnd_elm.get<Variable>()).get_cat_id()].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[Variable(grnd_elm.get<Variable>()).get_cat_id()].end() //辞書の指定カテゴリに単語がある
             )
             {
                 DictionaryRange item_range;
@@ -1608,7 +1590,7 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
                             ExType empty_ex;
 
                             //空の単語規則を作る
-                            empty_word.set_noun(grnd_elm.cat, grnd_elm, empty_ex);
+                            empty_word.set_noun(Variable(grnd_elm.get<Variable>()).get_cat_id(), grnd_elm, empty_ex);
 
                             //すでに作られてる単語規則の組をコピー
                             sub_pattern = *patternDB_it;
@@ -1628,7 +1610,7 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
                     else
                     {
                         std::cerr << "pattern error" << std::endl;
-                        throw;
+                        exit(1);
                     }
 
                     is_absorute &= false;
@@ -1722,8 +1704,8 @@ bool KnowledgeBase::acceptable(Rule &src)
             }
             else if (                                                                     //変数の場合で、グラウンド可能な場合
                 grnd_elm.type() == ELEM_TYPE::VAR_TYPE &&                                                      //変数で
-                word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
-                word_dic[grnd_elm.cat].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
+                word_dic.find(Variable(grnd_elm.get<Variable>()).get_cat_id()) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
+                word_dic[Variable(grnd_elm.get<Variable>()).get_cat_id()].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[Variable(grnd_elm.get<Variable>()).get_cat_id()].end() //辞書の指定カテゴリに単語がある
             )
             {
                 continue;
@@ -1744,7 +1726,7 @@ std::vector<Rule>
 KnowledgeBase::grounded_rules(Rule src)
 {
     RuleDBType grounded_rules;
-    std::map<PATTERN_TYPE, std::vector<PatternType>> patterns, patterns2;
+    std::map<PATTERN_TYPE, std::vector<PatternType>> patterns;
 
     patterns = construct_grounding_patterns(src);
 
@@ -1780,84 +1762,6 @@ KnowledgeBase::grounded_rules(Rule src)
     return grounded_rules;
 }
 
-std::vector<Rule>
-KnowledgeBase::groundable_rules(Rule &src)
-{
-    build_word_index();
-
-    std::vector<Rule> ret;
-
-    //SentenceDBシーケンス用
-    RuleDBType::iterator sent_it;
-    bool filted;
-    bool is_applied = false;
-
-    sent_it = sentenceDB.begin();
-    while (sent_it != sentenceDB.end())
-    {
-        //拡張用:内部言語列長の同一性検査
-        // 将来的に内部言語列長が異なるものがデータベースに入るかも知れないので
-        if ((*sent_it).internal.size() != src.internal.size())
-        {
-            sent_it++;
-            continue;
-        }
-
-        //高速化枝狩り
-        //対象が1カ所でも一致していないものは使えない
-        filted = true;
-        for (int index = 0; index < src.internal.size() && filted; index++)
-        {
-            if ((*sent_it).internal[index].type() == ELEM_TYPE::MEAN_TYPE && src.internal[index] != (*sent_it).internal[index])
-            {
-                filted = false;
-            }
-        }
-        if (!filted)
-        {
-            sent_it++;
-            continue;
-        }
-
-        //ある単語規則に対するグラウンドパターン検索
-        Element grnd_elm, mean_elm;
-
-        is_applied = true;
-        for (int in_idx = 0; is_applied && in_idx < (*sent_it).internal.size();
-             in_idx++)
-        {
-            grnd_elm = (*sent_it).internal[in_idx]; //検査するインターナル要素
-            mean_elm = src.internal[in_idx];        //基準のインターナル要素
-
-            if (grnd_elm == mean_elm)
-            { //単語がそのまま一致する場合
-                continue;
-            }
-            else if (                                                                     //変数の場合で、グラウンド可能な場合
-                grnd_elm.type() == ELEM_TYPE::VAR_TYPE &&                                                      //変数で
-                word_dic.find(grnd_elm.cat) != word_dic.end() &&                          //変数のカテゴリが辞書に有り
-                word_dic[grnd_elm.cat].find(Mean(mean_elm.get<Mean>()).get_obj_id()) != word_dic[grnd_elm.cat].end() //辞書の指定カテゴリに単語がある
-            )
-            {
-                continue;
-            }
-            else
-            { //構成不可能文規則
-                is_applied = false;
-            }
-        } //内部言語のグラウンドループ
-
-        if (is_applied)
-        {
-            ret.push_back(*sent_it);
-        }
-
-        sent_it++;
-    } //文規則のループ
-
-    return ret;
-}
-
 std::string
 KnowledgeBase::to_s(void)
 {
@@ -1870,7 +1774,6 @@ KnowledgeBase::to_s(void)
     sbuf = std::string("\nSent BOX\n");
     buf.push_back(sbuf);
     rule_buf = sentence_box;
-    //	std::sort(rule_buf.begin(), rule_buf.end(), RuleSort());
     it = rule_buf.begin();
     while (it != rule_buf.end())
     {
@@ -2215,7 +2118,7 @@ KnowledgeBase::recognize_terminal_strings(Rule &target)
     it = target.external.begin();
     for (; it != target.external.end(); it++)
     {
-        switch ((*it).type)
+        switch ((*it).type())
         {
         case ELEM_TYPE::SYM_TYPE:
             buf.push_back(*it);
