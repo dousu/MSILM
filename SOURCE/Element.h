@@ -171,22 +171,19 @@ public:
 		element = std::forward(dst);
 		return *this;
 	}
-	template <>
+	
 	Element & operator=(Mean && dst){
 		element = dst;
 		return *this;
 	};
-	template <>
 	Element & operator=(Variable && dst){
 		element = dst;
 		return *this;
 	};
-	template <>
 	Element & operator=(Symbol && dst){
 		element = dst;
 		return *this;
 	};
-	template <>
 	Element & operator=(Nonterminal && dst){
 		element = dst;
 		return *this;
