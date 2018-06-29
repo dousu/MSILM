@@ -171,28 +171,26 @@ public:
 		element = std::forward(dst);
 		return *this;
 	}
-	/*
-	Element & operator=(Element && dst){
-		element = std::forward(dst.element);
-		return *this;
-	};
+	template <>
 	Element & operator=(Mean && dst){
-		element = std::forward(dst);
+		element = dst;
 		return *this;
 	};
+	template <>
 	Element & operator=(Variable && dst){
-		element = std::forward(dst);
+		element = dst;
 		return *this;
 	};
+	template <>
 	Element & operator=(Symbol && dst){
-		element = std::forward(dst);
+		element = dst;
 		return *this;
 	};
+	template <>
 	Element & operator=(Nonterminal && dst){
-		element = std::forward(dst);
+		element = dst;
 		return *this;
 	};
-	*/
 	bool operator==(const Element & dst) const {
 		return type() == dst.type() && element == dst.element;
 	}
