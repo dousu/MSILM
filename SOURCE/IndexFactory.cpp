@@ -14,8 +14,10 @@ IndexFactory &IndexFactory::operator=(const IndexFactory &dst)
 }
 int IndexFactory::generate(void)
 {
-	if (index_counter + 1 < index_counter)
-		throw "range over error";
+	if (index_counter + 1 < index_counter){
+		std::cerr << "range over error" std::endl;
+		exit(1);
+	}
 	index_counter++;
 	return index_counter;
 }

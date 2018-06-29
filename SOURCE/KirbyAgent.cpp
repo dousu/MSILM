@@ -36,7 +36,7 @@ Rule KirbyAgent::say(Rule &internal)
     catch (...)
     {
         LogBox::refresh_log();
-        throw;
+        exit(1);
     }
 }
 

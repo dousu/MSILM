@@ -154,7 +154,7 @@ class Element{
 	//template <int I, typename T>
 	//std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
 	template <int I>
-	const decltype(auto) get() const {return std::get<I>(element);}
+	const auto get() const -> decltype(std::get<I>(element)) {return std::get<I>(element);}
 public:
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
@@ -167,6 +167,10 @@ public:
 	template <typename T>
 	T & get() const {return std::get<T>(element);}
 	
+	Element & operator=(Element & dst){
+		element = dst.element;
+		return *this;
+	}
 	Element & operator=(Element && dst){
 		element = dst.element;
 		return *this;

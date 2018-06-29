@@ -267,7 +267,8 @@ Rule::to_s(void)
     break;
   default:
     std::cerr << "RULE TYPE : " << type << std::endl;
-    throw "unknown rule type";
+    std::cerr << "unknown rule type" << std::endl;
+    exit(1);
   }
 
   std::vector<std::string> buffer;

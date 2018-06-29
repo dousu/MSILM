@@ -32,8 +32,10 @@ int MT19937::irand(void)
 {
 	if (icount < ULLONG_MAX - 1)
 		icount++;
-	else
-		throw "cannot use random any more";
+	else{
+		std::cerr << "cannot use random any more" << std::endl;
+		exit(1);
+	}
 
 	return idist(igen);
 }
@@ -42,8 +44,10 @@ int MT19937::irand(int a, int b)
 {
 	if (icount < ULLONG_MAX - 1)
 		icount++;
-	else
-		throw "cannot use random any more";
+	else{
+		std::cerr "cannot use random any more" << std::endl;
+		exit(1);
+	}
 	std::uniform_int_distribution<> dist(a, b);
 	return dist(igen);
 }
@@ -52,8 +56,10 @@ double MT19937::rrand(void)
 {
 	if (rcount < ULLONG_MAX - 1)
 		rcount++;
-	else
-		throw "cannot use random any more";
+	else{
+		std::cerr << "cannot use random any more" << std::endl;
+		exit(1);
+	}
 	return rdist(rgen);
 }
 
@@ -61,8 +67,10 @@ double MT19937::rrand(double a, double b)
 {
 	if (rcount < ULLONG_MAX - 1)
 		rcount++;
-	else
-		throw "cannot use random any more";
+	else{
+		std::cerr << "cannot use random any more" std::endl;
+		exit(1);
+	}
 	std::uniform_real_distribution<> dist(a, b);
 	return dist(rgen);
 }

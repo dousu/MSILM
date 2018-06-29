@@ -187,7 +187,7 @@ bool KnowledgeBase::consolidate(void)
         if (flag3)
             std::cerr << "F3" << std::endl;
 
-        throw;
+        exit(1);
     }
 
     send_db(sbox_buffer);
@@ -419,7 +419,7 @@ KnowledgeBase::chunking(Rule &src, Rule &dst)
     else
     {
         std::cerr << "Illegal Chunk Type" << std::endl;
-        throw "Illegal Chunk Type";
+        exit(1);
     }
 
     //chunk check : Base
@@ -447,7 +447,8 @@ KnowledgeBase::chunking(Rule &src, Rule &dst)
         break;
 
     default:
-        throw "unknow chunk type";
+        std::cerr << "unknow chunk type" << std::endl;
+        exit(1);
     }
 
     //chunk check: Target
@@ -539,7 +540,7 @@ KnowledgeBase::chunking(Rule &src, Rule &dst)
     }
     default:
         std::cerr << "CHUNK PROC ERROR" << std::endl;
-        throw "CHUNK PROC ERROR";
+        exit(1);
     }
 
     return buf;
@@ -1390,7 +1391,8 @@ KnowledgeBase::construct_buzz_word(void)
     if (ex.size() == 0)
     {
         std::cout << "Failed making random" << std::endl;
-        throw "make random external error";
+        std::cerr << "make random external error" << std::endl;
+        exit(1);
     }
     return ex;
 }
@@ -1431,7 +1433,7 @@ void KnowledgeBase::ground_with_pattern(Rule &src, PatternType &pattern)
         else
         {
             std::cerr << "fabricate error" << std::endl;
-            throw "fabricate error";
+            exit(1);
         }
         sent_ex_it++;
     }
