@@ -167,7 +167,7 @@ public:
 	template <typename T>
 	T & get() const {return std::get<T>(element);}
 	
-	Element & operator=(Element & dst){
+	Element & operator=(const Element & dst){
 		element = dst.element;
 		return *this;
 	}

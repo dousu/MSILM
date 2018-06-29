@@ -202,12 +202,6 @@ bool Rule::operator==(const Rule &dst) const
   return false;
 }
 
-/*
- bool Rule::operator<(Rule& dst) const{
- return ;
- }
- */
-
 Rule &
 Rule::operator=(const Rule &dst)
 {
