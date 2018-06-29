@@ -159,6 +159,10 @@ class Element{
 public:
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
+	Element(const Mean & other) : element(other){}
+	Element(const Variable & other) : element(other){}
+	Element(const Symbol & other) : element(other){}
+	Element(const Nonterminal & other) : element(other){}
 	constexpr std::size_t type() const{
 		return element.index();
 	};
@@ -171,7 +175,7 @@ public:
 		element = std::forward(dst);
 		return *this;
 	}
-	
+	/*
 	Element & operator=(Mean && dst){
 		ElementType el = dst;
 		element = std::forward(el);
@@ -192,6 +196,7 @@ public:
 		element = std::forward(el);
 		return *this;
 	};
+	*/
 	bool operator==(const Element & dst) const {
 		return type() == dst.type() && element == dst.element;
 	}
