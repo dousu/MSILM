@@ -8,7 +8,6 @@
 #ifndef ELEMENT_H_
 #define ELEMENT_H_
 #include <iostream>
-#include <map>
 #include <string>
 #include <variant>
 
@@ -42,19 +41,19 @@ namespace ELEM_TYPE
  */
 
 class Mean{
-	const int obj;
+	int obj;
 public:
-	Mean(int num) : obj(num) {};
-	Mean(const Mean & dst) : obj(dst.obj) {};
+	Mean(int num) : obj(num) {}
+	Mean(const Mean & dst) : obj(dst.obj) {}
 	bool operator==(const Mean & dst) const {
 		return obj == dst.obj;
-	};
+	}
 	bool operator!=(const Mean & dst) const {
 		return !(*this == dst);
-	};
+	}
 	bool operator<(const Mean & dst) const{
 		return obj < dst.obj;
-	};
+	}
 	int get_obj_id() const {
 		return obj;
 	}
@@ -75,19 +74,19 @@ class Variable{
 	int cat;
 	int obj;
 public:
-	Variable(int cat_num, int var_num) : cat(cat_num), obj(var_num) {};
-	Variable(const Variable & dst) : cat(dst.cat), obj(dst.obj) {};
+	Variable(int cat_num, int var_num) : cat(cat_num), obj(var_num) {}
+	Variable(const Variable & dst) : cat(dst.cat), obj(dst.obj) {}
 	bool operator==(const Variable & dst) const {
 		return obj == dst.obj && cat == dst.cat;
-	};
+	}
 	bool operator!=(const Variable & dst) const {
 		return !(*this == dst);
-	};
+	}
 	bool operator==(const Nonterminal & dst) const;
 	bool operator!=(const Nonterminal & dst) const;
 	bool operator<(const Variable & dst) const{
 		return obj < dst.obj;
-	};
+	}
 	int get_cat_id() const {
 		return cat;
 	}
@@ -102,17 +101,17 @@ public:
 class Symbol{
 	int obj;
 public:
-	Symbol(int num) : obj(num) {};
-	Symbol(const Symbol & dst) : obj(dst.obj) {};
+	Symbol(int num) : obj(num) {}
+	Symbol(const Symbol & dst) : obj(dst.obj) {}
 	bool operator==(const Symbol & dst) const {
 		return obj == dst.obj;
-	};
+	}
 	bool operator!=(const Symbol & dst) const {
 		return !(*this == dst);
-	};
+	}
 	bool operator<(const Symbol & dst) const{
 		return obj < dst.obj;
-	};
+	}
 	std::string to_s() const{
 		if (Dictionary::symbol.find(obj) == Dictionary::symbol.end())
 		{
@@ -128,19 +127,19 @@ class Nonterminal{
 	int cat;
 	int obj;
 public:
-	Nonterminal(int cat_num, int obj_num) : cat(cat_num), obj(obj_num) {};
-	Nonterminal(const Nonterminal & dst) : cat(dst.cat), obj(dst.obj) {};
+	Nonterminal(int cat_num, int obj_num) : cat(cat_num), obj(obj_num) {}
+	Nonterminal(const Nonterminal & dst) : cat(dst.cat), obj(dst.obj) {}
 	bool operator==(const Nonterminal & dst) const {
 		return cat == dst.cat;
-	};
+	}
 	bool operator!=(const Nonterminal & dst) const {
 		return !(*this == dst);
-	};
+	}
 	bool operator==(const Variable & dst) const;
 	bool operator!=(const Variable & dst) const;
 	bool operator<(const Nonterminal & dst) const{
 		return cat < dst.cat || (cat == dst.cat && obj < dst.obj);
-	};
+	}
 	int get_cat_id() const {
 		return cat;
 	}
@@ -163,38 +162,31 @@ public:
 	Element(const Variable & other) : element(other){}
 	Element(const Symbol & other) : element(other){}
 	Element(const Nonterminal & other) : element(other){}
-	constexpr std::size_t type() const{
-		return element.index();
-	};
+	constexpr std::size_t type() const{return element.index();}
 
 	template <typename T>
-	T & get() const {return std::get<T>(element);};
+	T & get() const {return std::get<T>(element);}
 	
-	template <typename T>
-	Element & operator=(T && dst){
-		element = std::forward(dst);
+	Element & operator=(Element && dst){
+		element = dst.element;
 		return *this;
 	}
 	Element & operator=(Mean && dst){
-		Element el(dst);
-		*this=el;
+		element = dst;
 		return *this;
-	};
+	}
 	Element & operator=(Variable && dst){
-		Element el(dst);
-		*this=el;
+		element = dst;
 		return *this;
-	};
+	}
 	Element & operator=(Symbol && dst){
-		Element el(dst);
-		*this=el;
+		element = dst;
 		return *this;
-	};
+	}
 	Element & operator=(Nonterminal && dst){
-		Element el(dst);
-		*this=el;
+		element = dst;
 		return *this;
-	};
+	}
 	bool operator==(const Element & dst) const {
 		return type() == dst.type() && element == dst.element;
 	}
