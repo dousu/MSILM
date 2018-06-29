@@ -173,19 +173,23 @@ public:
 	}
 	
 	Element & operator=(Mean && dst){
-		element = dst;
+		ElementType el = dst;
+		element = el;
 		return *this;
 	};
 	Element & operator=(Variable && dst){
-		element = dst;
+		ElementType el = dst;
+		element = el;
 		return *this;
 	};
 	Element & operator=(Symbol && dst){
-		element = dst;
+		ElementType el = dst;
+		element = el;
 		return *this;
 	};
 	Element & operator=(Nonterminal && dst){
-		element = dst;
+		ElementType el = dst;
+		element = el;
 		return *this;
 	};
 	bool operator==(const Element & dst) const {
