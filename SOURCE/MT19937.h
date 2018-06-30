@@ -9,9 +9,9 @@
 #define MT19937_H_
 
 #include <vector>
-//#include <boost/random.hpp>
 #include <climits>
 #include <random>
+#include <iostream>
 
 /*!
  * 乱数発生器を保持するクラス。
