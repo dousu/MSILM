@@ -1,38 +1,22 @@
-#ID = -I/usr/local/include
-#LD = -L/usr/local/lib
-#LIBS = -lboost_program_options
-SOURCEDIR = ./SOURCE
-OBJ = MSILMAgent.o MSILMParameters.o KirbyAgent.o KnowledgeBase.o Rule.o Element.o Dictionary.o IndexFactory.o Prefices.o LogBox.o MT19937.o
-OBJS = $(addprefix ${SOURCEDIR}/, $(OBJ))
-HD = Distance.hpp
-HDS = $(addprefix ${SOURCEDIR}/, $(HD))
-OPT = -std=c++17
+SRCS = $(addprefix ./SOURCE/, MSILMAgent.cpp MSILMParameters.cpp KirbyAgent.cpp KnowledgeBase.cpp Rule.cpp Element.cpp Dictionary.cpp IndexFactory.cpp Prefices.cpp LogBox.cpp MT19937.cpp)
+DEPS = $(patsubst %.cpp,%.d,$(SRCS))
+OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 
-ms: ${OBJS}
-	${CXX} ${OPT} ${SOURCEDIR}/MSILM_main.cpp ${OBJS} -o ${SOURCEDIR}/msilm.exe
+CFLAGS = -std=c++17 -MMD
 
-$(SOURCEDIR)/%.o: $(SOURCEDIR)/%.cpp
-	@[ -d $(SOURCEDIR/) ]
-	${CXX} ${OPT} -o $@ -c $<
+ms: $(OBJS)
+	${CXX} ${CFLAGS} ./SOURCE/MSILM_main.cpp ${OBJS} -o ./SOURCE/msilm.exe
+
+%.o: %.cpp
+	${CXX} ${CFLAGS} -o $@ -c $<
 
 test: ms
-	${CXX} ${OPT} ${SOURCEDIR}/DistTest.cpp -o ${SOURCEDIR}/disttest.exe
-	${SOURCEDIR}/disttest.exe
-	${CXX} ${OPT} ${SOURCEDIR}/KnwTest.cpp ${OBJS} -o ${SOURCEDIR}/knwtest.exe
-	${CXX} ${OPT} ${SOURCEDIR}/PrmTest.cpp ${OBJS} -o ${SOURCEDIR}/prmtest.exe
+	${CXX} ${CFLAGS} ./SOURCE/DistTest.cpp -o ./SOURCE/disttest.exe
+	./SOURCE/disttest.exe
+	${CXX} ${CFLAGS} ./SOURCE/KnwTest.cpp ${OBJS} -o ./SOURCE/knwtest.exe
+	${CXX} ${CFLAGS} ./SOURCE/PrmTest.cpp ${OBJS} -o ./SOURCE/prmtest.exe
 
-$(SOURCEDIR)/MSILM_main.cpp: ${OBJS} MSILM_main.h
-$(SOURCEDIR)/MSILMAgent.o: $(SOURCEDIR)/KirbyAgent.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/MSILMAgent.h
-$(SOURCEDIR)/KirbyAgent.o: $(SOURCEDIR)/KnowledgeBase.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/KirbyAgent.h
-$(SOURCEDIR)/KnowledgeBase.o: ${HDS} $(SOURCEDIR)/Rule.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/LogBox.o $(SOURCEDIR)/MT19937.o $(SOURCEDIR)/KnowledgeBase.h
-$(SOURCEDIR)/Rule.o: $(SOURCEDIR)/Element.o $(SOURCEDIR)/Dictionary.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/Rule.h
-$(SOURCEDIR)/Element.o: $(SOURCEDIR)/Dictionary.o $(SOURCEDIR)/IndexFactory.o $(SOURCEDIR)/Prefices.o $(SOURCEDIR)/Element.h
-$(SOURCEDIR)/Dictionary.o: $(SOURCEDIR)/Dictionary.h
-$(SOURCEDIR)/IndexFactory.o: $(SOURCEDIR)/IndexFactory.h
-$(SOURCEDIR)/Prefices.o: $(SOURCEDIR)/Prefices.h
-$(SOURCEDIR)/LogBox.o: $(SOURCEDIR)/LogBox.h
-$(SOURCEDIR)/MT19937.o: $(SOURCEDIR)/MT19937.h
-$(SOURCEDIR)/MSILMParameters: $(SOURCEDIR)/MSILMParameters.h
+-include $(DEPS)
 
 clean:
-	rm -f ${SOURCEDIR}/*.o ${SOURCEDIR}/*.dump ${SOURCEDIR}/*.exe ${SOURCEDIR}/*.log ${SOURCEDIR}/*.rst
+	rm -f ./SOURCE/*.o ./SOURCE/*.dump ./SOURCE/*.exe ./SOURCE/*.log ./SOURCE/*.rst
