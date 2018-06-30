@@ -4,11 +4,10 @@ services:
   - docker
 env:
   matrix:
-    - DOCKERIMAGE="gcc" MATRIX_EVAL="CXX=\"g++\""
-    - DOCKERIMAGE="rsmmr/clang" MATRIX_EVAL="CXX=\"clang++\""
+    - DOCKERIMAGE="gcc CXX=\"g++\""
+    - DOCKERIMAGE="rsmmr/clang CXX=\"clang++\""
 install:
   - docker pull $DOCKERIMAGE
-  - eval "${MATRIX_EVAL}"
 script:
   - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOCKERIMAGE /bin/sh -c "$CXX -v && make test"
 notifications:
