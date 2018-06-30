@@ -10,7 +10,7 @@ install:
   - docker pull $DOCKERIMAGE
   - eval "${MATRIX_EVAL}"
 script:
-  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOCKERIMAGE /bin/sh -c "$CXX -v && make test"
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOCKERIMAGE /bin/sh -c "$CXX -v && make -j test"
 notifications:
   email:
     on_failure: change
