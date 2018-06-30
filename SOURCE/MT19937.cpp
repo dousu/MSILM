@@ -45,7 +45,7 @@ int MT19937::irand(int a, int b)
 	if (icount < ULLONG_MAX - 1)
 		icount++;
 	else{
-		std::cerr "cannot use random any more" << std::endl;
+		std::cerr << "cannot use random any more" << std::endl;
 		exit(1);
 	}
 	std::uniform_int_distribution<> dist(a, b);
@@ -68,7 +68,7 @@ double MT19937::rrand(double a, double b)
 	if (rcount < ULLONG_MAX - 1)
 		rcount++;
 	else{
-		std::cerr << "cannot use random any more" std::endl;
+		std::cerr << "cannot use random any more" << std::endl;
 		exit(1);
 	}
 	std::uniform_real_distribution<> dist(a, b);
