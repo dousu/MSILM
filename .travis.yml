@@ -4,8 +4,8 @@ services:
   - docker
 env:
   matrix:
-    - DOCKERIMAGE="gcc" CXX="g++"
-    - DOCKERIMAGE="rsmmr/clang" MATRIX_EVAL="CXX=\"clang++-6.0\""
+    - DOCKERIMAGE="gcc" MATRIX_EVAL="CXX=\"g++\""
+    - DOCKERIMAGE="rsmmr/clang" MATRIX_EVAL="CXX=\"clang++\""
 install:
   - docker pull $DOCKERIMAGE
   - eval "${MATRIX_EVAL}"
