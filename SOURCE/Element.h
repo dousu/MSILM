@@ -167,6 +167,9 @@ public:
 
 	template <typename T>
 	T & get() const {return std::get<T>(element);}
+
+	template <typename T>
+	T && get() const {return std::get<T>(element);}
 	
 	Element & operator=(const Element & dst){
 		element = dst.element;

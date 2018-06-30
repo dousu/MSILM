@@ -1530,7 +1530,7 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
                 std::vector<PatternType> patternDB_buffer;
 
                 //変数に適用可能単語規則集合取得
-                item_range = word_dic[grnd_elm.cat].equal_range(Mean(mean_elm.get<Mean>()).get_obj_id());
+                item_range = word_dic[Variable(grnd_elm.get<Variable>()).get_cat_id()].equal_range(Mean(mean_elm.get<Mean>()).get_obj_id());
 
                 //すでに作られてる単語組に対し組み合わせの直積の生成
                 patternDB_it = patternDB.begin();
@@ -1546,7 +1546,7 @@ KnowledgeBase::construct_grounding_patterns(Rule &src)
                         word_item = (*(item_range.first)).second;
 
                         //変数用の単語規則をinternalに書き込み
-                        word_item.internal.front()=Variable(grnd_elm.cat, in_idx);
+                        word_item.internal.front()=Variable(Variable(grnd_elm.get<Variable>()).get_cat_id(), in_idx);
 
                         //すでに作られてる単語規則の組をコピー
                         sub_pattern = *patternDB_it;
@@ -2070,7 +2070,7 @@ bool KnowledgeBase::clipping(Rule &mean, KnowledgeBase::PatternType &ptn, Knowle
     term_it = src[0].external.begin();
     for (; term_it != src[0].external.end(); term_it++)
     {
-        switch ((*term_it).type)
+        switch ((*term_it).type())
         {
         case ELEM_TYPE::SYM_TYPE:
             if (!sym_flag)
