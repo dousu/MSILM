@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <variant>
+#include <cstddef>
 
 #include "Dictionary.h"
 #include "Prefices.h"
@@ -171,23 +172,19 @@ public:
 		element = dst.element;
 		return *this;
 	}
-	Element & operator=(Element && dst){
-		element = dst.element;
-		return *this;
-	}
-	Element & operator=(Mean && dst){
+	Element & operator=(const Mean & dst){
 		element = dst;
 		return *this;
 	}
-	Element & operator=(Variable && dst){
+	Element & operator=(const Variable & dst){
 		element = dst;
 		return *this;
 	}
-	Element & operator=(Symbol && dst){
+	Element & operator=(const Symbol & dst){
 		element = dst;
 		return *this;
 	}
-	Element & operator=(Nonterminal && dst){
+	Element & operator=(const Nonterminal & dst){
 		element = dst;
 		return *this;
 	}
