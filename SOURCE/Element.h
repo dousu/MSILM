@@ -165,17 +165,17 @@ public:
 	Element(const Nonterminal & other) : element(other){}
 	constexpr std::size_t type() const{return element.index();}
 
-	template <typename T>
-	T & get() const {return std::get<T>(element);}
+	// template <typename T>
+	// T & get() const {return std::get<T>(element);}
 
-	template <typename T>
-	T && get() const {return std::get<T>(element);}
+	// template <typename T>
+	// T && get() const {return std::get<T>(element);}
 
 	template <typename T>
 	const T & get() const {return std::get<T>(element);}
 
-	template <typename T>
-	const T && get() const {return std::get<T>(element);}
+	// template <typename T>
+	// const T && get() const {return std::get<T>(element);}
 	
 	Element & operator=(const Element & dst){
 		element = dst.element;
