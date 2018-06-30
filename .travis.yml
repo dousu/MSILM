@@ -5,9 +5,7 @@ services:
 env:
   matrix:
     - DOCKERIMAGE="gcc"
-      compiler: gcc
     - DOCKERIMAGE="rsmmr/clang"
-      compiler: clang
 install:
   - docker pull $DOCKERIMAGE
 script:
