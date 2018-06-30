@@ -722,7 +722,7 @@ KnowledgeBase::merge_sent_proc(Rule &base_word, RuleDBType &DB,
             for (int j = 0; j < temp.external.size(); j++)
             {
                 if ( //find unified cat
-                    temp.external[j].type == ELEM_TYPE::CAT_TYPE && unified_cat.find(Variable(temp.external[j].get<Variable>()).get_cat_id()) != unified_cat.end())
+                    temp.external[j].type() == ELEM_TYPE::CAT_TYPE && unified_cat.find(Variable(temp.external[j].get<Variable>()).get_cat_id()) != unified_cat.end())
                 {
                     temp.external[j] = Nonterminal(base_word.cat, Variable(temp.external[j].get<Variable>()).get_obj_id());
                 }
