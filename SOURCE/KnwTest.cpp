@@ -10,13 +10,8 @@ void construct_meanings(std::vector<Rule> &meanings)
     //construct means
     for (int i = VERB_INDEX_BEGIN; i <= VERB_INDEX_END; i++)
     {
-        Element verb;
-        verb.set_ind(i);
-
         for (int j = NOUN_INDEX_BEGIN; j <= NOUN_INDEX_END; j++)
         {
-            Element ind1;
-            ind1.set_ind(j);
             for (int k = NOUN_INDEX_BEGIN; k <= NOUN_INDEX_END; k++)
             {
                 if (j != k)
@@ -25,11 +20,9 @@ void construct_meanings(std::vector<Rule> &meanings)
                     std::vector<Element> internal, external;
                     Rule mean;
 
-                    ind2.set_ind(k);
-
-                    internal.push_back(verb);
-                    internal.push_back(ind1);
-                    internal.push_back(ind2);
+                    internal.push_back(Mean(i));
+                    internal.push_back(Mean(j));
+                    internal.push_back(Mean(k));
 
                     mean.set_sentence(internal, external);
                     meanings.push_back(mean);
@@ -45,9 +38,7 @@ void construct_individuals(std::vector<Element> &inds, Dictionary &dic)
     dic_it = dic.individual.begin();
     for (; dic_it != dic.individual.end(); dic_it++)
     {
-        Element elem;
-        elem.set_ind((*dic_it).first);
-        inds.push_back(elem);
+        inds.push_back(Symbol((*dic_it).first));
     }
 }
 

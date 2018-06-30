@@ -66,7 +66,7 @@ Rule MSILMAgent::cognittion_say(std::vector<Rule> &internals)
 	catch (...)
 	{
 		LogBox::refresh_log();
-		throw;
+		exit(1);
 	}
 }
 
@@ -151,7 +151,8 @@ Rule MSILMAgent::random_think_meaning(std::vector<Rule> &internals)
 	else
 	{
 		std::cerr << "invalid input" << std::endl;
-		throw "invalid input";
+		std::cerr << "invalid input" << std::endl;
+		exit(1);
 	}
 }
 
@@ -167,7 +168,8 @@ void MSILMAgent::cognittion_hear(std::vector<Rule> &utterances, std::vector<std:
 	{
 		//Exception
 		std::cerr << "No meaning for utterance in Func:cognittion_say" << std::endl;
-		throw "Exception";
+		std::cerr << "Exception" << std::endl;
+		exit(1);
 	}
 
 	if (internals.size() == utterances.size())
@@ -180,7 +182,8 @@ void MSILMAgent::cognittion_hear(std::vector<Rule> &utterances, std::vector<std:
 	else
 	{
 		std::cerr << "thinking error" << std::endl;
-		throw "thinking error";
+		std::cerr << "thinking error" << std::endl;
+		exit(1);
 	}
 
 	last_selected_meaning = internals;
