@@ -1,12 +1,11 @@
 language: cpp
 sudo: false
-compiler:
-  - gcc
-  - clang
 env:
   matrix:
     - DOCKERIMAGE="gcc" CXX="g++"
+      compiler: gcc
     - DOCKERIMAGE="rsmmr/clang" CXX="clang++ -stdlib=libc++"
+      compiler: clang
 install:
   - docker pull $DOCKERIMAGE
 script:
