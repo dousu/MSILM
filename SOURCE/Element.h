@@ -154,8 +154,8 @@ class Element{
 	ElementType element;
 	//template <int I, typename T>
 	//std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
-	template <int I>
-	const auto get() const -> const decltype(std::get<I>(element)) {return std::get<I>(element);}
+	// template <int I>
+	// const auto get() const -> const decltype(std::get<I>(element)) {return std::get<I>(element);}
 public:
 	Element() : element() {}
 	Element(const Element & other) : element(other.element){}
@@ -210,16 +210,16 @@ public:
 		std::string str("");
 		switch(type()){
 			case ELEM_TYPE::MEAN_TYPE :
-				str = Mean(get<ELEM_TYPE::MEAN_TYPE>()).to_s();
+				str = Mean(std::get<ELEM_TYPE::MEAN_TYPE>(element)).to_s();
 				break;
 			case ELEM_TYPE::VAR_TYPE :
-				str = Variable(get<ELEM_TYPE::VAR_TYPE>()).to_s();
+				str = Variable(std::get<ELEM_TYPE::VAR_TYPE>(element)).to_s();
 				break;
 			case ELEM_TYPE::SYM_TYPE :
-				str = Symbol(get<ELEM_TYPE::SYM_TYPE>()).to_s();
+				str = Symbol(std::get<ELEM_TYPE::SYM_TYPE>(element)).to_s();
 				break;
 			case ELEM_TYPE::CAT_TYPE :
-				str = Nonterminal(get<ELEM_TYPE::CAT_TYPE>()).to_s();
+				str = Nonterminal(std::get<ELEM_TYPE::CAT_TYPE>(element)).to_s();
 				break;
 			default:
 				str = "*";
