@@ -4,11 +4,15 @@ OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 
 CXXFLAGS = -std=c++17 -MMD
 
-ms: $(OBJS)
-	${CXX} ${CXXFLAGS} ./SOURCE/MSILM_main.cpp ${OBJS} -o ./SOURCE/msilm.exe
+all: ms
 
 %.o: %.cpp
 	${CXX} ${CXXFLAGS} -o $@ -c $<
+
+.PHONY: ms test clean
+
+ms: $(OBJS)
+	${CXX} ${CXXFLAGS} ./SOURCE/MSILM_main.cpp ${OBJS} -o ./SOURCE/msilm.exe
 
 test: ms
 	${CXX} ${CXXFLAGS} ./SOURCE/DistTest.cpp -o ./SOURCE/disttest.exe
@@ -16,7 +20,7 @@ test: ms
 	${CXX} ${CXXFLAGS} ./SOURCE/KnwTest.cpp ${OBJS} -o ./SOURCE/knwtest.exe
 	${CXX} ${CXXFLAGS} ./SOURCE/PrmTest.cpp ${OBJS} -o ./SOURCE/prmtest.exe
 
--include $(DEPS)
-
 clean:
 	rm -f ./SOURCE/*.o ./SOURCE/*.dump ./SOURCE/*.exe ./SOURCE/*.log ./SOURCE/*.rst
+
+-include $(DEPS)
