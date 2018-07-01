@@ -1,11 +1,8 @@
-language: cpp
 sudo: false
-services:
-  - docker
 env:
   matrix:
-    - DOCKERIMAGE="gcc"
-    - DOCKERIMAGE="rsmmr/clang"
+    - DOCKERIMAGE="gcc" CXX="g++"
+    - DOCKERIMAGE="rsmmr/clang" CXX="clang++"
 install:
   - docker pull $DOCKERIMAGE
 script:
