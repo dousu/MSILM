@@ -2,19 +2,19 @@ SRCS = $(addprefix ./SOURCE/, MSILMAgent.cpp MSILMParameters.cpp KirbyAgent.cpp 
 DEPS = $(patsubst %.cpp,%.d,$(SRCS))
 OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 
-CFLAGS = -std=c++17 -MMD
+CXXFLAGS = -std=c++17 -MMD
 
 ms: $(OBJS)
-	${CXX} ${CFLAGS} ./SOURCE/MSILM_main.cpp ${OBJS} -o ./SOURCE/msilm.exe
+	${CXX} ${CXXFLAGS} ./SOURCE/MSILM_main.cpp ${OBJS} -o ./SOURCE/msilm.exe
 
 %.o: %.cpp
-	${CXX} ${CFLAGS} -o $@ -c $<
+	${CXX} ${CXXFLAGS} -o $@ -c $<
 
 test: ms
-	${CXX} ${CFLAGS} ./SOURCE/DistTest.cpp -o ./SOURCE/disttest.exe
+	${CXX} ${CXXFLAGS} ./SOURCE/DistTest.cpp -o ./SOURCE/disttest.exe
 	./SOURCE/disttest.exe
-	${CXX} ${CFLAGS} ./SOURCE/KnwTest.cpp ${OBJS} -o ./SOURCE/knwtest.exe
-	${CXX} ${CFLAGS} ./SOURCE/PrmTest.cpp ${OBJS} -o ./SOURCE/prmtest.exe
+	${CXX} ${CXXFLAGS} ./SOURCE/KnwTest.cpp ${OBJS} -o ./SOURCE/knwtest.exe
+	${CXX} ${CXXFLAGS} ./SOURCE/PrmTest.cpp ${OBJS} -o ./SOURCE/prmtest.exe
 
 -include $(DEPS)
 
