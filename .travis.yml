@@ -1,8 +1,5 @@
-language: cpp
+language: generic
 sudo: false
-compiler:
-  - gcc
-  - clang
 env:
   matrix:
     - DOCKERIMAGE="gcc" CXX="g++"
