@@ -1,4 +1,4 @@
-language: docker
+language: generic
 sudo: false
 env:
   matrix:
