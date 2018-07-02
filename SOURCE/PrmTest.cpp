@@ -57,8 +57,6 @@ int main(int argc, char *argv[])
 		("delete-redundant-rules", "Delete redundant rules")
 		/*補完発話*/
 		("invention", "Uttering with invention")
-		/*非重複発話*/
-		("unique-utterance", "Do not use the same meaning on utterance process")
 		/*FILE PREFIX*/
 		("prefix", ProgramOption::value<std::string>(), "Set file prefix (\"MSILM\")")
 		/*BASE PATH*/

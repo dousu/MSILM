@@ -35,7 +35,6 @@ MSILMParameters::MSILMParameters()
 	MAX_GENERATIONS = 100;
 	PER_UTTERANCES = 0.5;
 	RANDOM_SEED = 101010;
-	UNIQUE_UTTERANCE = false;
 	ANALYZE = false;
 	buzz_length = 3;
 
@@ -61,7 +60,7 @@ MSILMParameters::~MSILMParameters()
 	// TODO Auto-generated destructor stub
 }
 
-void MSILMParameters::set_option(ProgramOption &po)
+void MSILMParameters::set_option(ProgramOption & po)
 {
 	spo = po;
 
@@ -102,11 +101,6 @@ void MSILMParameters::set_option(ProgramOption &po)
 	{
 		RESULT_FILE = (FILE_PREFIX + RESULT_EXT);
 		ANALYZE = po.get<bool>("analyze");
-	}
-
-	if (po.count("unique-utterance"))
-	{
-		UNIQUE_UTTERANCE = po.get<bool>("unique-utterance");
 	}
 
 	if (po.count("dictionary"))
@@ -248,13 +242,6 @@ MSILMParameters::to_s(void)
 			std::to_string(spo.get<bool>("analyze")));
 	}
 
-	if (spo.count("unique-utterance"))
-	{
-		bag.push_back("--unique-utterance");
-		bag.push_back(
-			std::to_string(spo.get<bool>("unique-utterance")));
-	}
-
 	if (spo.count("dictionary"))
 	{
 		bag.push_back("--dictionary");
@@ -375,8 +362,6 @@ MSILMParameters::to_all_s(void){
 	ss << "PER_UTTERANCES = " << PER_UTTERANCES << std::endl;
  //  int RANDOM_SEED;       //
 	ss << "RANDOM_SEED = " << RANDOM_SEED << std::endl;
- //  bool UNIQUE_UTTERANCE; //
-	ss << "UNIQUE_UTTERANCE = " << std::boolalpha << UNIQUE_UTTERANCE << std::noboolalpha << std::endl;
  //  uint32_t CONTROLS;
 	ss << "CONTROLS = " << CONTROLS << std::endl;
  //  int buzz_length;

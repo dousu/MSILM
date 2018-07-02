@@ -18,8 +18,9 @@
 #include <cstdlib>
 #include <climits>
 #include <cfloat>
-
-#include <stdio.h>
+#include <algorithm>
+#include <limits>
+#include <numeric>
 
 #include "MSILMAgent.h"
 #include "Rule.h"
