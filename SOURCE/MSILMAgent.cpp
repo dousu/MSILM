@@ -78,7 +78,7 @@ MSILMAgent::cognition_say(std::vector<std::vector<Rule>> &internals)
 
 	for (auto &el : internals)
 	{
-		rules.push_back(cognittion_say(el));
+		rules.push_back(cognition_say(el));
 	}
 
 	return rules;
