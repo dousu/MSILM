@@ -54,7 +54,7 @@ MSILMAgent::grow(std::vector<Rule> meanings)
 	return *this;
 }
 
-Rule MSILMAgent::cognittion_say(std::vector<Rule> &internals)
+Rule MSILMAgent::cognition_say(std::vector<Rule> &internals)
 {
 	try
 	{
@@ -71,14 +71,14 @@ Rule MSILMAgent::cognittion_say(std::vector<Rule> &internals)
 }
 
 std::vector<Rule>
-MSILMAgent::cognittion_say(std::vector<std::vector<Rule>> &internals)
+MSILMAgent::cognition_say(std::vector<std::vector<Rule>> &internals)
 {
 	std::vector<Rule> rules;
 	last_selected_meaning.clear();
 
 	for (auto &el : internals)
 	{
-		rules.push_back(cognittion_say(el));
+		rules.push_back(cognition_say(el));
 	}
 
 	return rules;
@@ -156,7 +156,7 @@ Rule MSILMAgent::random_think_meaning(std::vector<Rule> &internals)
 	}
 }
 
-void MSILMAgent::cognittion_hear(std::vector<Rule> &utterances, std::vector<std::vector<Rule>> &meaning_lists, std::vector<Rule> &all_meanings)
+void MSILMAgent::cognition_hear(std::vector<Rule> &utterances, std::vector<std::vector<Rule>> &meaning_lists, std::vector<Rule> &all_meanings)
 {
 	std::vector<Rule> internals = hear_think_meaning(utterances, meaning_lists, all_meanings);
 	//Rule internal;

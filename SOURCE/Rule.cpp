@@ -14,6 +14,8 @@ Dictionary Rule::dictionary = Dictionary::copy();
 
 Rule::Rule()
 {
+  type = RULE_TYPE::SENTENCE;
+  cat = 0;
 }
 Rule::~Rule()
 {

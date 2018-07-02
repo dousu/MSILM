@@ -11,15 +11,13 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cassert>
 #include <fstream>
 #include <sstream>
 #include <ctime>
 #include <cstdlib>
-#include <climits>
-#include <cfloat>
-
-#include <stdio.h>
+#include <algorithm>
+#include <limits>
+#include <numeric>
 
 #include "MSILMAgent.h"
 #include "Rule.h"
@@ -31,34 +29,33 @@
 #include "Distance.hpp"
 
 //construct function
-void construct_meanings(std::vector<Rule> &meanings);
-void construct_individuals(std::vector<Element> &inds, Dictionary &dic);
-void cognition_task_init(std::vector<int> &source, MSILMParameters &param);
+void construct_meanings(std::vector<Rule> & meanings);
+void construct_individuals(std::vector<Element> & inds, Dictionary & dic);
+void cognition_task_init(std::vector<int> & source, MSILMParameters & param);
 
 //analyze function
-void unit_analyze(std::vector<double> &result_vector,
-				  std::vector<Rule> &meanings, MSILMAgent &agent);
+void unit_analyze(std::vector<double> & result_vector,
+				  std::vector<Rule> & meanings, MSILMAgent & agent);
 
 double
-expression(std::vector<Rule> &meanings, MSILMAgent &agent);
+expression(std::vector<Rule> & meanings, MSILMAgent & agent);
 
 void calculate_language_distance(
-	std::vector<double> &lev_dist_vector,
-	std::vector<Rule> &meanings, MSILMAgent &agent1,
-	MSILMAgent &agent2);
+	std::vector<double> & lev_dist_vector,
+	std::vector<Rule> & meanings, MSILMAgent & agent1, MSILMAgent & agent2);
 
-void analyze_and_output(MSILMParameters &param, std::vector<Rule> meaning_space,
-						MSILMAgent &agent1, MSILMAgent &agent2, int index);
+void analyze_and_output(MSILMParameters & param, std::vector<Rule> & meaning_space,
+						MSILMAgent & agent1, MSILMAgent & agent2, int index);
 
 double
-calculate_distance(std::vector<Rule> &meanings,
-				   KnowledgeBase &kb1, KnowledgeBase &kb2, double &word_length);
+calculate_distance(std::vector<Rule> & meanings,
+				   KnowledgeBase & kb1, KnowledgeBase & kb2);
 
 //utility
-void calculate_average_word_length(std::vector<Rule> &meanings, KnowledgeBase &kb1, double &word_length);
+double calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase & kb1);
 
 std::string
-tr_vector_double_to_string(std::vector<double> vector);
+tr_vector_double_to_string(std::vector<double> & vector);
 
 double limit_time;
 

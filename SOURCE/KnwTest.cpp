@@ -1,55 +1,9 @@
 #include "KnowledgeBase.h"
 
-void construct_meanings(std::vector<Rule> &meanings)
-{
-    int VERB_INDEX_BEGIN = 0;
-    int VERB_INDEX_END = 4;
-    int NOUN_INDEX_BEGIN = 5;
-    int NOUN_INDEX_END = 9;
-
-    //construct means
-    for (int i = VERB_INDEX_BEGIN; i <= VERB_INDEX_END; i++)
-    {
-        for (int j = NOUN_INDEX_BEGIN; j <= NOUN_INDEX_END; j++)
-        {
-            for (int k = NOUN_INDEX_BEGIN; k <= NOUN_INDEX_END; k++)
-            {
-                if (j != k)
-                {
-                    Element ind2;
-                    std::vector<Element> internal, external;
-                    Rule mean;
-
-                    internal.push_back(Mean(i));
-                    internal.push_back(Mean(j));
-                    internal.push_back(Mean(k));
-
-                    mean.set_sentence(internal, external);
-                    meanings.push_back(mean);
-                }
-            }
-        }
-    }
-}
-
-void construct_individuals(std::vector<Element> &inds, Dictionary &dic)
-{
-    Dictionary::DictionaryType::iterator dic_it;
-    dic_it = dic.individual.begin();
-    for (; dic_it != dic.individual.end(); dic_it++)
-    {
-        inds.push_back(Symbol((*dic_it).first));
-    }
-}
-
 int main(int arg, char **argv)
 {
-    std::vector<Rule> meanings;
-    std::vector<Element> symbols;
     Dictionary dic;
     dic.load(std::string("./SOURCE/data.dic"));
-    construct_meanings(meanings);
-    construct_individuals(symbols, dic);
     Rule buf;
     KnowledgeBase kb;
     std::vector<Rule> vec;

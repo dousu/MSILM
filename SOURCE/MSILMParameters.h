@@ -331,7 +331,6 @@ public:
   int MAX_GENERATIONS;
   double PER_UTTERANCES; //
   int RANDOM_SEED;       //
-  bool UNIQUE_UTTERANCE; //
 
   uint32_t CONTROLS;
   int buzz_length;
