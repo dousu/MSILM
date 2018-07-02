@@ -11,13 +11,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cassert>
 #include <fstream>
 #include <sstream>
 #include <ctime>
 #include <cstdlib>
-#include <climits>
-#include <cfloat>
 #include <algorithm>
 #include <limits>
 #include <numeric>

@@ -39,43 +39,7 @@ void construct_meanings(std::vector<Rule> & meanings)
 		std::for_each(std::begin(noun), std::end(noun), func2);
 	};
 	std::for_each(std::begin(verb), std::end(verb), func1);
-
-	//construct means
-	// for (int i = VERB_INDEX_BEGIN; i <= VERB_INDEX_END; i++)
-	// {
-	// 	for (int j = NOUN_INDEX_BEGIN; j <= NOUN_INDEX_END; j++)
-	// 	{
-	// 		for (int k = NOUN_INDEX_BEGIN; k <= NOUN_INDEX_END; k++)
-	// 		{
-	// 			if (j != k)
-	// 			{
-	// 				std::vector<Element> internal, external;
-	// 				Rule mean;
-
-	// 				internal.push_back(Mean(i));
-	// 				internal.push_back(Mean(j));
-	// 				internal.push_back(Mean(k));
-
-	// 				mean.set_sentence(internal, external);
-	// 				meanings.push_back(mean);
-	// 			}
-	// 		}
-	// 	}
-	// }
-
 }
-
-// void construct_individuals(std::vector<Element> & inds, Dictionary & dic)
-// {
-// 	auto func = [&inds](std::pair<int, std::string> & p) {inds.push_back(Symbol(p.first));};
-// 	std::for_each(std::begin(Dictionary::individual), std::end(Dictionary::individual), func);
-// 	// Dictionary::DictionaryType::iterator dic_it;
-// 	// dic_it = dic.individual.begin();
-// 	// for (; dic_it != dic.individual.end(); dic_it++)
-// 	// {
-// 	// 	inds.push_back(Symbol((*dic_it).first));
-// 	// }
-// }
 
 std::vector<std::vector<double>> analyze(std::vector<Rule> & meanings,
 										 MSILMAgent & agent1, MSILMAgent & agent2)
@@ -129,14 +93,6 @@ double expression(std::vector<Rule> & meanings, MSILMAgent & agent)
 		}
 	};
 	std::for_each(std::begin(meanings),std::end(meanings),func);
-	// std::vector<Rule>::iterator mean_it;
-	// mean_it = meanings.begin();
-	// while (mean_it != meanings.end())
-	// {
-	// 	if (agent.utterable(*mean_it))
-	// 		counter++;
-	// 	mean_it++;
-	// }
 
 	return (static_cast<double>(counter)) / (static_cast<double>(meanings.size())) * 100.0;
 }
@@ -154,12 +110,9 @@ void calculate_language_distance(
 void analyze_and_output(MSILMParameters &param, std::vector<Rule> & meaning_space,
 						MSILMAgent &agent1, MSILMAgent &agent2, int index)
 {
-	//	std::vector<NetWorld>::iterator n_it;
 	std::vector<std::vector<double>> res;
 	std::string index_str, file, file_postfix;
-	//int index;
 
-	//index = agent1.generation_index;
 	index_str = std::to_string(index);
 	file = param.FILE_PREFIX + param.DATE_STR + "_" + std::to_string(param.RANDOM_SEED) + "_" + index_str + ".rst";
 
@@ -196,25 +149,6 @@ void accuracy_meaning_output(MSILMParameters & param, std::string & file, std::v
 		};
 		std::for_each(std::begin(data), std::end(data), func1);
 		ofs.close();
-
-		// std::vector<std::vector<int>>::iterator data_it;
-		// std::vector<int>::iterator inside_it;
-		// data_it = data.begin();
-		// for (; data_it != data.end(); data_it++)
-		// {
-		// 	inside_it = (*data_it).begin();
-		// 	if (inside_it != (*data_it).end())
-		// 	{
-		// 		ofs << *inside_it;
-		// 		inside_it++;
-		// 		for (; inside_it != (*data_it).end(); inside_it++)
-		// 		{
-		// 			ofs << " " << *inside_it;
-		// 		}
-		// 	}
-		// 	ofs << std::endl;
-		// }
-		// ofs.close();
 	}
 }
 
@@ -271,76 +205,6 @@ double calculate_distance(std::vector<Rule> & meanings,
 	};
 	std::for_each(std::begin(kb1_all), std::end(kb1_all), dist);
 
-	// std::vector<Rule> kb1_pat, kb2_pat, kb1_all, kb2_all, target_rules, temp;
-	// double ham, min_ham = 1000, lev, min_lev = 2, lev_sum = 0, work_lev = 2, length_cnt = 0;
-	// int ham_zero_cnt = 0;
-	// std::vector<Rule>::iterator mean_it, kb1_pat_it, kb2_pat_it, kb1_all_it, kb2_all_it, target_it;
-	// word_length = 0;
-	// mean_it = meanings.begin();
-	// for (; mean_it != meanings.end(); mean_it++)
-	// {
-	// 	kb1_pat = kb1.grounded_rules(*mean_it);
-	// 	kb2_pat = kb2.grounded_rules(*mean_it);
-	// 	if (kb1_pat.size() != 0)
-	// 	{
-	// 		kb1_pat_it = kb1_pat.begin();
-	// 		for (; kb1_pat_it != kb1_pat.end(); kb1_pat_it++)
-	// 		{
-	// 			kb1_all.push_back(*kb1_pat_it);
-	// 			word_length += ((*kb1_pat_it).external.size());
-	// 			length_cnt++;
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		kb1_all.push_back(kb1.fabricate_for_complementing(*mean_it));
-	// 	}
-	// 	if (kb2_pat.size() != 0)
-	// 	{
-	// 		kb2_pat_it = kb2_pat.begin();
-	// 		for (; kb2_pat_it != kb2_pat.end(); kb2_pat_it++)
-	// 		{
-	// 			kb2_all.push_back(*kb2_pat_it);
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		kb2_all.push_back(kb2.fabricate_for_complementing(*mean_it));
-	// 	}
-	// }
-	// word_length = (word_length / length_cnt);
-	// kb1_all_it = kb1_all.begin();
-	// for (; kb1_all_it != kb1_all.end(); kb1_all_it++)
-	// {
-	// 	min_ham = 1000;
-	// 	kb2_all_it = kb2_all.begin();
-	// 	for (; kb2_all_it != kb2_all.end(); kb2_all_it++)
-	// 	{
-	// 		ham = Distance::hamming((*kb1_all_it).internal, (*kb2_all_it).internal);
-	// 		if (ham < min_ham)
-	// 		{
-	// 			min_ham = ham;
-	// 			target_rules = temp;
-	// 			target_rules.push_back(*kb2_all_it);
-	// 		}
-	// 		else if (ham == min_ham)
-	// 		{
-	// 			target_rules.push_back(*kb2_all_it);
-	// 		}
-	// 	}
-	// 	min_lev = 1;
-	// 	target_it = target_rules.begin();
-	// 	for (; target_it != target_rules.end(); target_it++)
-	// 	{
-	// 		lev = Distance::levenstein((*kb1_all_it).external, (*target_it).external);
-	// 		if (lev < min_lev)
-	// 		{
-	// 			min_lev = lev;
-	// 		}
-	// 	}
-	// 	lev_sum += min_lev;
-	// }
-
 	return lev_sum / (static_cast<double>(kb1_all.size()));
 }
 
@@ -361,24 +225,6 @@ double calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase
 	};
 	std::for_each(std::begin(meanings), std::end(meanings), func);
 	return word_length / length_cnt;
-
-	// std::vector<Rule>::iterator mean_it, kb1_pat_it;
-	// std::vector<Rule> kb1_pat;
-	// mean_it = meanings.begin();
-	// for (; mean_it != meanings.end(); mean_it++)
-	// {
-	// 	kb1_pat = kb1.grounded_rules(*mean_it);
-	// 	if (kb1_pat.size() != 0)
-	// 	{
-	// 		kb1_pat_it = kb1_pat.begin();
-	// 		for (; kb1_pat_it != kb1_pat.end(); kb1_pat_it++)
-	// 		{
-	// 			word_length += ((*kb1_pat_it).external.size());
-	// 			length_cnt++;
-	// 		}
-	// 	}
-	// }
-	// word_length = (word_length / length_cnt);
 }
 
 std::string
@@ -405,49 +251,11 @@ void logging_on(MSILMParameters &param)
 	MSILMAgent::logging_on();
 }
 
-// std::vector<int>
-// choice_meanings(std::vector<Rule> & meanings, MSILMParameters & param)
-// {
-// 	std::vector<int> chosen_meaning_indexs;
-// 	//meaningsの型によっては自作するべき
-// 	std::sample(std::begin(meanings), std::end(meanings), std::back_inserter(chosen_meaning_indexs), param.MULTIPLE_MEANINGS, MT19937::igen);
-// 	// int index;
-// 	// bool flag = false;
-// 	// for (int i = 0; i < param.MULTIPLE_MEANINGS; i++)
-// 	// {
-// 	// 	if (param.MULTIPLE_MEANINGS == meanings.size())
-// 	// 	{
-// 	// 		index = i;
-// 	// 	}
-// 	// 	else
-// 	// 	{
-// 	// 		index = MT19937::irand(0, meanings.size() - 1);
-// 	// 	}
-// 	// 	flag = (std::find(chosen_meaning_indexs.begin(), chosen_meaning_indexs.end(), index) != chosen_meaning_indexs.end());
-// 	// 	while (flag)
-// 	// 	{
-// 	// 		index = MT19937::irand(0, meanings.size() - 1);
-// 	// 		flag = (std::find(chosen_meaning_indexs.begin(), chosen_meaning_indexs.end(), index) != chosen_meaning_indexs.end());
-// 	// 	}
-// 	// 	chosen_meaning_indexs.push_back(index);
-// 	// }
-// 	return chosen_meaning_indexs;
-// }
-
 void cognition_task_init(std::vector<int> & source, MSILMParameters & param)
 {
 	source.assign(param.UTTERANCES, 0);
 	std::fill_n(std::begin(source), param.TERMS, 1);
 	std::shuffle(source.begin(), source.end(), MT19937::igen);
-	// source.clear();
-	// for (int i = 0; i < param.TERMS; i++)
-	// {
-	// 	source.push_back(1);
-	// }
-	// for (int i = 0; i < param.UTTERANCES - param.TERMS; i++)
-	// {
-	// 	source.push_back(0);
-	// }
 }
 
 int main(int argc, char *argv[])
@@ -470,10 +278,6 @@ int main(int argc, char *argv[])
 
 	int generation_counter = 1;
 	Rule utter;
-	// int use_meaning_index = 0;
-	// Rule use_meaning;
-	// std::vector<int> use_meaning_indexs;
-	// std::vector<Rule> use_meanings;
 	std::vector<Rule> history_utterance;
 	std::vector<std::vector<Rule>> history_meanings;
 	std::vector<int> cognition_task_flag;
@@ -544,7 +348,6 @@ int main(int argc, char *argv[])
 	 */
 	dic.load(param.DICTIONARY_FILE);
 	construct_meanings(meaning_space);
-	// construct_individuals(individuals, dic);
 	MT19937::set_seed(param.RANDOM_SEED);
 	KnowledgeBase::set_control(KnowledgeBase::ANTECEDE_COMPOSITION | param.CONTROLS);
 	if (param.LOGGING)
@@ -571,13 +374,6 @@ int main(int argc, char *argv[])
 		LogBox::push_log(std::to_string(param.RANDOM_SEED));
 
 		std::for_each(std::begin(meaning_space), std::end(meaning_space), [](Rule & mean){LogBox::push_log(mean.to_s());});
-		// std::vector<Rule>::iterator mean_it;
-		// mean_it = meaning_space.begin();
-		// LogBox::push_log("USEING MEANINGS");
-		// for (; mean_it != meaning_space.end(); mean_it++)
-		// {
-		// 	LogBox::push_log((*mean_it).to_s());
-		// }
 		LogBox::push_log("\n");
 	}
 
@@ -609,8 +405,6 @@ int main(int argc, char *argv[])
 	//main loop
 	while (generation_counter <= param.MAX_GENERATIONS)
 	{
-		// std::vector<Rule> meanings_copy;
-		// meanings_copy = meaning_space;
 		utterance_counter = 0;
 		time(&start);
 
@@ -663,8 +457,9 @@ int main(int argc, char *argv[])
 		//多義意味環境での発話タイミングをランダムに設定
 		cognition_task_init(cognition_task_flag, param);
 
-		// std::vector<int> pseudo_meanings;
-		// cognition_correct_data.push_back(pseudo_meanings);
+		//各世代での正解数を記録
+		cognition_correct_data.push_back(std::vector<int>());
+		
 		while (utterance_counter < param.UTTERANCES)
 		{
 			int old_utterance_counter = utterance_counter; //バッチ処理対応
@@ -683,25 +478,10 @@ int main(int argc, char *argv[])
 				if (cognition_task_flag[utterance_counter] == 1)
 				{
 					meanings.push_back(meaning_space[MT19937::irand(0, meaning_space.size() - 1)]);
-					// std::sample(std::begin(meanings_copy), std::end(meanings_copy), std::back_inserter(meanings), 1, MT19937::igen);
-					// use_meanings.clear();
-					// use_meaning_index = MT19937::irand(0, meanings_copy.size() - 1);
-					// use_meaning = meanings_copy[use_meaning_index];
-					// use_meanings.push_back(use_meaning);
-					// meanings = use_meanings;
 				}
 				else
 				{
 					std::sample(std::begin(meaning_space), std::end(meaning_space), std::back_inserter(meanings), param.MULTIPLE_MEANINGS, MT19937::igen);
-					// use_meaning_indexs.clear();
-					// use_meanings.clear();
-					// use_meaning_indexs = choice_meanings(meanings_copy, param);
-					// std::vector<int>::iterator use_meaning_indexs_it = use_meaning_indexs.begin();
-					// for (; use_meaning_indexs_it != use_meaning_indexs.end(); use_meaning_indexs_it++)
-					// {
-					// 	use_meanings.push_back(meanings_copy[(*use_meaning_indexs_it)]);
-					// }
-					// meanings = use_meanings;
 				}
 
 				if (param.LOGGING)
@@ -715,12 +495,6 @@ int main(int argc, char *argv[])
 					{
 						LogBox::push_log("USE MULTIPLE MEANINGS:");
 						std::for_each(std::begin(meanings), std::end(meanings), [](Rule & mean){LogBox::push_log("MEANING: " + mean.to_s());});
-						// std::vector<int>::iterator use_meaning_indexs_it = use_meaning_indexs.begin();
-						// for (; use_meaning_indexs_it != use_meaning_indexs.end(); use_meaning_indexs_it++)
-						// {
-						// 	LogBox::push_log("INDEX: [" + std::to_string((*use_meaning_indexs_it)) + "]");
-						// 	LogBox::push_log("MEANING: " + (meanings_copy[(*use_meaning_indexs_it)]).to_s());
-						// }
 					}
 				}
 
