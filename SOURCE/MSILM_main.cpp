@@ -226,7 +226,6 @@ double calculate_distance(std::vector<Rule> & meanings,
 
 	std::vector<Rule> kb1_all, kb2_all;
 
-	word_length = 0;
 	auto utt_list_func = [&kb1, &kb2, &kb1_all, &kb2_all](Rule mean){
 		std::vector<Rule> rules1, rules2;
 		rules1 = kb1.grounded_rules(mean);
@@ -261,7 +260,7 @@ double calculate_distance(std::vector<Rule> & meanings,
 		std::for_each(std::begin(kb2_all), std::end(kb2_all), hamming);
 		//levenshtein distance
 		double min_lev = 1.0;
-		auto leven = [&rule1, &targets, min_lev](Rule rule2){
+		auto leven = [&rule1, &targets, &min_lev](Rule rule2){
 			double lev = Distance::levenstein(rule1.external, rule2.external);
 			if(lev < min_lev){
 				min_lev = lev;
@@ -353,7 +352,7 @@ double calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase
 		std::vector<Rule> rules1;
 		rules1 = kb1.grounded_rules(mean);
 		if(rules1.size() != 0){
-			std::for_each(std::begin(rules1), std::end(rules1), [&word_length](Rule r){word_length += r.external.size()});
+			std::for_each(std::begin(rules1), std::end(rules1), [&word_length](Rule r){word_length += r.external.size();});
 			length_cnt += rules1.size();
 		}else{
 			word_length += kb1.fabricate_for_complementing(mean).external.size();
