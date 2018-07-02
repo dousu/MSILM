@@ -19,10 +19,10 @@ class MSILMAgent : public KirbyAgent
 
     MSILMAgent &operator=(const MSILMAgent &dst);
 
-    Rule cognittion_say(std::vector<Rule> &internals);
+    Rule cognition_say(std::vector<Rule> &internals);
     std::vector<Rule> cognittion_say(std::vector<std::vector<Rule>> &internals);
     //    void cognittion_hear(Rule& term,std::vector<Rule>& meanings, std::vector<Rule>& all_meanings);
-    void cognittion_hear(std::vector<Rule> &utterances, std::vector<std::vector<Rule>> &meanings_list, std::vector<Rule> &all_meanings);
+    void cognition_hear(std::vector<Rule> &utterances, std::vector<std::vector<Rule>> &meanings_list, std::vector<Rule> &all_meanings);
 
     Rule say_think_meaning(std::vector<Rule> &internals);
     std::vector<Rule> hear_think_meaning(std::vector<Rule> &utterances, std::vector<std::vector<Rule>> &meaning_lists, std::vector<Rule> &all_meanings);

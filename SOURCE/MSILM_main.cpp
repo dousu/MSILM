@@ -19,9 +19,9 @@ void construct_meanings(std::vector<Rule> & meanings)
 	std::iota(verb.begin(), verb.end(), 0);
 	std::iota(noun.begin(), noun.end(), 5);
 
-	auto func1 = [&meanigs](int i) {
-		auto func2 = [&meanigs](int j) {
-			auto func3 = [&meanigs](int k) {
+	auto func1 = [&noun, &meanings](int i) {
+		auto func2 = [&i, &noun, &meanings](int j) {
+			auto func3 = [&i, &j, &meanings](int k) {
 				if(j != k){
 					std::vector<Element> internal;
 					Rule mean;
@@ -146,11 +146,9 @@ void calculate_language_distance(
 	std::vector<Rule> &meanings,
 	MSILMAgent &agent1, MSILMAgent &agent2)
 {
-
-	double word_length;
-
 	//言語間距離を計算
-	lev_matrix.push_back(calculate_distance(meanings, agent1.kb, agent2.kb, word_length));
+	lev_matrix.push_back(calculate_distance(meanings, agent1.kb, agent2.kb));
+	lev_matrix.push_back(calculate_average_word_length(meanings, agent1.kb));
 }
 
 void analyze_and_output(MSILMParameters &param, std::vector<Rule> & meaning_space,
@@ -221,7 +219,7 @@ void accuracy_meaning_output(MSILMParameters & param, std::string & file, std::v
 }
 
 double calculate_distance(std::vector<Rule> & meanings,
-						  KnowledgeBase & kb1, KnowledgeBase & kb2, double & word_length)
+						  KnowledgeBase & kb1, KnowledgeBase & kb2)
 {
 
 	//from kb1 to kb2
@@ -229,7 +227,7 @@ double calculate_distance(std::vector<Rule> & meanings,
 	std::vector<Rule> kb1_all, kb2_all;
 
 	word_length = 0;
-	auto utt_list_func = [&kb1_all, &kb2_all](Rule mean){
+	auto utt_list_func = [&kb1, &kb2, &kb1_all, &kb2_all](Rule mean){
 		std::vector<Rule> rules1, rules2;
 		rules1 = kb1.grounded_rules(mean);
 		if(rules1.size() != 0){
@@ -247,7 +245,7 @@ double calculate_distance(std::vector<Rule> & meanings,
 	std::for_each(std::begin(meanings), std::end(meanings), utt_list_func);
 
 	double lev_sum = 0.0;
-	auto dist = [&lev_sum](Rule rule1){
+	auto dist = [&kb2_all, &lev_sum](Rule rule1){
 		std::vector<Rule> targets;
 		double min_ham = std::numeric_limits<double>::max();
 		auto hamming = [&rule1, &targets, &min_ham](Rule rule2){
@@ -347,12 +345,11 @@ double calculate_distance(std::vector<Rule> & meanings,
 	return lev_sum / (static_cast<double>(kb1_all.size()));
 }
 
-void calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase & kb1, double & word_length)
+double calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase & kb1)
 {
 	
-	double length_cnt = 0;
-	word_length = 0;
-	auto func = [&word_length, &length_cnt](Rule mean){
+	double word_length = 0, length_cnt = 0;
+	auto func = [&kb1, &word_length, &length_cnt](Rule mean){
 		std::vector<Rule> rules1;
 		rules1 = kb1.grounded_rules(mean);
 		if(rules1.size() != 0){
@@ -364,7 +361,7 @@ void calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase &
 		}
 	};
 	std::for_each(std::begin(meanings), std::end(meanings), func);
-	word_length = word_length / length_cnt;
+	return word_length / length_cnt;
 
 	// std::vector<Rule>::iterator mean_it, kb1_pat_it;
 	// std::vector<Rule> kb1_pat;

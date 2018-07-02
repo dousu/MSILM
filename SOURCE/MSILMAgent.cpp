@@ -54,7 +54,7 @@ MSILMAgent::grow(std::vector<Rule> meanings)
 	return *this;
 }
 
-Rule MSILMAgent::cognittion_say(std::vector<Rule> &internals)
+Rule MSILMAgent::cognition_say(std::vector<Rule> &internals)
 {
 	try
 	{
@@ -71,7 +71,7 @@ Rule MSILMAgent::cognittion_say(std::vector<Rule> &internals)
 }
 
 std::vector<Rule>
-MSILMAgent::cognittion_say(std::vector<std::vector<Rule>> &internals)
+MSILMAgent::cognition_say(std::vector<std::vector<Rule>> &internals)
 {
 	std::vector<Rule> rules;
 	last_selected_meaning.clear();
