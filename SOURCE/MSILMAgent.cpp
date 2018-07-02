@@ -156,7 +156,7 @@ Rule MSILMAgent::random_think_meaning(std::vector<Rule> &internals)
 	}
 }
 
-void MSILMAgent::cognittion_hear(std::vector<Rule> &utterances, std::vector<std::vector<Rule>> &meaning_lists, std::vector<Rule> &all_meanings)
+void MSILMAgent::cognition_hear(std::vector<Rule> &utterances, std::vector<std::vector<Rule>> &meaning_lists, std::vector<Rule> &all_meanings)
 {
 	std::vector<Rule> internals = hear_think_meaning(utterances, meaning_lists, all_meanings);
 	//Rule internal;
