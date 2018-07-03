@@ -387,76 +387,45 @@ std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<R
 		std::cerr << "Size Error in Imcomplete Symmetry Bias Think" << std::endl;
 		exit(1);
 	}
-	std::vector<std::size_t> index_list(utterances.size()), all_index_list(utterances.size());
+	std::vector<std::size_t> index_list(utterances.size());
 	std::iota(std::begin(index_list), std::end(index_list), 0);
-	all_index_list = index_list;//?1
-	std::vector<double> dist_list(utterances.size(), 1.0);//?2
-
 
 	std::vector<std::vector<std::pair<Rule, Rule>>> all_ham_candidates;
-	while(index_list.size() != 0){
-		int pos_ut = index_list.front();
+	for(int pos_ut : index_list){
 		double min_lev(1.0);
 		std::vector<int> min_index;
 		std::vector<Rule> min_rules;
-		std::for_each(std::begin(all_index_list), std::end(all_index_list), [&min_lev, &utterances, &pos_ut, &min_index](std::size_t idx_ut){
-			double lev = Distance::levenstein(utterances[pos_ut].external, utterances[idx_ut].external);
-			if(lev < min_lev){
-				min_index.clear();
-				min_index.push_back(pos_ut);
-				min_index.push_back(idx_ut);
-			}else if (lev == min_lev){
-				min_index.push_back(idx_ut);
+		std::for_each(std::begin(index_list), std::end(index_list), [&min_lev, &utterances, &pos_ut, &min_index](std::size_t idx_ut){
+			if(pos_ut != idx_ut){
+				double lev = Distance::levenstein(utterances[pos_ut].external, utterances[idx_ut].external);
+				if(lev < min_lev){
+					min_index.clear();
+					min_index.push_back(idx_ut);
+				}else if (lev == min_lev){
+					min_index.push_back(idx_ut);
+				}
 			}
 		});
 		std::for_each(std::begin(krules), std::end(krules), [&min_lev, &utterances, &pos_ut, &min_index, &min_rules](Rule & r){
 			double lev = Distance::levenstein(utterances[pos_ut].external, r.external);
 			if(lev < min_lev){
 				min_index.clear();
-				min_index.push_back(pos_ut);
 				min_rules.clear();
 				min_rules.push_back(r);
 			}else if (lev == min_lev){
 				min_rules.push_back(r);
 			}
 		});
-		if(min_index.size() > 1){
-			std::for_each(std::begin(min_index), std::end(min_index), [&meaning_lists, &all_ham_candidates, &min_index, &index_list, &min_lev, &dist_list, &min_rules](int idx){
-				if(min_lev < dist_list[idx]){
-					dist_list[idx] = min_lev;
-					all_ham_candidates[idx].clear();
-					std::for_each(std::begin(meaning_lists[idx]), std::end(meaning_lists[idx]), [&all_ham_candidates, &meaning_lists, &idx, &min_index, &min_rules](Rule & r1){
-						for(auto idx2 : min_index){
-							if(idx2 != idx){
-								std::for_each(std::begin(meaning_lists[idx2]), std::end(meaning_lists[idx2]), [&all_ham_candidates, &idx, &r1](Rule & r2){
-									all_ham_candidates[idx].push_back(std::pair<Rule, Rule>(r1, r2));
-								});
-							}
-						}
-						std::for_each(std::begin(min_rules), std::end(min_rules), [&all_ham_candidates, &idx, &r1](Rule & min_rule){
-							all_ham_candidates[idx].push_back(std::pair<Rule, Rule>(r1, min_rule));
-						});
-					});
-					auto it = std::find(std::begin(index_list), std::end(index_list), idx);
-					if(it != std::end(index_list)){
-						index_list.erase(it);
-					}
-				}
-			});
-		}else if(min_index.size() == 1){
-			if(min_lev < dist_list[pos_ut]){
-				dist_list[pos_ut] = min_lev;
-				std::for_each(std::begin(meaning_lists[pos_ut]), std::end(meaning_lists[pos_ut]), [&all_ham_candidates, &min_rules, &pos_ut](Rule & r1){
-					std::for_each(std::begin(min_rules), std::end(min_rules), [&all_ham_candidates, &pos_ut, &r1](Rule & min_rule){
-						all_ham_candidates[pos_ut].push_back(std::pair<Rule, Rule>(r1, min_rule));
-					});
+		std::for_each(std::begin(meaning_lists[pos_ut]), std::end(meaning_lists[pos_ut]), [&min_index, &meaning_lists, &all_ham_candidates, &min_rules, &pos_ut](Rule & r1){
+			for(auto idx2 : min_index){
+				std::for_each(std::begin(meaning_lists[idx2]), std::end(meaning_lists[idx2]), [&all_ham_candidates, &pos_ut, &r1](Rule & r2){
+					all_ham_candidates[pos_ut].push_back(std::pair<Rule, Rule>(r1, r2));
 				});
-				index_list.erase(std::begin(index_list));
 			}
-		}else{
-			std::cerr << "irregal operation in Imcomplete Symmetry Bias Think" << std::endl;
-			exit(1);
-		}
+			std::for_each(std::begin(min_rules), std::end(min_rules), [&all_ham_candidates, &pos_ut, &r1](Rule & min_rule){
+				all_ham_candidates[pos_ut].push_back(std::pair<Rule, Rule>(r1, min_rule));
+			});
+		});
 	}
 	std::for_each(std::begin(all_index_list), std::end(all_index_list), [&meaning_lists, &all_ham_candidates](int idx){
 		std::vector<Rule> min_rules;
