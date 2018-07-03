@@ -421,7 +421,7 @@ std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<R
 			}
 		});
 		if(min_index.size() > 1){
-			std::for_each(std::begin(min_index), std::end(min_index), [&meaning_lists, &all_ham_candidates, &min_index, &index_list, &min_lev, &dist_list](int idx){
+			std::for_each(std::begin(min_index), std::end(min_index), [&meaning_lists, &all_ham_candidates, &min_index, &index_list, &min_lev, &dist_list, &min_rules](int idx){
 				if(min_lev < dist_list[idx]){
 					dist_list[idx] = min_lev;
 					all_ham_candidates[idx].clear();
@@ -458,7 +458,7 @@ std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<R
 			exit(1);
 		}
 	}
-	std::for_each(std::begin(all_index_list), std::end(all_index_list), [&result_lists, &all_ham_candidates](int idx){
+	std::for_each(std::begin(all_index_list), std::end(all_index_list), [&meaning_lists, &all_ham_candidates](int idx){
 		std::vector<Rule> min_rules;
 		double min_ham = std::numeric_limits<double>::max();
 		std::for_each(std::begin(all_ham_candidates[idx]), std::end(all_ham_candidates[idx]), [&min_rules, &min_ham](std::pair<Rule, Rule> & p){
