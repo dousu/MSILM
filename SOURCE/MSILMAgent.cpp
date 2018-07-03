@@ -427,7 +427,7 @@ std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<R
 			});
 		});
 	}
-	std::for_each(std::begin(all_index_list), std::end(all_index_list), [&meaning_lists, &all_ham_candidates](int idx){
+	std::for_each(std::begin(index_list), std::end(index_list), [&meaning_lists, &all_ham_candidates](int idx){
 		std::vector<Rule> min_rules;
 		double min_ham = std::numeric_limits<double>::max();
 		std::for_each(std::begin(all_ham_candidates[idx]), std::end(all_ham_candidates[idx]), [&min_rules, &min_ham](std::pair<Rule, Rule> & p){
