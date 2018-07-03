@@ -539,7 +539,7 @@ int main(int argc, char *argv[])
 			LogBox::push_log(child_agent.to_s());
 		}
 
-		child_agent = child_agent.grow(meaning_space);
+		child_agent = child_agent.grow();
 
 		if (param.ANALYZE)
 		{
