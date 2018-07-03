@@ -376,7 +376,7 @@ std::vector<std::vector<Rule>> & MSILMAgent::symmetry_bias_think(std::vector<Rul
 	return meaning_lists;
 }
 
-std::vector<std::vector<Rule>> MSILMAgent::ucsymmetry_bias_think(std::vector<Rule> & utterances, std::vector<std::vector<Rule>> & meaning_lists, std::vector<Rule> & krules)
+std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<Rule> & utterances, std::vector<std::vector<Rule>> & meaning_lists, std::vector<Rule> & krules)
 {
 	if (LOGGING_FLAG)
 	{
