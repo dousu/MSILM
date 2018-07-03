@@ -376,21 +376,22 @@ std::vector<std::vector<Rule>> & MSILMAgent::symmetry_bias_think(std::vector<Rul
 	return meaning_lists;
 }
 
-std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<Rule> & utterances, std::vector<std::vector<Rule>> & meaning_lists, std::vector<Rule> & krules)
+std::vector<std::vector<Rule>> MSILMAgent::ucsymmetry_bias_think(std::vector<Rule> & utterances, std::vector<std::vector<Rule>> & meaning_lists, std::vector<Rule> & krules)
 {
 	if (LOGGING_FLAG)
 	{
 		LogBox::push_log("USING SYMMETRY BIAS THINK");
 		LogBox::push_log("PROSPECTIVE MEANINGS:\n" + tr_vector_Rule_to_string(meaning_lists));
 	}
-	std::vector<std::vector<Rule>> result_lists;
 	if(utterances.size() != meaning_lists.size()){
 		std::cerr << "Size Error in Imcomplete Symmetry Bias Think" << std::endl;
 		exit(1);
 	}
 	std::vector<std::size_t> index_list(utterances.size()), all_index_list(utterances.size());
 	std::iota(std::begin(index_list), std::end(index_list), 0);
-	all_index_list = index_list;
+	all_index_list = index_list;//?1
+	std::vector<double> dist_list(utterances.size(), 1.0);//?2
+
 
 	std::vector<std::vector<std::pair<Rule, Rule>>> all_ham_candidates;
 	while(index_list.size() != 0){
@@ -420,28 +421,38 @@ std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<R
 			}
 		});
 		if(min_index.size() > 1){
-			std::for_each(std::begin(min_index), std::end(min_index), [&meaning_lists, &all_ham_candidates](int idx){
-				std::for_each(std::begin(meaning_lists[idx]), std::end(meaning_lists[idx]), [&all_ham_candidates, &meaning_lists, &idx](Rule & r1){
-					for(auto idx2 : min_index){
-						if(idx2 != idx){
-							std::for_each(std::begin(meaning_lists[idx2]), std::end(meaning_lists[idx2]), [&all_ham_candidates, &idx, &r1](Rule & r2){
-								all_ham_candidates[idx].push_back(std::pair<Rule, Rule>(r1, r2));
-							});
+			std::for_each(std::begin(min_index), std::end(min_index), [&meaning_lists, &all_ham_candidates, &min_index, &index_list](int idx){
+				if(min_lev < dist_list[idx]){
+					dist_list[idx] = min_lev;
+					all_ham_candidates[idx].clear();
+					std::for_each(std::begin(meaning_lists[idx]), std::end(meaning_lists[idx]), [&all_ham_candidates, &meaning_lists, &idx, &min_index, &min_rules](Rule & r1){
+						for(auto idx2 : min_index){
+							if(idx2 != idx){
+								std::for_each(std::begin(meaning_lists[idx2]), std::end(meaning_lists[idx2]), [&all_ham_candidates, &idx, &r1](Rule & r2){
+									all_ham_candidates[idx].push_back(std::pair<Rule, Rule>(r1, r2));
+								});
+							}
 						}
+						std::for_each(std::begin(min_rules), std::end(min_rules), [&all_ham_candidates, &idx, &r1](Rule & min_rule){
+							all_ham_candidates[idx].push_back(std::pair<Rule, Rule>(r1, min_rule));
+						});
+					});
+					auto it = std::find(std::begin(index_list), std::end(index_list), idx);
+					if(it != std::end(index_list)){
+						index_list.erase(it);
 					}
+				}
+			});
+		}else if(min_index.size() == 1){
+			if(min_lev < dist_list[pos_ut]){
+				dist_list[pos_ut] = min_lev;
+				std::for_each(std::begin(meaning_lists[pos_ut]), std::end(meaning_lists[pos_ut]), [&all_ham_candidates, &min_rules, &pos_ut](Rule & r1){
 					std::for_each(std::begin(min_rules), std::end(min_rules), [&all_ham_candidates, &pos_ut, &r1](Rule & min_rule){
 						all_ham_candidates[pos_ut].push_back(std::pair<Rule, Rule>(r1, min_rule));
 					});
 				});
-				index_list.erase(std::find(std::begin(index_list), std::end(index_list), idx));
-			});
-		}else if(min_index.size() == 1){
-			std::for_each(std::begin(meaning_lists[pos_ut]), std::end(meaning_lists[pos_ut]), [&all_ham_candidates, &min_rules, &pos_ut](Rule & r1){
-				std::for_each(std::begin(min_rules), std::end(min_rules), [&all_ham_candidates, &pos_ut, &r1](Rule & min_rule){
-					all_ham_candidates[pos_ut].push_back(std::pair<Rule, Rule>(r1, min_rule));
-				});
-			});
-			index_list.erase(std::begin(index_list));
+				index_list.erase(std::begin(index_list));
+			}
 		}else{
 			std::cerr << "irregal operation in Imcomplete Symmetry Bias Think" << std::endl;
 			exit(1);
@@ -459,9 +470,9 @@ std::vector<std::vector<Rule>> & MSILMAgent::ucsymmetry_bias_think(std::vector<R
 				min_rules.push_back(p.first);
 			}
 		});
-		result_lists[idx] = min_rules;
+		meaning_lists[idx] = min_rules;
 	});
-	return result_lists;
+	return meaning_lists;
 
 	// bool double_check;
 	// int index, index2;
