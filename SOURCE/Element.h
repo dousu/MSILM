@@ -144,6 +144,9 @@ public:
 	int get_cat_id() const {
 		return cat;
 	}
+	int get_obj_id() const {
+		return obj;
+	}
 	std::string to_s() const{
 		return Prefices::CAT + std::to_string(cat) + Prefices::DEL + Prefices::VAR + std::to_string(obj);
 	}
@@ -152,49 +155,36 @@ public:
 class Element{
 	using ElementType = std::variant<std::monostate, Mean, Variable, Symbol, Nonterminal>;
 	ElementType element;
-	//template <int I, typename T>
-	//std::variant_alternative_t<I, T> & get() const {return std::get<I>(element);}
-	// template <int I>
-	// const auto get() const -> const decltype(std::get<I>(element)) {return std::get<I>(element);}
 public:
 	Element() : element() {}
-	Element(const Element & other) : element(other.element){}
-	Element(const Mean & other) : element(other){}
-	Element(const Variable & other) : element(other){}
-	Element(const Symbol & other) : element(other){}
-	Element(const Nonterminal & other) : element(other){}
+	Element(const Element & other) : element(std::move(other.element)){}
+	Element(const Mean & other) : element(std::move(other)){}
+	Element(const Variable & other) : element(std::move(other)){}
+	Element(const Symbol & other) : element(std::move(other)){}
+	Element(const Nonterminal & other) : element(std::move(other)){}
 	constexpr std::size_t type() const{return element.index();}
-
-	// template <typename T>
-	// T & get() const {return std::get<T>(element);}
-
-	// template <typename T>
-	// T && get() const {return std::get<T>(element);}
 
 	template <typename T>
 	const T & get() const {return std::get<T>(element);}
-
-	// template <typename T>
-	// const T && get() const {return std::get<T>(element);}
 	
 	Element & operator=(const Element & dst){
-		element = dst.element;
+		element = std::move(dst.element);
 		return *this;
 	}
 	Element & operator=(const Mean & dst){
-		element = dst;
+		element = std::move(dst);
 		return *this;
 	}
 	Element & operator=(const Variable & dst){
-		element = dst;
+		element = std::move(dst);
 		return *this;
 	}
 	Element & operator=(const Symbol & dst){
-		element = dst;
+		element = std::move(dst);
 		return *this;
 	}
 	Element & operator=(const Nonterminal & dst){
-		element = dst;
+		element = std::move(dst);
 		return *this;
 	}
 	bool operator==(const Element & dst) const {
@@ -224,7 +214,7 @@ public:
 			default:
 				str = "*";
 		}
-		return str;//(std::get<type(), ElementType>(element)).to_s();
+		return str;
 	}
 };
 

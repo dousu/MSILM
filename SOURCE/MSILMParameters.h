@@ -33,6 +33,13 @@ private:
   OptionTypes obj;
 
 public:
+  enum type_id
+  {
+    btype = 0,
+    itype = 1,
+    dtype = 2,
+    stype = 3
+  };
   OptionValue() : obj(){};
 
   template <typename T>
@@ -40,7 +47,7 @@ public:
   {
     obj = val;
   };
-  OptionValue &operator=(const OptionValue &other)
+  OptionValue & operator=(const OptionValue &other)
   {
     if (other.check_type<int>())
     {
@@ -67,7 +74,7 @@ public:
   };
 
   template <typename T>
-  OptionValue &operator=(const T val)
+  OptionValue & operator=(const T val)
   {
     //型チェック
     if (check_type<int>())
@@ -103,21 +110,33 @@ public:
       std::cerr << "irregular option value" << std::endl;
       exit(1);
     }
-    OptionTypes value = val;
-    obj = value;
+    // OptionTypes value = val;
+    // obj = value;
+    obj = val;
     return *this;
   };
 
   template <typename T>
-  T get() const
+  const T & get() const
   {
-    return std::get<T>(obj);
+    if (std::holds_alternative<T>(obj)){
+      return std::get<T>(obj);
+    }else{
+      OptionTypes emp = T();
+      std::cerr << "invalid get in OptionValue" << std::endl << "Value Type ID: " << return_type() << "  Called Type ID: " << emp.index() << std::endl;
+      exit(1);
+    }
   }
 
   template <typename T>
   bool check_type() const
   {
     return std::holds_alternative<T>(obj);
+  }
+
+  type_id return_type() const
+  {
+    return static_cast<type_id>(obj.index());
   }
 };
 struct ProgramOption
@@ -127,14 +146,7 @@ private:
   std::map<std::string, int> id;
   std::map<int, OptionValue> val_list;
   std::map<int, std::string> desc_list;
-  enum type_id
-  {
-    itype,
-    dtype,
-    stype,
-    btype
-  };
-  std::map<int, type_id> type_inf;
+  std::map<int, OptionValue::type_id> type_inf;
   std::set<int> exist;
 
 public:
@@ -171,48 +183,46 @@ public:
     return exist.count(id[str]);
   }
 
-  ProgramOption &add_option() { return *this; }
+  ProgramOption & add_option() { return *this; }
 
-  ProgramOption &operator()(std::string key, OptionValue val, std::string str)
+  ProgramOption & operator()(std::string key, OptionValue val, std::string str)
   {
     int index = idx.generate();
     id[key] = index;
     val_list[index] = val;
     desc_list[index] = str;
-    if (val.check_type<int>())
+    switch(val.return_type())
     {
-      type_inf[index] = itype;
-    }
-    else if (val.check_type<double>())
-    {
-      type_inf[index] = dtype;
-    }
-    else if (val.check_type<std::string>())
-    {
-      type_inf[index] = stype;
-    }
-    else if (val.check_type<bool>())
-    {
-      type_inf[index] = btype;
-    }
-    else
-    {
+    case OptionValue::itype :
+      type_inf[index] = OptionValue::itype;
+      break;
+    case OptionValue::dtype :
+      type_inf[index] = OptionValue::dtype;
+      break;
+    case OptionValue::stype :
+      type_inf[index] = OptionValue::stype;
+      break;
+    case OptionValue::btype :
+      type_inf[index] = OptionValue::btype;
+      break;
+    default:
       std::cerr << "unknown type" << std::endl;
+      exit(1);
     }
     return *this;
   }
-  ProgramOption &operator()(std::string key, std::string str)
+  ProgramOption & operator()(std::string key, std::string str)
   {
     int index = idx.generate();
     id[key] = index;
     val_list[index] = bool(false);
     desc_list[index] = str;
-    type_inf[index] = btype;
+    type_inf[index] = OptionValue::btype;
     return *this;
   }
 
   template <typename T>
-  T get(std::string str)
+  const T & get(std::string str)
   {
     return val_list[id[str]].get<T>();
   }
@@ -247,21 +257,21 @@ public:
         else
         {
           exist.insert(id[key]);
-          type_id ti = type_inf[id[key]];
+          OptionValue::type_id ti = type_inf[id[key]];
           bool b;
           try{
             switch (ti)
             {
-            case itype:
+            case OptionValue::itype:
               val_list[id[key]] = std::stoi(str);
               break;
-            case dtype:
+            case OptionValue::dtype:
               val_list[id[key]] = std::stod(str);
               break;
-            case stype:
+            case OptionValue::stype:
               val_list[id[key]] = str;
               break;
-            case btype:
+            case OptionValue::btype:
               ss << std::boolalpha << str;
               ss >> b;
               ss << std::noboolalpha;

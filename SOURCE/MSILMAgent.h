@@ -15,9 +15,9 @@ class MSILMAgent : public KirbyAgent
   public:
     MSILMAgent make_child(void);
 
-    MSILMAgent &grow(std::vector<Rule>);
+    MSILMAgent & grow(void);
 
-    MSILMAgent &operator=(const MSILMAgent & dst);
+    MSILMAgent & operator=(const MSILMAgent & dst);
 
     Rule cognition_say(std::vector<Rule> & internals);
     std::vector<Rule> cognition_say(std::vector<std::vector<Rule>> & internals);
@@ -27,9 +27,11 @@ class MSILMAgent : public KirbyAgent
     Rule say_think_meaning(std::vector<Rule> & internals);
     std::vector<Rule> hear_think_meaning(std::vector<Rule> & utterances, std::vector<std::vector<Rule>> & meaning_lists, std::vector<Rule> & all_meanings);
     Rule random_think_meaning(std::vector<Rule> & internals);
-    void symmetry_bias_think(std::vector<Rule> & terms, std::vector<std::vector<Rule>> & meaningss, std::vector<Rule> & reference, std::vector<std::vector<Rule>> & return_rules);
-    void ucsymmetry_bias_inference(std::vector<Rule> & terms, std::vector<std::vector<Rule>> & meaningss, std::vector<Rule> & reference, std::vector<std::vector<Rule>> & term_pairs, std::vector<std::vector<std::vector<Rule>>> & meaning_pair_orders, std::vector<std::vector<double>> & meaning_distancess);
-    std::vector<std::vector<Rule>> decide_likelihood(std::vector<Rule> & terms, std::vector<std::vector<Rule>> & term_pairs, std::vector<std::vector<std::vector<Rule>>> & meaning_pair_orders);
+    std::vector<std::vector<Rule>> & symmetry_bias_think(std::vector<Rule> & utterances, std::vector<std::vector<Rule>> & meaningss, std::vector<Rule> & krules);
+    std::vector<std::vector<Rule>> & ucsymmetry_bias_think(std::vector<Rule> & utterances, std::vector<std::vector<Rule>> & meaningss, std::vector<Rule> & krules);
+    // void symmetry_bias_think(std::vector<Rule> & terms, std::vector<std::vector<Rule>> & meaningss, std::vector<Rule> & reference, std::vector<std::vector<Rule>> & return_rules);
+    // void ucsymmetry_bias_inference(std::vector<Rule> & terms, std::vector<std::vector<Rule>> & meaningss, std::vector<Rule> & reference, std::vector<std::vector<Rule>> & term_pairs, std::vector<std::vector<std::vector<Rule>>> & meaning_pair_orders, std::vector<std::vector<double>> & meaning_distancess);
+    // std::vector<std::vector<Rule>> decide_likelihood(std::vector<Rule> & terms, std::vector<std::vector<Rule>> & term_pairs, std::vector<std::vector<std::vector<Rule>>> & meaning_pair_orders);
     static bool SYM_FLAG;
     static bool UCSYM;
     static bool OMISSION_FLAG;

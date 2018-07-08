@@ -7,7 +7,7 @@
 
 #include "MSILM_main.h"
 
-void construct_meanings(std::vector<Rule> & meanings)
+void construct_meanings(std::vector<Rule> &meanings)
 {
 	constexpr int VERB_INDEX_BEGIN = 0;
 	constexpr int VERB_INDEX_END = 4;
@@ -22,7 +22,8 @@ void construct_meanings(std::vector<Rule> & meanings)
 	auto func1 = [&noun, &meanings](int i) {
 		auto func2 = [&i, &noun, &meanings](int j) {
 			auto func3 = [&i, &j, &meanings](int k) {
-				if(j != k){
+				if (j != k)
+				{
 					std::vector<Element> internal;
 					Rule mean;
 
@@ -41,8 +42,8 @@ void construct_meanings(std::vector<Rule> & meanings)
 	std::for_each(std::begin(verb), std::end(verb), func1);
 }
 
-std::vector<std::vector<double>> analyze(std::vector<Rule> & meanings,
-										 MSILMAgent & agent1, MSILMAgent & agent2)
+std::vector<std::vector<double>> analyze(std::vector<Rule> &meanings,
+										 MSILMAgent &agent1, MSILMAgent &agent2)
 {
 
 	std::vector<double> unit_result, dist_result;
@@ -65,8 +66,8 @@ std::vector<std::vector<double>> analyze(std::vector<Rule> & meanings,
 	return result;
 }
 
-void unit_analyze(std::vector<double> & result_matrix,
-				  std::vector<Rule> & meanings, MSILMAgent & agent)
+void unit_analyze(std::vector<double> &result_matrix,
+				  std::vector<Rule> &meanings, MSILMAgent &agent)
 {
 	int index = 0, max_index;
 	int GEN = 0, EXP = 1, SRN = 2, WRN = 3;
@@ -84,15 +85,16 @@ void unit_analyze(std::vector<double> & result_matrix,
 	result_matrix.push_back(agent.kb.wordDB.size());
 }
 
-double expression(std::vector<Rule> & meanings, MSILMAgent & agent)
+double expression(std::vector<Rule> &meanings, MSILMAgent &agent)
 {
 	int counter = 0;
-	auto func = [&agent, &counter](Rule & meaning){
-		if(agent.utterable(meaning)){
+	auto func = [&agent, &counter](Rule &meaning) {
+		if (agent.utterable(meaning))
+		{
 			counter++;
 		}
 	};
-	std::for_each(std::begin(meanings),std::end(meanings),func);
+	std::for_each(std::begin(meanings), std::end(meanings), func);
 
 	return (static_cast<double>(counter)) / (static_cast<double>(meanings.size())) * 100.0;
 }
@@ -107,7 +109,7 @@ void calculate_language_distance(
 	lev_matrix.push_back(calculate_average_word_length(meanings, agent1.kb));
 }
 
-void analyze_and_output(MSILMParameters &param, std::vector<Rule> & meaning_space,
+void analyze_and_output(MSILMParameters &param, std::vector<Rule> &meaning_space,
 						MSILMAgent &agent1, MSILMAgent &agent2, int index)
 {
 	std::vector<std::vector<double>> res;
@@ -131,16 +133,16 @@ void analyze_and_output(MSILMParameters &param, std::vector<Rule> & meaning_spac
 	ofs << "DIST =" << tr_vector_double_to_string(res[1]) << std::endl;
 }
 
-void accuracy_meaning_output(MSILMParameters & param, std::string & file, std::vector<std::vector<int>> & data)
+void accuracy_meaning_output(MSILMParameters &param, std::string &file, std::vector<std::vector<int>> &data)
 {
 	{
 		std::string path;
 		path = param.BASE_PATH + file;
 		std::ofstream ofs(path.c_str());
 
-		auto func1 = [&ofs](const std::vector<int> & vec){
+		auto func1 = [&ofs](const std::vector<int> &vec) {
 			std::string str;
-			auto func2 = [&str](const int & val){
+			auto func2 = [&str](const int &val) {
 				str += std::to_string(val) + " ";
 			};
 			std::for_each(std::begin(vec), std::end(vec), func2);
@@ -152,51 +154,61 @@ void accuracy_meaning_output(MSILMParameters & param, std::string & file, std::v
 	}
 }
 
-double calculate_distance(std::vector<Rule> & meanings,
-						  KnowledgeBase & kb1, KnowledgeBase & kb2)
+double calculate_distance(std::vector<Rule> &meanings,
+						  KnowledgeBase &kb1, KnowledgeBase &kb2)
 {
 
 	//from kb1 to kb2
 
 	std::vector<Rule> kb1_all, kb2_all;
 
-	auto utt_list_func = [&kb1, &kb2, &kb1_all, &kb2_all](Rule mean){
+	auto utt_list_func = [&kb1, &kb2, &kb1_all, &kb2_all](Rule mean) {
 		std::vector<Rule> rules1, rules2;
 		rules1 = kb1.grounded_rules(mean);
-		if(rules1.size() != 0){
+		if (rules1.size() != 0)
+		{
 			std::copy(std::begin(rules1), std::end(rules1), std::back_inserter(kb1_all));
-		}else{
+		}
+		else
+		{
 			kb1_all.push_back(kb1.fabricate_for_complementing(mean));
 		}
 		rules2 = kb2.grounded_rules(mean);
-		if(rules2.size() != 0){
+		if (rules2.size() != 0)
+		{
 			std::copy(std::begin(rules2), std::end(rules2), std::back_inserter(kb2_all));
-		}else{
+		}
+		else
+		{
 			kb2_all.push_back(kb2.fabricate_for_complementing(mean));
 		}
 	};
 	std::for_each(std::begin(meanings), std::end(meanings), utt_list_func);
 
 	double lev_sum = 0.0;
-	auto dist = [&kb2_all, &lev_sum](Rule rule1){
+	auto dist = [&kb2_all, &lev_sum](Rule rule1) {
 		std::vector<Rule> targets;
 		double min_ham = std::numeric_limits<double>::max();
-		auto hamming = [&rule1, &targets, &min_ham](Rule rule2){
+		auto hamming = [&rule1, &targets, &min_ham](Rule rule2) {
 			double ham = Distance::hamming(rule1.internal, rule2.internal);
-			if(ham < min_ham){
+			if (ham < min_ham)
+			{
 				min_ham = ham;
 				targets.clear();
 				targets.push_back(rule2);
-			}else if(ham == min_ham){
+			}
+			else if (ham == min_ham)
+			{
 				targets.push_back(rule2);
 			}
 		};
 		std::for_each(std::begin(kb2_all), std::end(kb2_all), hamming);
 		//levenshtein distance
 		double min_lev = 1.0;
-		auto leven = [&rule1, &targets, &min_lev](Rule rule2){
+		auto leven = [&rule1, &targets, &min_lev](Rule rule2) {
 			double lev = Distance::levenstein(rule1.external, rule2.external);
-			if(lev < min_lev){
+			if (lev < min_lev)
+			{
 				min_lev = lev;
 			}
 		};
@@ -208,17 +220,20 @@ double calculate_distance(std::vector<Rule> & meanings,
 	return lev_sum / (static_cast<double>(kb1_all.size()));
 }
 
-double calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase & kb1)
+double calculate_average_word_length(std::vector<Rule> &meanings, KnowledgeBase &kb1)
 {
-	
+
 	double word_length = 0, length_cnt = 0;
-	auto func = [&kb1, &word_length, &length_cnt](Rule mean){
+	auto func = [&kb1, &word_length, &length_cnt](Rule mean) {
 		std::vector<Rule> rules1;
 		rules1 = kb1.grounded_rules(mean);
-		if(rules1.size() != 0){
-			std::for_each(std::begin(rules1), std::end(rules1), [&word_length](Rule r){word_length += r.external.size();});
+		if (rules1.size() != 0)
+		{
+			std::for_each(std::begin(rules1), std::end(rules1), [&word_length](Rule r) { word_length += r.external.size(); });
 			length_cnt += rules1.size();
-		}else{
+		}
+		else
+		{
 			word_length += kb1.fabricate_for_complementing(mean).external.size();
 			length_cnt++;
 		}
@@ -228,10 +243,10 @@ double calculate_average_word_length(std::vector<Rule> & meanings, KnowledgeBase
 }
 
 std::string
-tr_vector_double_to_string(std::vector<double> & vec)
+tr_vector_double_to_string(std::vector<double> &vec)
 {
 	std::string str = "(";
-	auto func = [&str](const double & val){
+	auto func = [&str](const double &val) {
 		str += std::to_string(val) + ",";
 	};
 	std::for_each(std::begin(vec), std::end(vec), func);
@@ -251,7 +266,7 @@ void logging_on(MSILMParameters &param)
 	MSILMAgent::logging_on();
 }
 
-void cognition_task_init(std::vector<int> & source, MSILMParameters & param)
+void cognition_task_init(std::vector<int> &source, MSILMParameters &param)
 {
 	source.assign(param.UTTERANCES, 0);
 	std::fill_n(std::begin(source), param.TERMS, 1);
@@ -373,7 +388,7 @@ int main(int argc, char *argv[])
 		LogBox::push_log("USED RANDOM SEED");
 		LogBox::push_log(std::to_string(param.RANDOM_SEED));
 
-		std::for_each(std::begin(meaning_space), std::end(meaning_space), [](Rule & mean){LogBox::push_log(mean.to_s());});
+		std::for_each(std::begin(meaning_space), std::end(meaning_space), [](Rule &mean) { LogBox::push_log(mean.to_s()); });
 		LogBox::push_log("\n");
 	}
 
@@ -459,11 +474,11 @@ int main(int argc, char *argv[])
 
 		//各世代での正解数を記録
 		cognition_correct_data.push_back(std::vector<int>());
-		
+
 		while (utterance_counter < param.UTTERANCES)
 		{
 			int old_utterance_counter = utterance_counter; //バッチ処理対応
-			time(&now); //処理の時間制限
+			time(&now);									   //処理の時間制限
 			history_meanings.clear();
 			history_utterance.clear();
 			for (int i = 0; i < param.WINDOW && utterance_counter < param.UTTERANCES; i++)
@@ -494,7 +509,7 @@ int main(int argc, char *argv[])
 					else
 					{
 						LogBox::push_log("USE MULTIPLE MEANINGS:");
-						std::for_each(std::begin(meanings), std::end(meanings), [](Rule & mean){LogBox::push_log("MEANING: " + mean.to_s());});
+						std::for_each(std::begin(meanings), std::end(meanings), [](Rule &mean) { LogBox::push_log("MEANING: " + mean.to_s()); });
 					}
 				}
 
@@ -539,7 +554,7 @@ int main(int argc, char *argv[])
 			LogBox::push_log(child_agent.to_s());
 		}
 
-		child_agent = child_agent.grow(meaning_space);
+		child_agent = child_agent.grow();
 
 		if (param.ANALYZE)
 		{
