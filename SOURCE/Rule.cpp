@@ -254,11 +254,11 @@ Rule::to_s(void)
   switch (type)
   {
   case RULE_TYPE::SENTENCE:
-    rule_type = Prefices::SEN;
+    rule_type = Prefices::SEN + Prefices::DEL;
     break;
 
   case RULE_TYPE::NOUN:
-    rule_type = Prefices::CAT + Prefices::CLN + std::to_string(cat);
+    rule_type = Prefices::CAT + std::to_string(cat) + Prefices::DEL;
 
     break;
   default:
@@ -271,24 +271,37 @@ Rule::to_s(void)
 
   if (internal.size() > 0)
   {
-    InType::iterator it;
+    if(internal.size() < 1){
+      std::cerr << "Warning: Empty Internal" << std::endl;
+      exit(1);
+    }
     //internal
     buffer.clear();
-    it = internal.begin();
-    while (it != internal.end())
+    auto it = std::begin(internal);
+    internal_str = (*it).to_s();
+    it++;
+    if(it != std::end(internal))
     {
-      buffer.push_back((*it).to_s());
-      it++;
+      while (it != std::end(internal))
+      {
+        buffer.push_back((*it).to_s());
+        it++;
+      }
+      internal_str += Prefices::LPRN + string_join(buffer, ",") + Prefices::RPRN;
     }
-    internal_str += string_join(buffer, " ");
   }
 
   if (external.size() > 0)
   {
-    ExType::iterator it;
+    if(internal.size() < 1){
+      std::cerr << "Warning: Empty Internal" << std::endl;
+      exit(1);
+    }
     //external
-    it = external.begin();
     buffer.clear();
+    auto it = std::begin(external);
+    buffer.push_back((*it).to_s());
+    it++;
     while (it != external.end())
     {
       buffer.push_back((*it).to_s());
@@ -297,7 +310,7 @@ Rule::to_s(void)
     external_str = string_join(buffer, " ");
   }
 
-  return rule_type + " " + internal_str + " " + Prefices::ARW + " " + external_str;
+  return rule_type + internal_str + " " + Prefices::ARW + " " + external_str;
 }
 
 void Rule::set_noun(int dcat, Element &dind, std::vector<Element> &dex)

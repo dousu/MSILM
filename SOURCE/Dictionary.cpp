@@ -29,8 +29,11 @@ void Dictionary::load(std::string file_path)
   std::vector<std::string> symbol_buffer;
   while (std::getline(source, line))
   {
+    const std::regex line_code("[(\r\n)\n]");
+    auto del_line_code = std::sregex_token_iterator(std::begin(line), std::end(line), line_code, -1); //getlineで1行だということが保証されていると仮定
+    std::string str = *del_line_code;
     const std::regex re("[,=]");
-    std::sregex_token_iterator it(std::begin(line), std::end(line), re, -1), it_end;
+    std::sregex_token_iterator it(std::begin(str), std::end(str), re, -1), it_end;
     if (*it == "IND")
     {
       it++;
