@@ -9,7 +9,7 @@ env:
 install:
   - docker pull dousu/msilm
 script:
-  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOCKERIMAGE /bin/sh -c "$CXX -v && make -j test"
+  - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX dousu/MSILM /bin/sh -c "$CXX -v && make -j test"
 notifications:
   email:
     on_failure: change
