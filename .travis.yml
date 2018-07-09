@@ -2,10 +2,12 @@ language: generic
 sudo: false
 env:
   matrix:
-    - DOCKERIMAGE="gcc" CXX="g++"
-    - DOCKERIMAGE="rsmmr/clang" CXX="clang++ -stdlib=libc++"
+    - CXX=g++
+    - CXX=clang++
+   # - DOCKERIMAGE="gcc" CXX="g++"
+   # - DOCKERIMAGE="rsmmr/clang" CXX="clang++ -stdlib=libc++"
 install:
-  - docker pull $DOCKERIMAGE
+  - docker pull dousu/MSILM
 script:
   - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOCKERIMAGE /bin/sh -c "$CXX -v && make -j test"
 notifications:
