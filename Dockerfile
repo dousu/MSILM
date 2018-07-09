@@ -1,2 +1,2 @@
 FROM alpine:latest
-RUN apk add build-base
+RUN apk add gcc-7
