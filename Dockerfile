@@ -1,2 +1,2 @@
 FROM alpine:latest
-RUN apk add g++ clang make libc++-dev
+RUN apk add g++ clang make libc++
