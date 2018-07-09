@@ -1,2 +1,2 @@
 FROM alpine:latest
-RUN apk add gcc clang
+RUN apk add gcc clang make
