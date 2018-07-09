@@ -3,9 +3,7 @@ sudo: false
 env:
   matrix:
     - CXX=g++
-    - CXX=clang++
-   # - DOCKERIMAGE="gcc" CXX="g++"
-   # - DOCKERIMAGE="rsmmr/clang" CXX="clang++ -stdlib=libc++"
+    - CXX="clang++ -stdlib=libc++"
 install:
   - docker pull dousu/msilm
 script:
