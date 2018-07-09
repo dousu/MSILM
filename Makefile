@@ -1,4 +1,4 @@
-SRCS = $(addprefix ./SOURCE/, MSILMAgent.cpp MSILMParameters.cpp KirbyAgent.cpp KnowledgeBase.cpp Rule.cpp Element.cpp Dictionary.cpp IndexFactory.cpp Prefices.cpp LogBox.cpp MT19937.cpp)
+SRCS = $(addprefix ./SOURCE/, MSILMAgent.cpp MSILMParameters.cpp KirbyAgent.cpp KnowledgeBase.cpp Rule.cpp Element.cpp Dictionary.cpp IndexFactory.cpp LogBox.cpp MT19937.cpp)
 DEPS = $(patsubst %.cpp,%.d,$(SRCS))
 OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 

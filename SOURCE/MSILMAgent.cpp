@@ -57,8 +57,16 @@ Rule MSILMAgent::cognition_say(std::vector<Rule> &internals)
 {
 	try
 	{
-		Rule return_internal = say_think_meaning(internals);
+		if (LOGGING_FLAG)
+		{
+			LogBox::push_log("START TO GUESS\n");
+		}
+		Rule return_internal = random_think_meaning(internals);
 		last_selected_meaning.push_back(return_internal);
+		if (LOGGING_FLAG)
+		{
+			LogBox::push_log("SELECTED MEANING : " + return_internal.to_s());
+		}
 
 		return kb.fabricate(return_internal);
 	}
@@ -81,23 +89,6 @@ MSILMAgent::cognition_say(std::vector<std::vector<Rule>> &internals)
 	}
 
 	return rules;
-}
-
-Rule MSILMAgent::say_think_meaning(std::vector<Rule> &internals)
-{
-	if (LOGGING_FLAG)
-	{
-		LogBox::push_log("START TO GUESS\n");
-	}
-
-	Rule return_rule = random_think_meaning(internals);
-
-	if (LOGGING_FLAG)
-	{
-		LogBox::push_log("SELECTED MEANING : " + return_rule.to_s());
-	}
-
-	return return_rule;
 }
 
 void MSILMAgent::sym_on(void)

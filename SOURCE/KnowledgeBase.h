@@ -82,70 +82,75 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
         COMPLETE,
         SEMICOMPLETE
     };
-
     IndexFactory cat_indexer;
     RuleDBType sbox_buffer;
     RuleDBType sentence_box;
     RuleDBType word_box;
     DicDBType word_dic;
-
     RuleDBType sentenceDB;
     RuleDBType wordDB;
     bool DIC_BLD;
-
     static bool LOGGING_FLAG;
     static int ABSENT_LIMIT;
     static uint32_t CONTROLS;
     static int buzz_length;
-
     static const uint32_t USE_OBLITERATION = 0x01;
     static const uint32_t USE_SEMICOMPLETE_FABRICATION = 0x02;
     static const uint32_t USE_ADDITION_OF_RANDOM_WORD = 0x04;
     static const uint32_t ANTECEDE_COMPOSITION = 0x08;
-
     static bool OMISSION_FLAG;
-
     static std::vector<Rule> MEANING_SPACE;
-
+    /*!
+     * 実行ログを取るようにします。
+     */
+    static void
+    logging_on(void);
+    /*!
+     * ログの取得を停止します。
+     */
+    static void
+    logging_off(void);
+    static void
+    omission_on(void);
+    static void
+    omission_off(void);
+    static void
+    set_control(uint32_t FLAGS);
     KnowledgeBase();
     ~KnowledgeBase();
-
+    KnowledgeBase &
+    operator=(const KnowledgeBase &dst);
+    void
+    clear(void);
+    /*!
+     * 知識集合の文字列表現を返します
+     */
+    std::string
+    to_s(void);
     /*!
      * 知識に対して、Chunk、Merge、Replaceを実行します。
      * これはいずれのルールも適用不可能になるまで実行されます。
      */
     bool
     consolidate(void);
-
     /*!
      * Chunkを全てのルールに対して実行します。
      * ただし、Chunkが不可能になるまでChunkを繰り返すことを保証しません。
      */
     bool
     chunk(void); //チャンク
-
     /*!
      * Mergeを全てのルールに対して実行します。
      * ただし、Mergeが不可能になるまでMergeを繰り返すことを保証しません。
      */
     bool
     merge(void); //マージ
-
     /*!
      * Replaceを全てのルールに対して実行します。
      * ただし、Replaceが不可能になるまでReplaceを繰り返すことを保証しません。
      */
     bool
     replace(void); //リプレイス
-
-    /*!
-     * 例外ルールである、単語削除を行います。
-     * これは、単語規則について、内部言語が等しいものに対し、外部言語が最も短いものを残し、
-     * その他を削除するルールです。
-     */
-    bool
-    obliterate(void); //最短単語残す
-
     /*!
      * Ruleを受け取り、その内部言語列に対応する外部言語列を生成し、
      * その外部言語列をRuleに代入して返します。なお生成ルールは以下のようになります。
@@ -168,14 +173,12 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
      */ 
     Rule
     fabricate_for_complementing(Rule &src1);
-
     /*!
      * 渡されたRuleの内部言語から完全に外部言語列を構成可能かどうかを返す。
      * 真なら構成可能、偽なら不可能
      */
     bool
     acceptable(Rule &src);
-
     /*!
      * Ruleを知識集合のメールボックスに送ります。Ruleはそのまま知識集合に格納されません。
      * それは、未処理のRuleだからです。Chunk、Merge、Replaceなどの処理が終わって始めて
@@ -185,7 +188,6 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
     send_box(Rule &mail);
     void
     send_box(std::vector<Rule> &mails);
-
     /*!
      * Ruleを直接知識集合に追加します。
      */
@@ -193,42 +195,24 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
     send_db(Rule &mail);
     void
     send_db(std::vector<Rule> &mails);
-
+    void
+    ground_with_pattern(Rule &src, PatternType &pattern);
+    std::vector<Rule>
+    grounded_rules(Rule src);
+    std::vector<Rule>
+    rules(void);
+    std::vector<Rule>
+    utterances(void);
     /*!
      * 実行速度を上げるために、単語規則のハッシュを構成します。
      * これはfabricateが始めて実行されるときに自動的に呼び出されます。
+     * 将来的にprivate
      */
     void
     build_word_index(void);
-    void
-    clear(void);
-
-    /*!
-     * 知識集合の文字列表現を返します
-     */
-    std::string
-    to_s(void);
-
-    /*!
-     * 実行ログを取るようにします。
-     */
-    static void
-    logging_on(void);
-
-    /*!
-     * ログの取得を停止します。
-     */
-    static void
-    logging_off(void);
-    static void
-    omission_on(void);
-    static void
-    omission_off(void);
-    KnowledgeBase &
-    operator=(const KnowledgeBase &dst);
-    static void
-    set_control(uint32_t FLAGS);
-
+  private:
+    bool
+    clipping(Rule &mean, KnowledgeBase::PatternType &ptn, KnowledgeBase::PatternType &res);
     /*!
      * Ruleの内部言語列に対応する外部言語列を構成可能なとき、その構成に必要なRuleの集合を
      * 構成可能パターンとして返します。返値はMapクラスで、パターンのタイプをキーとして、パターンの集合が入っています。
@@ -239,26 +223,12 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
      */
     std::map<PATTERN_TYPE, std::vector<PatternType>>
     construct_grounding_patterns(Rule &src);
-
-    void
-    ground_with_pattern(Rule &src, PatternType &pattern);
-    std::vector<Rule>
-    grounded_rules(Rule src);
-    bool
-    clipping(Rule &mean, KnowledgeBase::PatternType &ptn, KnowledgeBase::PatternType &res);
-    std::vector<Rule>
-    rules(void);
-    std::vector<Rule>
-    utterances(void);
     std::vector<std::vector<Element>>
     recognize_terminal_strings(Rule &target);
-
-  private:
     std::vector<Rule>
     chunking(Rule &src, Rule &dst);
     bool
     chunking_loop(Rule &unchecked_sent, RuleDBType &checked_rules);
-
     bool
     merging(Rule &src);
     void collect_merge_cat(Rule &src, std::vector<Rule> &words, std::map<int, bool> &unified_cat);
@@ -268,33 +238,21 @@ class KnowledgeBase : public KnowledgeBaseTypeDef, public RuleTypeDef
     RuleDBType
     merge_sent_proc(Rule &base_word, RuleDBType &DB,
                     std::map<int, bool> &unified_cat);
-
     bool
     replacing(Rule &word, RuleDBType &checking_sents);
-
     KnowledgeBase::ExType
     construct_buzz_word(void);
-
     void
     unique(RuleDBType &DB);
-
     std::string
     string_join(const std::vector<std::string> &str_v, const std::string &delim);
-
-    /*private:
-    friend class boost::serialization::access;
-
-    template<class Archive>
-    void
-    serialize(Archive &ar, const unsigned int ) {
-        ar & BOOST_SERIALIZATION_NVP(cat_indexer);
-        ar & BOOST_SERIALIZATION_NVP(sbox_buffer);
-        ar & BOOST_SERIALIZATION_NVP(sentence_box);
-        ar & BOOST_SERIALIZATION_NVP(sentenceDB);
-        ar & BOOST_SERIALIZATION_NVP(word_box);
-        ar & BOOST_SERIALIZATION_NVP(wordDB);
-        ar & BOOST_SERIALIZATION_NVP(buzz_length);
-    }*/
+    /*!
+     * 例外ルールである、単語削除を行います。
+     * これは、単語規則について、内部言語が等しいものに対し、外部言語が最も短いものを残し、
+     * その他を削除するルールです。
+     */
+    bool
+    obliterate(void); //最短単語残す
 };
 
 #endif /* KNOWLEDGEBASE_H_ */
