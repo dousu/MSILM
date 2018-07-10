@@ -1,7 +1,7 @@
 FROM alpine:3.8
 ARG base='ftp://gcc.gnu.org/pub/gcc/infrastructure'
 RUN apk add --no-cache make \
-  && apk add --no-cache --virtual .build-dep gcc g++ gmp-dev file texinfo \
+  && apk add --no-cache --virtual .build-dep gcc g++ gmp-dev file texinfo libstdc++ \
   && mkdir sources; cd sources \
   && wget -O- https://www.musl-libc.org/releases/musl-1.1.19.tar.gz | tar zxf -; cd musl-1.1.19 \
   && ./configure \
