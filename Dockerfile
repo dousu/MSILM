@@ -29,8 +29,7 @@ RUN apk add --no-cache make \
   && ./configure \
   && make > /dev/null \
   && make check > /dev/null \
-  && make install > /dev/null \
-  && cd ../ \
+  && make install > /dev/null; cd ../ \
   && wget -O- http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-7.3.0/gcc-7.3.0.tar.xz | tar Jxf -; cd gcc-7.3.0 \
   && mkdir ../build; cd ../build \
   && ../gcc-7.3.0/configure --enable-language=c,c++ --disable-multilib --disable-bootstrap \
@@ -38,4 +37,5 @@ RUN apk add --no-cache make \
   && make all-target-libgcc > /dev/null \
   && make install-gcc > /dev/null \
   && make install-target-libgcc > /dev/null \
+  && cd ../../ \
   && rm -rf sources
