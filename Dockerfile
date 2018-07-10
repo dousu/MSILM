@@ -35,9 +35,13 @@ RUN apk add --no-cache make \
   && mkdir ../build; cd ../build \
   && ../gcc-7.3.0/configure --enable-language=c,c++ --disable-multilib --disable-bootstrap \
   && make all-gcc > /dev/null \
+  && make all-g++ > /dev/null \
   && make all-target-libgcc > /dev/null \
+  && make all-target-libstdc++ > /dev/null \
   && make install-gcc > /dev/null \
-  && make install-target-libgcc > /dev/null; cd ../../../ \
+  && make install-g++ > /dev/null \
+  && make install-target-libgcc > /dev/null \
+  && make install-target-libstdc++ > /dev/null; cd ../../../ \
   && apk del .build-dep \
   && apk add make \
   && rm -rf sources
