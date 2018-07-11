@@ -3,7 +3,7 @@ ARG base='ftp://gcc.gnu.org/pub/gcc/infrastructure'
 RUN apk update \
   && apk upgrade \
   && apk add --no-cache make \
-  && apk add --no-cache --virtual .build-dep gcc g++ gmp-dev file texinfo\
+  && apk add --no-cache --virtual .build-dep gcc g++ paxmark bison flex texinfo gawk zip gmp-dev mpfr-dev mpc1-dev zlib-dev isl-dev linux-headers !gettext-dev gcc-doc libatomic libgcc libgomp libstdc++ make file \
   && mkdir sources \
   && cd sources \
   && wget -O- https://www.musl-libc.org/releases/musl-1.1.19.tar.gz | tar zxf - \
