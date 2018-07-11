@@ -55,7 +55,7 @@ RUN apk update \
   && make install-gcc > /dev/null \
   && make install-target-libgcc > /dev/null \
   && cd ../ \
-  && wget -O- ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz | tar jxf - \
+  && wget -O- ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz | tar zxf - \
   && cd newlib-3.0.0 \
   && mkdir ../buildnlib \
   && cd ../buildnlib \
