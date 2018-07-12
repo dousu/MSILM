@@ -45,16 +45,6 @@ RUN apk update \
   && make check > /dev/null \
   && make install > /dev/null \
   && cd ../ \
-  && wget -O- http://ftpmirror.gnu.org/gcc/gcc-7.3.0/gcc-7.3.0.tar.xz | tar Jxf - \
-  && cd gcc-7.3.0 \
-  && mkdir ../buildgcc \
-  && cd ../buildgcc \
-  && ../gcc-7.3.0/configure --with-linker-hash-style=gnu --disable-libssp --disable-libmpx --disable-libmudflap --disable-libsanitizer --disable-symvers --disable-libgomp --disable-libatomic --disable-libitm --with-system-zlib --enable-languages=c,c++ --enable-cloog-backend --enable-default-pie --enable-__cxa_atexit --disable-werror --disable-nls --disable-multilib --disable-libstdcxx-pch --disable-fixed-point --enable-checking=release --with-pkgversion="Alpine gcc-7.3.0" --target="x86_64-pc-linux" --host="x86_64-pc-linux" --build="x86_64-pc-linux" --infodir=/usr/share/info --mandir=/usr/share/man --prefix=/usr --with-newlib --disable-shared --enable-threads=no \
-  && make -j4 all-gcc > /dev/null \
-  && make -j4 all-target-libgcc > /dev/null \
-  && make install-gcc > /dev/null \
-  && make install-target-libgcc > /dev/null \
-  && cd ../ \
   && wget -O- ftp://sourceware.org/pub/newlib/newlib-3.0.0.tar.gz | tar zxf - \
   && cd newlib-3.0.0 \
   && mkdir ../buildnlib \
@@ -62,7 +52,11 @@ RUN apk update \
   && ../newlib-3.0.0/configure \
   && make > /dev/null \
   && make install > /dev/null \
-  && cd cd ../buildgcc \
+  && cd ../ \
+  && wget -O- http://ftpmirror.gnu.org/gcc/gcc-7.3.0/gcc-7.3.0.tar.xz | tar Jxf - \
+  && cd gcc-7.3.0 \
+  && mkdir ../buildgcc \
+  && cd ../buildgcc \
   && ../gcc-7.3.0/configure --with-linker-hash-style=gnu --disable-libssp --disable-libmpx --disable-libmudflap --disable-libsanitizer --disable-symvers --disable-libgomp --disable-libatomic --disable-libitm --with-system-zlib --enable-languages=c,c++ --enable-cloog-backend --enable-default-pie --enable-__cxa_atexit --disable-werror --disable-nls --disable-multilib --disable-libstdcxx-pch --disable-fixed-point --enable-checking=release --with-pkgversion="Alpine gcc-7.3.0" --target="x86_64-pc-linux" --host="x86_64-pc-linux" --build="x86_64-pc-linux" --infodir=/usr/share/info --mandir=/usr/share/man --prefix=/usr --with-newlib --disable-shared --enable-threads=no \
   && make \
   && make install \
