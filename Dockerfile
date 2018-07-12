@@ -57,7 +57,7 @@ RUN apk update \
   && cd gcc-7.3.0 \
   && mkdir ../buildgcc \
   && cd ../buildgcc \
-  && ../gcc-7.3.0/configure --with-linker-hash-style=gnu --disable-libssp --disable-libmpx --disable-libmudflap --disable-libsanitizer --disable-symvers --disable-libgomp --disable-libatomic --disable-libitm --with-system-zlib --enable-languages=c,c++ --enable-cloog-backend --enable-default-pie --enable-__cxa_atexit --disable-werror --disable-nls --disable-multilib --disable-libstdcxx-pch --disable-fixed-point --enable-checking=release --with-pkgversion="Alpine gcc-7.3.0" --target="x86_64-pc-linux" --host="x86_64-pc-linux" --build="x86_64-pc-linux" --infodir=/usr/share/info --mandir=/usr/share/man --prefix=/usr \
+  && ../gcc-7.3.0/configure --with-linker-hash-style=gnu --disable-libssp --disable-libmpx --disable-libmudflap --disable-libsanitizer --disable-symvers --disable-libgomp --disable-libatomic --disable-libitm --with-system-zlib --enable-languages=c,c++ --enable-cloog-backend --enable-default-pie --enable-__cxa_atexit --disable-werror --disable-nls --disable-multilib --disable-libstdcxx-pch --disable-fixed-point --enable-checking=release --with-pkgversion="Alpine gcc-7.3.0" --infodir=/usr/share/info --mandir=/usr/share/man --prefix=/usr \
   && make \
   && make install \
   && cd ../../ \
