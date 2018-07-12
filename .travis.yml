@@ -10,7 +10,7 @@ matrix:
       install:
         - docker pull $DOC
     - env:
-      - CXX=clang++
+      - CXX="clang++ -stdlib=libc++"
         DOC=dousu/ubuntu_clang6_dev
       install:
         - docker pull $DOC
