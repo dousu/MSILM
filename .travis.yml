@@ -15,7 +15,7 @@ matrix:
       install:
         - docker pull $DOC
 script:
-  - docker run -e CXX $DOC /bin/sh -c "$CXX -v && make -j test"
+  - docker run -w /tmp/MSILM -v $PWD:/tmp/MSILM -e CXX $DOC /bin/sh -c "$CXX -v && make -j test"
 notifications:
   email:
     on_failure: change
