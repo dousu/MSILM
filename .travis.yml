@@ -1,16 +1,17 @@
 language: generic
 sudo: false
 matrix:
-  - env:
-    - CXX=g++
-      DOC=dousu/ubuntu_gcc8_dev
-    install:
-      - docker pull dousu/ubuntu_gcc8_dev
-  - env:
-    - CXX=clang++
-      DOC=dousu/ubuntu_clang6_dev
-    install:
-      - docker pull dousu/ubuntu_clang6_dev
+  include:
+    - env:
+      - CXX=g++
+        DOC=dousu/ubuntu_gcc8_dev
+      install:
+        - docker pull dousu/ubuntu_gcc8_dev
+    - env:
+      - CXX=clang++
+        DOC=dousu/ubuntu_clang6_dev
+      install:
+        - docker pull dousu/ubuntu_clang6_dev
 script:
   - docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp -e CXX $DOC /bin/sh -c "$CXX -v && make -j test"
 notifications:
