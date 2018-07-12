@@ -6,16 +6,16 @@ matrix:
   include:
     - env:
       - CXX=g++
+        DOC=dousu/ubuntu_gcc8_dev
       install:
-        - docker pull dousu/ubuntu_gcc8_dev
-      script:
-        - docker run -e CXX dousu/ubuntu_gcc8_dev /bin/sh -c "$CXX -v && make -j test"
+        - docker pull $DOC
     - env:
       - CXX=clang++
+        DOC=dousu/ubuntu_clang6_dev
       install:
-        - docker pull dousu/ubuntu_clang6_dev
-      script:
-        - docker run -e CXX dousu/ubuntu_clang6_dev /bin/sh -c "$CXX -v && make -j test"
+        - docker pull $DOC
+script:
+  - docker run -e CXX $DOC /bin/sh -c "$CXX -v && make -j test"
 notifications:
   email:
     on_failure: change
