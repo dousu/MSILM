@@ -1,7 +1,5 @@
 language: generic
 sudo: false
-services:
-  - docker
 matrix:
   include:
     - env:
