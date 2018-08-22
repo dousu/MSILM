@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(MSILM CXX)
 file(GLOB SRC "SOURCE/*.h" "SOURCE/*.cpp")
-add_executable(mslim ${SRC})
+add_executable(msilm ${SRC})
 set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "-g3 -O0 -pg")
 set(CMAKE_CXX_FLAGS_RELEASE "-03 -march=native")
